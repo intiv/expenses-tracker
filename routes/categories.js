@@ -18,13 +18,14 @@ router.post('/create', async (req, res, next) => {
     console.log(newCategory);
     let transaction;
     try{
-        let transaction = await db.transaction();
+        transaction = await db.transaction();
         await Category.create(newCategory, {transaction});
         await transaction.commit();
         res.status(200).redirect('/categories');
     }catch(err){
-        if(err && transaction){
+        if(err){
             await transaction.rollback();
+            next(err);
         }
 
     }

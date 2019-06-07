@@ -14,13 +14,24 @@ router.get('/', async (req, res, next) =>  {
 });
 
 router.post('/create', async (req, res, next) => {
-
     const newCategory = req.body.category;
     console.log(newCategory);
-    Category.create(newCategory)
-        .then(category => res.status(200).redirect('/categories'))
-        .catch(err => next(err));
+    let transaction;
+    try{
+        let transaction = await db.transaction();
+        await Category.create(newCategory, {transaction});
+        await transaction.commit();
+        res.status(200).redirect('/categories');
+    }catch(err){
+        if(err && transaction){
+            await transaction.rollback();
+        }
+
+    }
+    
 
 });
+
+
 
 module.exports = router;

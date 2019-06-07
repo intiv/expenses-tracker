@@ -11,6 +11,16 @@ router.get('/', async (req, res, next) =>  {
         next(err);
     }
     
-})
+});
+
+router.post('/create', async (req, res, next) => {
+
+    const newCategory = req.body.category;
+    console.log(newCategory);
+    Category.create(newCategory)
+        .then(category => res.status(200).redirect('/categories'))
+        .catch(err => next(err));
+
+});
 
 module.exports = router;

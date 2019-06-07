@@ -21,6 +21,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.json());
+
 //Routes
 app.use('/categories', require('./routes/categories'));
 

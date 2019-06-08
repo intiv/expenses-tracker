@@ -12,15 +12,18 @@ router.get('/', async (req, res, next) =>  {
     }
 });
 
-router.post('/create', async (req, res, next) => {
-    const newCategory = req.body.category;
+router.post('/create/:name', async (req, res, next) => {
+    const newCategory = {
+        name: req.params.name
+    }
     console.log(newCategory);
     let transaction;
     try{
         transaction = await db.transaction();
         await Category.create(newCategory, {transaction});
         await transaction.commit();
-        res.status(200).redirect('/categories');
+        let categories = await Category.findAll({});
+        res.json(categories);
     }catch(err){
         if(err){
             await transaction.rollback();

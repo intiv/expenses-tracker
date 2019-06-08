@@ -6,7 +6,7 @@ const Category = require('../api/Category');
 router.get('/', async (req, res, next) =>  {
     try{
         let categories = await Category.findAll({});
-        res.send(categories).status(200);
+        res.json(categories);
     }catch(err){
         next(err);
     }
@@ -28,7 +28,5 @@ router.post('/create', async (req, res, next) => {
         }
     }
 });
-
-
 
 module.exports = router;

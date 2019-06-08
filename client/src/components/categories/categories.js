@@ -10,32 +10,33 @@ class Categories extends Component {
         fetch('/api/categories')
             .then((res) => res.json())
             .then((categories) => {
-                console.log(categories);
-                this.setState({ ...this.state, categories})
+                console.log('Categories:', categories, 'asdad');
+                this.setState({categories});
             });
-    }
-
-    renderRows () {
-        this.state.categories.map((category, index) => (
-            <tr key={index}>
-                <td>{ category.id }</td>
-                <td>{ category.name }</td>
-            </tr>
-        ));
     }
 
     render () {
         return (
             <div id="categoriesRoot">
-                <Table dark>
+                
+                <Table dark striped>
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Created at</th>
+                            <th scope="col">Updated at</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.renderRows()}
+                        {this.state.categories.map((category, index) => (
+                            <tr key={index}>
+                                <td>{ category.id }</td>
+                                <td>{ category.name }</td>
+                                <td>{ category.createdAt }</td>
+                                <td>{ category.updatedAt }</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </div>

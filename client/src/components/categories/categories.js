@@ -21,17 +21,17 @@ class Categories extends Component {
         fetch(`/api/categories/create/${this.state.name}`, {method: 'post'})
             .then((res) => res.json())
             .then((categories) => {
-                this.setState({categories});
+                this.setState({categories, name: ''});
             });
     }
 
     render () {
         return (
             <div id="categoriesRoot">
-                <form onSumbit={this.onSubmit}>
+                <form onSubmit={this.onSubmit}>
                     <h2>Add category</h2>
-                    <input type="text" id="categoryName" placeholder="New category name" onChange={(event) => { this.setState({name: event.target.value}) }}/>
-                    <button type="submit"></button>
+                    <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
+                    <button>Add</button>
                 </form>
                 <h2>Caegories</h2>
                 <Table dark striped>

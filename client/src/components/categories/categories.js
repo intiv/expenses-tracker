@@ -3,7 +3,8 @@ import { Table } from 'reactstrap';
 
 class Categories extends Component {
     state = {
-        categories: []
+        categories: [],
+        name: ''
     }
 
     componentDidMount () {
@@ -15,10 +16,20 @@ class Categories extends Component {
             });
     }
 
+    onSubmit = (event) => {
+        event.preventDefault();
+
+    }
+
     render () {
         return (
             <div id="categoriesRoot">
-                
+                <form onSumbit={this.onSubmit}>
+                    <h2>Add category</h2>
+                    <input type="text" id="categoryName" placeholder="New category name" onChange={(event) => { this.setState({name: event.target.value}) }}/>
+                    <button type="submit"></button>
+                </form>
+                <h2>Caegories</h2>
                 <Table dark striped>
                     <thead>
                         <tr>

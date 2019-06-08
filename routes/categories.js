@@ -10,7 +10,6 @@ router.get('/', async (req, res, next) =>  {
     }catch(err){
         next(err);
     }
-    
 });
 
 router.post('/create', async (req, res, next) => {
@@ -27,10 +26,7 @@ router.post('/create', async (req, res, next) => {
             await transaction.rollback();
             next(err);
         }
-
     }
-    
-
 });
 
 

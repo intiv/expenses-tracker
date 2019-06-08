@@ -4,8 +4,11 @@
   "description": "App to keep track of daily expenses, summarized through monthly reports",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Inti",
   "license": "ISC",
@@ -19,7 +22,6 @@
     "sequelize": "^5.8.7"
   },
   "devDependencies": {
-    "jest": "^24.8.0",
     "nodemon": "^1.19.1"
   }
 }

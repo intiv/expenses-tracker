@@ -29,25 +29,30 @@ router.post('/create/', async (req, res, next) => {
         if(err){
             await transaction.rollback();
             let categories = await Category.findAll({});
-
             res.status(500).json(categories);
             next(err);
         }
     }
 });
 
-router.delete('/delete/:name', async (req, res, next) => {
+router.delete('/delete/', async (req, res, next) => {
     let transaction;
     try{
         transaction = await db.transaction();
         let rows = await Category.destroy({where: {
-            name: req.params.name
+            name: req.body.category.name
         }});
         let categories = await Category.findAll({});
+        await console.log('Rows:', rows);
+        if(rows === 1){
+            await transaction.commit();
+        }
         res.status(rows === 1 ? 200 : 500).json(categories);
     }catch(err){
         if(err){
             await transaction.rollback();
+            let categories = await Category.findAll({});
+            res.status(500).json(categories);
             next(err);
         }
     }

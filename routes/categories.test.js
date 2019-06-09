@@ -11,7 +11,7 @@ describe('/api/categories', () => {
         name: ''
     }
 
-    describe('GET', () => {
+    describe('GET /', () => {
         test('It should get 200 status and all categories from / method', async () => {
             const response = await (await request(app)).get('/api/categories');
             expect(response.statusCode).toBe(200);
@@ -39,6 +39,14 @@ describe('/api/categories', () => {
             expect(response.body.length).toEqual(1);
         });
 
+    });
+
+    describe('DELETE /', () => {
+        test('It should delete 1 matching category with status 200', async () => {
+            const response = await (await request(app)).delete('/api/categories/delete').send({category: testCategory}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(200);
+            expect(response.body.length).toEqual(0);
+        });
     });
 
 });

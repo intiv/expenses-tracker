@@ -6,7 +6,6 @@ const Category = require('../models/Category');
 router.get('/', async (req, res, next) =>  {
     try{
         let categories = await Category.findAll({});
-        console.log(categories);
         res.status(200).json(categories);
     }catch(err){
         next(err);
@@ -17,11 +16,10 @@ router.post('/create/', async (req, res, next) => {
     // const newCategory = {
     //     name: req.params.name
     // }
-    // console.log(newCategory);
     let transaction;
     try{
         transaction = await db.transaction();
-        await Category.create(req.body.category, {transaction});
+        await Category.create({name: req.body.category.name}, {transaction});
         await transaction.commit();
         let categories = await Category.findAll({});
         res.status(200).json(categories);

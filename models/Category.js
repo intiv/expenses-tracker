@@ -8,8 +8,7 @@ const Category = db.define('category', {
         allowNull: false,
         validate: {
             len: 1
-        }
-        
+        }    
     }
 });
 

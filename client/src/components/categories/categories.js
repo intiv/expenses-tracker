@@ -18,9 +18,17 @@ class Categories extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
-        fetch(`/api/categories/create/${this.state.name}`, {method: 'post'})
+        fetch('/api/categories/create/', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({category: {name: this.state.name}})
+            })
             .then((res) => res.json())
             .then((categories) => {
+                console.log(categories);
                 this.setState({categories, name: ''});
             });
     }

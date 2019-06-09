@@ -11,7 +11,7 @@ class Categories extends Component {
         fetch('/api/categories')
             .then((res) => res.json())
             .then((categories) => {
-                console.log('Categories:', categories, 'asdad');
+                console.log('Categories:', categories);
                 this.setState({categories});
             });
     }

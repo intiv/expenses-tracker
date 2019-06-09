@@ -8,7 +8,9 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test-server": "jest"
   },
   "author": "Inti",
   "license": "ISC",
@@ -22,6 +24,11 @@
     "sequelize": "^5.8.7"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "superagent": "^5.0.6",
+    "supertest": "^4.0.2"
   }
 }

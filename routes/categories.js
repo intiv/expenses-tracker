@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/db');
-const Category = require('../api/Category');
+const Category = require('../models/Category');
 
 router.get('/', async (req, res, next) =>  {
     try{
         let categories = await Category.findAll({});
-        res.json(categories);
+        res.status(200).json(categories);
     }catch(err){
         next(err);
     }
@@ -23,7 +23,7 @@ router.post('/create/:name', async (req, res, next) => {
         await Category.create(newCategory, {transaction});
         await transaction.commit();
         let categories = await Category.findAll({});
-        res.json(categories);
+        res.status(200).json(categories);
     }catch(err){
         if(err){
             await transaction.rollback();

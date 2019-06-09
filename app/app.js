@@ -23,12 +23,5 @@ app.use(express.json());
 
 //Routes
 app.use('/api/categories', require('../routes/categories'));
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static('../client/build'));
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname + '../client/build/index.html'));
-    });
-}
 
 module.exports = app;

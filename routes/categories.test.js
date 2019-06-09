@@ -7,9 +7,9 @@ describe('/api/categories', () => {
     beforeAll(() => {
         return Category.destroy({where: {}, truncate: true});
     });
-    
+
     const testCategory = {
-        name: 'This is a test for post'
+        name: 'Medical supplies'
     }
 
     const emptyNameCategory = {
@@ -20,8 +20,8 @@ describe('/api/categories', () => {
 
     }
 
-    const badCategory = {
-        name: 'This is a second test but for delete'
+    const nonExistingCategory = {
+        name: 'Food'
     }
 
     describe('GET /', () => {
@@ -62,7 +62,7 @@ describe('/api/categories', () => {
 
     describe('DELETE /', () => {
         test('It should not delete category if none match with status 500', async () => {
-            const response = await (await request(app)).delete('/api/categories/delete').send({category: badCategory}).set('Content-Type', 'application/json');
+            const response = await (await request(app)).delete('/api/categories/delete').send({category: nonExistingCategory}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(500);
             expect(response.body.length).toEqual(1);
         });

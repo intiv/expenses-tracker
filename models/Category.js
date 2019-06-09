@@ -4,11 +4,16 @@ const Sequelize = require('sequelize');
 const Category = db.define('category', {
     name: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false,
-        unique: true
+        validate: {
+            len: 1
+        }
+        
     }
 });
 
-//Category.sync({force: true}).then()
+
+Category.sync().then();
 
 module.exports = Category;

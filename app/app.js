@@ -8,7 +8,7 @@ const db = require('../db/db');
 db.authenticate()
     .then(() => console.log('Database connected succesfully'))
     .catch((err) => console.log('Error connecting to database:', err));
-    db.sync();
+db.sync();
 
 //Express config    
 app.use((req, res, next) => {

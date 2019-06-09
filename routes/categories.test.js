@@ -1,14 +1,27 @@
 const request = require('supertest');
 const app = require('../app/app');
+const Category = require('../models/Category');
 
 describe('/api/categories', () => {
 
+    beforeAll(() => {
+        return Category.destroy({where: {}, truncate: true});
+    });
+    
     const testCategory = {
         name: 'This is a test for post'
     }
 
     const emptyNameCategory = {
         name: ''
+    }
+
+    const noNameCategory = {
+
+    }
+
+    const badCategory = {
+        name: 'This is a second test but for delete'
     }
 
     describe('GET /', () => {
@@ -33,8 +46,14 @@ describe('/api/categories', () => {
             expect(response.body.length).toEqual(1);
         });
 
-        test('It should not insert a category without name property with status 500', async () => {
+        test('It should not insert a category with empty name property with status 500', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: emptyNameCategory}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(500);
+            expect(response.body.length).toEqual(1);
+        });
+
+        test('It should not insert a category without name property with status 500', async () => {
+            const response = await (await request(app)).post('/api/categories/create/').send({category: noNameCategory}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(500);
             expect(response.body.length).toEqual(1);
         });
@@ -42,11 +61,20 @@ describe('/api/categories', () => {
     });
 
     describe('DELETE /', () => {
+        test('It should not delete category if none match with status 500', async () => {
+            const response = await (await request(app)).delete('/api/categories/delete').send({category: badCategory}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(500);
+            expect(response.body.length).toEqual(1);
+        });
+
         test('It should delete 1 matching category with status 200', async () => {
             const response = await (await request(app)).delete('/api/categories/delete').send({category: testCategory}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(200);
             expect(response.body.length).toEqual(0);
         });
+
+        
     });
+
 
 });

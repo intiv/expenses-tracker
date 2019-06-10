@@ -73,7 +73,7 @@ class Categories extends Component {
                         </div>
                     </div>
                 </form>
-                <h2>Caegories</h2>
+                <h2>Categories</h2>
                 <Table dark striped>
                     <thead>
                         <tr>

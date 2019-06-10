@@ -62,6 +62,13 @@ describe('/api/categories', () => {
             expect(response.body.length).toEqual(2);
         });
 
+        test('It should not insert a category with an invalid type property with status 500', async () => {
+            const response = await (await request(app)).post('/api/categories/create/').send({category: {...nonExistingCategory, type: 'Owed'}}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(500);
+            expect(response.body.length).toEqual(2);
+
+        });
+
         test('It should not insert a category without name property with status 500', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: noNameCategory}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(500);

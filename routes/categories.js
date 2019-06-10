@@ -19,7 +19,7 @@ router.post('/create/', async (req, res, next) => {
     let transaction;
     try{
         transaction = await db.transaction();
-        await Category.create({name: req.body.category.name}, {transaction});
+        await Category.create({...req.body.category}, {transaction});
         await transaction.commit();
         let categories = await Category.findAll({});
         res.status(200).json(categories);

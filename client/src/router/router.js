@@ -8,7 +8,7 @@ export const router = (
     <Router>
         <Switch>
             <Route exact path="/" component={Home}/>
-            <Route path="/api/categories" component={Categories}/>
+            <Route path="/categories" component={Categories}/>
         </Switch>
 
     </Router>

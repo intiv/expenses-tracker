@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, ButtonGroup, Button } from 'reactstrap';
+import { Table, Button, FormGroup, Label, Input } from 'reactstrap';
 
 class Categories extends Component {
     state = {
@@ -34,24 +34,43 @@ class Categories extends Component {
             });
     }
 
+    setType = (type) => {
+        this.setState({type});
+    }
+
     render () {
         return (
             <div id="categoriesRoot">
                 <form onSubmit={this.onSubmit}>
                     <div className="row">
-                        <h2>Add category</h2>
-                    </div>
-                    <div className="row">
-                        <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
-                    </div>
-                    <div className="row">
-                        <ButtonGroup>
-                            <Button color="success" onClick={this.setState({type: 'Income'})}>Income</Button>
-                            <Button color="danger" onClick={this.setState({type: 'Expense'})}>Expense</Button>
-                        </ButtonGroup>
-                    </div>
-                    <div className="row">
-                        <Button color="primary">Add</Button>
+                        <div className="col-md-12">
+                            <h2>Add category</h2>
+
+                        </div>
+                        <div className="col-md-12">
+                            <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
+                        </div>
+                        <div className="col-md-12">
+                            <FormGroup tag="fieldset">
+                                <legend>This category is a:</legend>
+                                <FormGroup check>
+                                    <Label check>
+                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>{' '}
+                                        Income
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check>
+                                    <Label check>
+                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/>{' '}
+                                        Expense
+                                    </Label>
+                                </FormGroup>
+                            </FormGroup>
+                        </div>
+                        <div className="col-md-12">
+                            <Button color="primary">Add</Button>
+
+                        </div>
                     </div>
                 </form>
                 <h2>Caegories</h2>
@@ -60,6 +79,7 @@ class Categories extends Component {
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Created at</th>
                             <th scope="col">Updated at</th>
                         </tr>
@@ -69,6 +89,7 @@ class Categories extends Component {
                             <tr key={index}>
                                 <td>{ category.id }</td>
                                 <td>{ category.name }</td>
+                                <td>{ category.type }</td>
                                 <td>{ category.createdAt }</td>
                                 <td>{ category.updatedAt }</td>
                             </tr>

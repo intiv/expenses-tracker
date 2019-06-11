@@ -9,7 +9,7 @@
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest --runInBand --detectOpenHandles --forceExit .set1.test && jest --runInBand --detectOpenHandles --forceExit .set2.test",
     "test-server": "jest",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },

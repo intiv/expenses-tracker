@@ -35,6 +35,8 @@ router.post('/create/', async (req, res, next) => {
     }
 });
 
+//Dev purposes only
+//Deleting category on production would imply removing all of its transactions
 router.delete('/delete/', async (req, res, next) => {
     let dbTransaction;
     try{

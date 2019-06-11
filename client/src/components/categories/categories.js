@@ -50,6 +50,7 @@ class Categories extends Component {
                         <div className="col-md-12">
                             <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
                         </div>
+                        
                         <div className="col-md-12">
                             <FormGroup tag="fieldset">
                                 <legend>This category is a:</legend>
@@ -69,7 +70,7 @@ class Categories extends Component {
                         </div>
                         <div className="col-md-12">
                             <Button color="primary">Add</Button>
-
+                            
                         </div>
                     </div>
                 </form>

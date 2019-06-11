@@ -10,15 +10,23 @@ router.get('/', async (req, res, next) => {
         let transactions = await Transaction.findAll({});
         res.status(200).json({transactions});
     }catch(err){
-        res.status(500).json({transactions: [], });
+        res.status(500).json({transactions: [], errorMessage: err});
         next(err);
     }
 });
 
 router.post('/create/', async (req, res, next) => {
     let dbTransaction;
+    dbTransaction = await db.transaction();
+
     try{
-        dbTransaction = await db.transaction();
+        if(!req.body.transaction.categoryId){
+            throw new Error('Transaction must belong to a category');
+        }
+        let category = await Category.findByPk(req.body.transaction.categoryId);
+        if(!category){
+            throw new Error('Transaction belongs to non-existent category');
+        }
         await Transaction.create({...req.body.transaction}, {dbTransaction});
         await dbTransaction.commit();
         let transactions = await Transaction.findAll({});
@@ -29,6 +37,17 @@ router.post('/create/', async (req, res, next) => {
             let transactions = await Transaction.findAll({});
             res.status(500).send({transactions, errorMessage: err});
             next(err);
+        }
+    }
+});
+
+router.delete('/delete/', async (req, res, next) => {
+    let dbTransaction;
+    try{
+
+    }catch(err){
+        if(err){
+            await
         }
     }
 });

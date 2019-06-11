@@ -10,6 +10,6 @@ export const router = (
             <Route exact path="/" component={Home}/>
             <Route path="/categories" component={Categories}/>
         </Switch>
-
+        
     </Router>
 )

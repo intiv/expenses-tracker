@@ -14,7 +14,7 @@ describe('/api/categories', () => {
 
     const testCategory = {
         name: 'Medical supplies',
-        type: 'Expense'
+        type: 'Income'
     }
 
     let testCategory2 = {
@@ -38,9 +38,6 @@ describe('/api/categories', () => {
     describe('POST /create', () => {
         test('It should insert a test category with status 200', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: testCategory}).set('Content-Type', 'application/json');
-            if(response.body.errorMessage){
-                console.log('ERROR: ', response.body.errorMessage);
-            }
             expect(response.statusCode).toBe(200);
             expect(response.body.categories.length).toEqual(1);
             const retCategory = response.body.categories[0];

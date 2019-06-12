@@ -28,12 +28,13 @@ router.get('/monthly/', async (req, res, next) => {
                 }
             }
         });
-        
         if(!transactions){
             throw new Error('No transactions found');
         }
+        
         console.log(`Begin date: ${req.body.beginDate}, End date: ${req.body.endDate}`);
         console.log('Transactions: ', transactions);
+        
         res.status(200).json({transactions});
 
     }catch(err){

@@ -2,13 +2,36 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../db/db');
+const { Op } = require('sequelize');
 const Transaction = require('../models/Transaction');
 const Category = require('../models/Category');
+
+const moment = require('moment');
 
 router.get('/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({});
         res.status(200).json({transactions});
+    }catch(err){
+        res.status(500).json({transactions: [], errorMessage: err});
+        next(err);
+    }
+});
+
+router.get('/monthly/', async (req, res, next) => {
+    try{
+        let dateBegin = moment([2019, 5, 1]).format('YYYY-MM-DD');
+        let dateEnd = moment([2019, 6, 1]).format('YYYY-MM-DD');
+        let transactions = await Transaction.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: dateBegin,
+                    [Op.lte]: dateEnd
+                }
+            }
+        });
+        res.status(200).json({transactions});
+
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});
         next(err);

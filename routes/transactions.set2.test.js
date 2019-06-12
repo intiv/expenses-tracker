@@ -37,6 +37,7 @@ describe('/api/transactions', () => {
             const response = await (await request(app)).post('/api/transactions/create/').send({transaction: testTransaction}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(200);
             expect(response.body.transactions.length).toBe(1);
+            //console.log(response.body.transactions[0]);
             expect(response.body.transactions[0]).toMatchObject(testTransaction);
         });
 
@@ -78,6 +79,15 @@ describe('/api/transactions', () => {
             expect(response.body.transactions).toBeDefined();
             expect(response.body.transactions.length).toBe(2);
             expect(response.body.transactions[0]).toMatchObject(testTransaction);
+        });
+
+        test('It should get this month\'s transactions with status 200', async () => {
+            const response = await (await request(app)).get('/api/transactions/monthly');
+            console.log('Transactions of month:', response.body.transactions)
+            expect(response.body).toHaveProperty('transactions');
+            expect(response.body.transactions).toBeDefined();
+            expect(response.body.transactions.length).not.toBe(0);
+            
         });
     });
 

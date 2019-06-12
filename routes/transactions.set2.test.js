@@ -64,7 +64,29 @@ describe('/api/transactions', () => {
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
+            expect(response.body.transactions.length).toBe(2);
             expect(response.body.transactions[0]).toMatchObject(testTransaction);
         });
     });
+
+    describe('DELETE /delete/', () => {
+        test('It should delete 1 transaction with matching id with status 200', async () => {
+            testTransaction.id = 1;
+            const response = await (await request(app)).delete('/api/transactions/delete').send({transaction: testTransaction}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(200);
+            expect(response.body.transactions.length).toBe(1);
+            expect(response.body.transactions[0]).not.toMatchObject(testTransaction);
+        });
+
+        test('It shouldnt delete a transaction if none match the id with status 500', async () => {
+            invalidQtyTransaction.id = 4;
+            const response = await (await request(app)).delete('/api/transactions/delete').send({transaction: invalidQtyTransaction}).set('Content-Type', 'application/json');
+            console.log(response.body.transactions);
+
+            expect(response.statusCode).toBe(500);
+            expect(response.body.transactions.length).toBe(1);
+        });
+    });
+
+
 });

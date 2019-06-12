@@ -23,13 +23,13 @@ router.post('/create/', async (req, res, next) => {
         if(!req.body.transaction.categoryId){
             throw new Error('Transaction must belong to a category');
         }
-        let category = await Category.findByPk(req.body.transaction.categoryId);
+        const category = await Category.findByPk(req.body.transaction.categoryId);
         if(!category){
             throw new Error('Transaction belongs to non-existent category');
         }
         await Transaction.create({...req.body.transaction}, {dbTransaction});
         await dbTransaction.commit();
-        let transactions = await Transaction.findAll({});
+        const transactions = await Transaction.findAll({});
         res.status(200).json({transactions});
     }catch(err){
         if(err){
@@ -43,11 +43,22 @@ router.post('/create/', async (req, res, next) => {
 
 router.delete('/delete/', async (req, res, next) => {
     let dbTransaction;
-    try{
+    dbTransaction = await db.transaction();
 
+    try{
+        let rows = await Transaction.destroy({where: {id: req.body.transaction.id}}, {dbTransaction});
+        if(!rows){
+            throw new Error(`No transaction with id ${req.body.transaction.id} was found to delete`);
+        }
+        dbTransaction.commit();
+        const transactions = await Transaction.findAll({});
+        res.status(200).json({transactions});
     }catch(err){
         if(err){
-            await
+            await dbTransaction.rollback();
+            let transactions = await Transaction.findAll({});
+            res.status(500).send({transactions, errorMessage: err});
+            next(err);
         }
     }
 });

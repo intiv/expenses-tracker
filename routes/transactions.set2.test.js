@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../app/app');
 const Transaction = require('../models/Transaction');
 
+const moment = require('moment');
+
 describe('/api/transactions', () => {
 
     beforeAll(() => {
@@ -82,12 +84,16 @@ describe('/api/transactions', () => {
         });
 
         test('It should get this month\'s transactions with status 200', async () => {
-            const response = await (await request(app)).get('/api/transactions/monthly');
-            console.log('Transactions of month:', response.body.transactions)
+            let month = moment().month();
+            const response = await (await request(app)).get('/api/transactions/monthly').send({
+                beginDate: moment().month(month-1).date(1).format('YYYY-MM-DD'),
+                endDate: moment().month(month).date(1).format('YYYY-MM-DD')
+            }).set('Content-Type', 'application/json');
+
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
             expect(response.body.transactions.length).not.toBe(0);
-            
+            expect(response.body.transactions[0].quantity).toEqual(testTransaction.quantity);
         });
     });
 

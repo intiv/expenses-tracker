@@ -20,16 +20,20 @@ router.get('/', async (req, res, next) => {
 
 router.get('/monthly/', async (req, res, next) => {
     try{
-        let dateBegin = moment([2019, 5, 1]).format('YYYY-MM-DD');
-        let dateEnd = moment([2019, 6, 1]).format('YYYY-MM-DD');
         let transactions = await Transaction.findAll({
             where: {
                 createdAt: {
-                    [Op.gte]: dateBegin,
-                    [Op.lte]: dateEnd
+                    [Op.gte]: req.body.beginDate,
+                    [Op.lte]: req.body.endDate
                 }
             }
         });
+        
+        if(!transactions){
+            throw new Error('No transactions found');
+        }
+        console.log(`Begin date: ${req.body.beginDate}, End date: ${req.body.endDate}`);
+        console.log('Transactions: ', transactions);
         res.status(200).json({transactions});
 
     }catch(err){

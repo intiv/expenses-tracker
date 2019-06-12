@@ -35,7 +35,7 @@ router.post('/create/', async (req, res, next) => {
         if(err){
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
-            res.status(500).send({transactions, errorMessage: err});
+            res.status(500).json({transactions, errorMessage: err});
             next(err);
         }
     }
@@ -57,7 +57,7 @@ router.delete('/delete/', async (req, res, next) => {
         if(err){
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
-            res.status(500).send({transactions, errorMessage: err});
+            res.status(500).json({transactions, errorMessage: err});
             next(err);
         }
     }

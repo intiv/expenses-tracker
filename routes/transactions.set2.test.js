@@ -13,8 +13,13 @@ describe('/api/transactions', () => {
         categoryId: 1
     }
 
-    const invalidQtyTransaction = {
+    const invalidPrecisionTransaction = {
         quantity: '50.567',
+        categoryId: 1
+    }
+
+    const invalidQtyTransaction = {
+        quantity: '0',
         categoryId: 1
     }
 
@@ -36,10 +41,17 @@ describe('/api/transactions', () => {
         });
 
         test('It should insert a transaction with incorrect precision by rounding to 2 with status 200', async () => {
-            const response = await (await request(app)).post('/api/transactions/create/').send({transaction: invalidQtyTransaction}).set('Content-Type', 'application/json');
+            const response = await (await request(app)).post('/api/transactions/create/').send({transaction: invalidPrecisionTransaction}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(200);
             expect(response.body.transactions.length).toBe(2);
             expect(response.body.transactions[0]).toMatchObject(testTransaction);
+        });
+
+        test('It shouldnt insert a transaction with quantity lower than 0.01 with status 500', async () => {
+            const response = await (await request(app)).post('/api/transactions/create/').send({transaction: invalidQtyTransaction}).set('Content-Type', 'application/json');
+            expect(response.statusCode).toBe(500);
+            expect(response.body.transactions.length).toBe(2);
+            
         });
 
         test('It shouldnt insert a transaction with a non-existent category id with status 500', async () => {
@@ -79,8 +91,8 @@ describe('/api/transactions', () => {
         });
 
         test('It shouldnt delete a transaction if none match the id with status 500', async () => {
-            invalidQtyTransaction.id = 4;
-            const response = await (await request(app)).delete('/api/transactions/delete').send({transaction: invalidQtyTransaction}).set('Content-Type', 'application/json');
+            invalidPrecisionTransaction.id = 4;
+            const response = await (await request(app)).delete('/api/transactions/delete').send({transaction: invalidPrecisionTransaction}).set('Content-Type', 'application/json');
             console.log(response.body.transactions);
 
             expect(response.statusCode).toBe(500);

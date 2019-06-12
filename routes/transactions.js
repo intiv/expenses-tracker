@@ -28,7 +28,7 @@ router.get('/monthly/', async (req, res, next) => {
                 }
             }
         });
-        if(!transactions){
+        if(!transactions || transactions.length === 0){
             throw new Error('No transactions found');
         }
         

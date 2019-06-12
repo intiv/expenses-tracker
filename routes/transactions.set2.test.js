@@ -89,7 +89,7 @@ describe('/api/transactions', () => {
                 beginDate: moment().month(month).date(1).format('YYYY-MM-DD'),
                 endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
             }).set('Content-Type', 'application/json');
-
+            expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
             expect(response.body.transactions.length).not.toBe(0);
@@ -102,7 +102,7 @@ describe('/api/transactions', () => {
                 beginDate: moment().month(month+2).date(1).format('YYYY-MM-DD'),
                 endDate: moment().month(month+3).date(1).format('YYYY-MM-DD')
             }).set('Content-Type', 'application/json');
-
+            expect(response.statusCode).toBe(500);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
             expect(response.body.transactions.length).toBe(0);

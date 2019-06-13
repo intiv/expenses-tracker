@@ -22,7 +22,12 @@ export default class Home extends Component{
             .then((res) => res.json())
             .then((resData) => {
                 if(!resData.errorMessage){
-                    this.setState({categories: categories.categories, errorMessage: ''});
+                    let newCategories = [];
+                    resData.categories.forEach((category) => {
+                        newCategories[category.id - 1] = category;
+                    });
+                    console.log(newCategories);
+                    this.setState({categories: newCategories, errorMessage: ''});
                 }else{
                     this.setState({categories: [], errorMessage: resData.errorMessage});
                 }

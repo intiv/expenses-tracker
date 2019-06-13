@@ -9,12 +9,16 @@ class Categories extends Component {
     }
 
     componentDidMount () {
-        fetch('/api/categories')
-            .then((res) => res.json())
-            .then((categories) => {
-                console.log('Categories:', categories);
-                this.setState({categories});
-            });
+            fetch('/api/categories')
+                .then((res) => res.json())
+                .then((resData) => {
+                    console.log('resData:', resData);
+                    if(!resData.errorMessage){
+                        this.setState({categories: resData.categories, errorMessage: ''});
+                    }else{
+                        this.setState({categories: [], errorMessage: resData.errorMessage});
+                    }
+                });
     }
 
     onSubmit = (event) => {
@@ -28,9 +32,12 @@ class Categories extends Component {
                 body: JSON.stringify({category: {name: this.state.name, type: this.state.type}})
             })
             .then((res) => res.json())
-            .then((categories) => {
-                console.log(categories);
-                this.setState({categories, name: ''});
+            .then((resData) => {
+                if(!resData.errorMessage){
+                    this.setState({categories: resData.categories, errorMessage: '', name: ''});
+                }else{
+                    this.setState({categories: [], errorMessage: resData.errorMessage, name: ''});
+                }
             });
     }
 
@@ -83,7 +90,7 @@ class Categories extends Component {
                             <th scope="col">Created at</th>
                             <th scope="col">Updated at</th>
                         </tr>
-                    </thead>
+                    </thead>    
                     <tbody>
                         {this.state.categories.map((category, index) => (
                             <tr key={index}>

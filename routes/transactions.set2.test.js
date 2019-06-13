@@ -85,7 +85,7 @@ describe('/api/transactions', () => {
 
         test('It should get this month\'s transactions with status 200', async () => {
             let month = moment().month();
-            const response = await (await request(app)).get('/api/transactions/monthly').send({
+            const response = await (await request(app)).post('/api/transactions/monthly/').send({
                 beginDate: moment().month(month).date(1).format('YYYY-MM-DD'),
                 endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
             }).set('Content-Type', 'application/json');
@@ -98,7 +98,7 @@ describe('/api/transactions', () => {
 
         test('It should not get any transactions with invalid time frame with status 500', async () => {
             let month = moment().month();
-            const response = await (await request(app)).get('/api/transactions/monthly').send({
+            const response = await (await request(app)).post('/api/transactions/monthly/').send({
                 beginDate: moment().month(month+2).date(1).format('YYYY-MM-DD'),
                 endDate: moment().month(month+3).date(1).format('YYYY-MM-DD')
             }).set('Content-Type', 'application/json');

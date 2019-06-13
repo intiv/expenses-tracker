@@ -44,7 +44,7 @@ export default class Home extends Component{
         .then((resData) => {
             console.log(resData);
             if(!resData.errorMessage){
-                this.setState({transactions: resData.transactions});
+                this.setState({transactions: resData.transactions, errorMessage: ''});
             }else{
                 this.setState({ errorMessage: resData.errorMessage});
             }
@@ -54,6 +54,7 @@ export default class Home extends Component{
 
     onSubmit = async (event) => {
         event.preventDefault();
+        
         let response = await fetch('/api/transactions/create/', {
             method: 'post',
             headers: {
@@ -78,7 +79,7 @@ export default class Home extends Component{
         </div>)
         :
         (
-        <Alert color="danger">{this.errorMessage}</Alert>
+        <Alert color="danger">{this.state.errorMessage}</Alert>
         )
     }
 

@@ -64,7 +64,7 @@ router.post('/create/', async (req, res, next) => {
             console.log(err);
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
-            res.status(500).json({transactions, errorMessage: err});
+            res.status(500).json({transactions, errorMessage: err.message});
             next(err);
         }
     }

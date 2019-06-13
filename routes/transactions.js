@@ -53,7 +53,7 @@ router.post('/create/', async (req, res, next) => {
         }
         const category = await Category.findByPk(req.body.transaction.categoryId);
         if(!category){
-            throw new Error('Transaction belongs to non-existent category');
+            throw new Error('Transaction can\'t belong to non-existent category');
         }
         await Transaction.create({...req.body.transaction}, {dbTransaction});
         await dbTransaction.commit();
@@ -61,6 +61,7 @@ router.post('/create/', async (req, res, next) => {
         res.status(200).json({transactions});
     }catch(err){
         if(err){
+            console.log(err);
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
             res.status(500).json({transactions, errorMessage: err});

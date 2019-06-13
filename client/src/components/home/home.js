@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Form, FormGroup, Button, Input, Label} from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label, Alert} from 'reactstrap';
 import moment from 'moment';
 
 export default class Home extends Component{
@@ -42,7 +42,12 @@ export default class Home extends Component{
         })
         .then((res) => res.json())
         .then((resData) => {
-            this.setState({transactions: resData.transactions});
+            console.log(resData);
+            if(!resData.errorMessage){
+                this.setState({transactions: resData.transactions});
+            }else{
+                this.setState({ errorMessage: resData.errorMessage});
+            }
         });
         
     }
@@ -58,12 +63,24 @@ export default class Home extends Component{
             body: JSON.stringify({transaction: {quantity: this.state.quantity, categoryId: this.state.category}})
         });
         let data = await response.json();
+        console.log(data);
         if(!data.errorMessage){
             this.getMonthTransactions();
         }else{
             this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
     } 
+
+    printAlert = () => {
+        return this.state.errorMessage === '' ?
+        (<div>
+
+        </div>)
+        :
+        (
+        <Alert color="danger">{this.errorMessage}</Alert>
+        )
+    }
 
     
     
@@ -90,7 +107,7 @@ export default class Home extends Component{
                         <Button color="primary">Add</Button>
                     </FormGroup>
                 </Form>
-                {}
+                {this.printAlert()}
                 <Table dark striped>
                     <thead>
                         <tr>
@@ -105,7 +122,6 @@ export default class Home extends Component{
                     <tbody>
                         {this.state.transactions.map((transaction, index) => (
                             <tr key={index}>
-                                {console.log(index)}
                                 <td>{transaction.id}</td>
                                 <td>{transaction.quantity}</td>                                
                                 <td>{this.state.categories[transaction.categoryId-1] ? this.state.categories[transaction.categoryId-1].id : ''}</td>

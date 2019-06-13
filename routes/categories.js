@@ -14,6 +14,28 @@ router.get('/', async (req, res, next) =>  {
     }
 });
 
+router.post('/find/id/', async (req, res, next) => {
+    try{
+        let category = await Category.findByPk(req.body.categoryId);
+        if(!category){
+            throw new Error('Transaction category not found');
+        }
+        res.status(200).json({category});
+    }catch(err){
+        res.status(500).json({errorMessage: err});
+        next(err);
+    }
+});
+
+router.post('/find/ids', async (req, res, next) => {
+    try{
+        //req.body.
+    }catch(err){
+        res.status(500).json({errorMessage: err});
+        next(err);
+    }
+});
+
 router.post('/create/', async (req, res, next) => {
     // const newCategory = {
     //     name: req.params.name

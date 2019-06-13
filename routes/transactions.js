@@ -33,7 +33,7 @@ router.post('/monthly/', async (req, res, next) => {
         }
         
         //console.log(`Begin date: ${req.body.date}, End date: ${req.body.date}`);
-        //console.log('Transactions: ', transactions);
+        console.log('Transactions: ', transactions);
         
         res.status(200).json({transactions});
 

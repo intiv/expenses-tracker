@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
-import { Table, Form, FormGroup, Button, Input, Label, Alert } from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label} from 'reactstrap';
 import moment from 'moment';
 
 export default class Home extends Component{
 
     state = {
         transactions: [],
+        categories: [],
         quantity: 0,
         category: 1,
         errorMessage: ''
     }
 
-    async componentDidMount () {
-        await this.getMonthTransactions();
+    componentDidMount () {
+        this.getMonthTransactions();
+        this.getCategories();
     }
 
-    getMonthTransactions = async () => {
+    getCategories = () => {
+        fetch('/api/categories')
+            .then((res) => res.json())
+            .then((categories) => {
+                console.log('Categories:', categories);
+                this.setState({categories: categories.categories});
+            });
+    }
+
+    getMonthTransactions = () => {
         let month = moment().month();
-        let response = await fetch('/api/transactions/monthly/', {
+        fetch('/api/transactions/monthly/', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -28,13 +39,12 @@ export default class Home extends Component{
                 endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
             
             }) 
+        })
+        .then((res) => res.json())
+        .then((resData) => {
+            this.setState({transactions: resData.transactions});
         });
-        let data = await response.json();
-        if(!data.errorMessage){
-            this.setState({transactions: data.transactions});
-        }else{
-            this.setState({transactions: [], errorMessage: data.errorMessage});
-        }
+        
     }
 
     onSubmit = async (event) => {
@@ -49,12 +59,13 @@ export default class Home extends Component{
         });
         let data = await response.json();
         if(!data.errorMessage){
-            this.setState({transactions: data.transactions});
+            this.getMonthTransactions();
         }else{
             this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
     } 
 
+    
     
 
     render () {
@@ -86,18 +97,24 @@ export default class Home extends Component{
                             <th scope="col">ID</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">CategoryId</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Created At</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.transactions.map((transaction, index) => (
                             <tr key={index}>
-                                <td>{ transaction.id }</td>
-                                <td>{ transaction.quantity }</td>
-                                <td>{ transaction.categoryId }</td>
-                                <td>{ transaction.createdAt }</td>
+                                {console.log(index)}
+                                <td>{transaction.id}</td>
+                                <td>{transaction.quantity}</td>                                
+                                <td>{this.state.categories[transaction.categoryId-1] ? this.state.categories[transaction.categoryId-1].id : ''}</td>
+                                <td>{this.state.categories[transaction.categoryId-1] ? this.state.categories[transaction.categoryId-1].name : ''}</td>
+                                <td>{this.state.categories[transaction.categoryId-1] ? this.state.categories[transaction.categoryId-1].type : ''}</td>
+                                <td>{transaction.createdAt}</td>
                             </tr>
                         ))}
+                        
                     </tbody>
                 </Table>
             </div>

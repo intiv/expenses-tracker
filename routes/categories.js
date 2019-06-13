@@ -7,7 +7,7 @@ const Category = require('../models/Category');
 router.get('/', async (req, res, next) =>  {
     try{
         let categories = await Category.findAll({});
-        console.log(categories)
+        // console.log(categories)
         res.status(200).json({categories});
     }catch(err){
         res.status(500).json({categories: [], errorMessage: err});
@@ -67,12 +67,12 @@ router.delete('/delete/', async (req, res, next) => {
         let rows = await Category.destroy({where: {
             name: req.body.category.name
         }});
-        let categories = await Category.findAll({});
         if(rows === 1){
             await dbTransaction.commit();
         }else{
-            throw new Error();
+            throw new Error('No categories were deleted');
         }
+        let categories = await Category.findAll({});
         res.status(rows === 1 ? 200 : 500).json({categories});
     }catch(err){
         if(err){

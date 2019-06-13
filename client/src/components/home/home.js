@@ -20,9 +20,12 @@ export default class Home extends Component{
     getCategories = () => {
         fetch('/api/categories')
             .then((res) => res.json())
-            .then((categories) => {
-                console.log('Categories:', categories);
-                this.setState({categories: categories.categories});
+            .then((resData) => {
+                if(!resData.errorMessage){
+                    this.setState({categories: categories.categories, errorMessage: ''});
+                }else{
+                    this.setState({categories: [], errorMessage: resData.errorMessage});
+                }
             });
     }
 
@@ -37,7 +40,6 @@ export default class Home extends Component{
             body: JSON.stringify({
                 beginDate: moment().date(1).format('YYYY-MM-DD'),
                 endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
-            
             }) 
         })
         .then((res) => res.json())
@@ -66,6 +68,7 @@ export default class Home extends Component{
         let data = await response.json();
         console.log(data);
         if(!data.errorMessage){
+            this.setState({quantity: 0, category: 0, errorMessage: ''});
             this.getMonthTransactions();
         }else{
             this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});

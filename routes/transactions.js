@@ -28,7 +28,7 @@ router.post('/monthly/', async (req, res, next) => {
                 }
             }
         });
-        if(!transactions || transactions.length === 0){
+        if(!transactions){
             throw new Error('No transactions found');
         }
         

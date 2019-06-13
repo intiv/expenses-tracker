@@ -28,12 +28,12 @@ router.post('/monthly/', async (req, res, next) => {
                 }
             }
         });
-        if(!transactions || transactions.length === 0){
-            throw new Error('No transactions found');
+        if(!transactions){
+            throw new Error('Coulnd\'t find transactions');
         }
         
         //console.log(`Begin date: ${req.body.date}, End date: ${req.body.date}`);
-        console.log('Transactions: ', transactions);
+        //console.log('Transactions: ', transactions);
         
         res.status(200).json({transactions});
 
@@ -77,7 +77,7 @@ router.delete('/delete/', async (req, res, next) => {
     try{
         let rows = await Transaction.destroy({where: {id: req.body.transaction.id}}, {dbTransaction});
         if(!rows){
-            throw new Error(`No transaction with id ${req.body.transaction.id} was found to delete`);
+            throw new Error(`No such transaction was found`);
         }
         dbTransaction.commit();
         const transactions = await Transaction.findAll({});

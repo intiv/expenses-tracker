@@ -11,7 +11,7 @@ const Transaction = db.define('transaction', {
         validate: {
             min: {
                 args: [0.01],
-                msg: 'Must be greater than 0'
+                msg: 'Quantity must be greater than 0'
             }
         }
     },

@@ -82,13 +82,9 @@ export default class Home extends Component{
 
     printAlert = () => {
         return this.state.errorMessage === '' ?
-        (<div>
-
-        </div>)
+        (<div> </div>)
         :
-        (
-        <Alert color="danger">{this.state.errorMessage}</Alert>
-        )
+        (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
 
     

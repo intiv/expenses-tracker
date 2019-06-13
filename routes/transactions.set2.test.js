@@ -121,8 +121,6 @@ describe('/api/transactions', () => {
         test('It shouldnt delete a transaction if none match the id with status 500', async () => {
             invalidPrecisionTransaction.id = 4;
             const response = await (await request(app)).delete('/api/transactions/delete').send({transaction: invalidPrecisionTransaction}).set('Content-Type', 'application/json');
-            console.log(response.body.transactions);
-
             expect(response.statusCode).toBe(500);
             expect(response.body.transactions.length).toBe(1);
         });

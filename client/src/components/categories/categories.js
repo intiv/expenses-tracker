@@ -45,7 +45,6 @@ class Categories extends Component {
                     <div className="row">
                         <div className="col-md-12">
                             <h2>Add category</h2>
-
                         </div>
                         <div className="col-md-12">
                             <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>

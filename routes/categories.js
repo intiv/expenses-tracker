@@ -19,8 +19,8 @@ router.post('/create/', async (req, res, next) => {
     //     name: req.params.name
     // }
     let dbTransaction;
+    dbTransaction = await db.transaction();
     try{
-        dbTransaction = await db.transaction();
         await Category.create({...req.body.category}, {dbTransaction});
         await dbTransaction.commit();
         let categories = await Category.findAll({});
@@ -39,8 +39,8 @@ router.post('/create/', async (req, res, next) => {
 //Deleting category on production would imply removing all of its transactions
 router.delete('/delete/', async (req, res, next) => {
     let dbTransaction;
+    dbTransaction = await db.transaction();
     try{
-        dbTransaction = await db.transaction();
         let rows = await Category.destroy({where: {
             name: req.body.category.name
         }});

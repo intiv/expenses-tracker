@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/monthly/', async (req, res, next) => {
+router.post('/monthly/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({
             where: {
@@ -32,8 +32,8 @@ router.get('/monthly/', async (req, res, next) => {
             throw new Error('No transactions found');
         }
         
-        console.log(`Begin date: ${req.body.beginDate}, End date: ${req.body.endDate}`);
-        console.log('Transactions: ', transactions);
+        //console.log(`Begin date: ${req.body.date}, End date: ${req.body.date}`);
+        //console.log('Transactions: ', transactions);
         
         res.status(200).json({transactions});
 

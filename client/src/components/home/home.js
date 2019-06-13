@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Form, FormGroup, Button, Input, Label } from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label, Alert } from 'reactstrap';
 import moment from 'moment';
 
 export default class Home extends Component{
@@ -51,7 +51,7 @@ export default class Home extends Component{
         if(!data.errorMessage){
             this.setState({transactions: data.transactions});
         }else{
-            this.setState({errorMessage: data.errorMessage});
+            this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
     } 
 
@@ -70,12 +70,16 @@ export default class Home extends Component{
                     </FormGroup>
                     <FormGroup>
                         <Label for="transactionCatId" className="mr-1">Category</Label>
-                        <Input type="number" />
+                        <Input type="number" min="1" step="1"
+                            value={this.state.category} 
+                            onChange={(event) => { this.setState({category: event.target.value }) }}
+                        />
                     </FormGroup>
                     <FormGroup>
                         <Button color="primary">Add</Button>
                     </FormGroup>
                 </Form>
+                {}
                 <Table dark striped>
                     <thead>
                         <tr>

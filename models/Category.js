@@ -25,6 +25,6 @@ const Category = db.define('category', {
 });
 
 
-Category.sync().then();
+async () => await Category.sync({force: true});
 
 module.exports = Category;

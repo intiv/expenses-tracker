@@ -23,5 +23,6 @@ app.use(express.json());
 
 //Routes
 app.use('/api/categories', require('../routes/categories'));
+app.use('/api/transactions', require('../routes/transactions'));
 
 module.exports = app;

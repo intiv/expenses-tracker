@@ -28,14 +28,6 @@ router.post('/find/id/', async (req, res, next) => {
     }
 });
 
-router.post('/find/ids', async (req, res, next) => {
-    try{
-        //req.body.
-    }catch(err){
-        res.status(500).json({errorMessage: err});
-        next(err);
-    }
-});
 
 router.post('/create/', async (req, res, next) => {
     // const newCategory = {

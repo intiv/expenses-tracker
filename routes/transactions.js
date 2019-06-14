@@ -44,8 +44,7 @@ router.post('/monthly/', async (req, res, next) => {
 });
 
 router.post('/create/', async (req, res, next) => {
-    let dbTransaction;
-    dbTransaction = await db.transaction();
+    let dbTransaction = await db.transaction();
 
     try{
         if(!req.body.transaction.categoryId){

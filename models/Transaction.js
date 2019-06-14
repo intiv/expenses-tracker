@@ -2,8 +2,6 @@ const Sequelize = require('sequelize');
 const db = require('../db/db');
 const Category = require('./Category');
 
-const moment = require('moment');
-
 const Transaction = db.define('transaction', {
     quantity: {
         type: Sequelize.DECIMAL(8,2),

@@ -13,8 +13,8 @@ router.post('/', async (req, res, next) => {
             }
         });
         if(!user){
-            //Create new user process
-            throw new Error('No such user found');
+            
+            throw new Error('No user found');
         }
         res.status(200).json({user});
     }catch(err){

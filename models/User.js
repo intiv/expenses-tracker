@@ -12,6 +12,9 @@ const User = db.define('user', {
             msg: 'Username must be 1 to 12 characters long.'
         }
     },
+    phone: {
+        type: Sequelize.STRING
+    },
     createdAt: {
         type: Sequelize.DATEONLY,
         allowNull: false

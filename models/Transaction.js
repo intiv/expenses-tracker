@@ -15,8 +15,14 @@ const Transaction = db.define('transaction', {
             }
         }
     },
-    createdAt:  Sequelize.DATEONLY,
-    updatedAt: Sequelize.DATEONLY
+    createdAt: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+    },
+    updatedAt: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+    }
 });
 
 Transaction.belongsTo(Category);

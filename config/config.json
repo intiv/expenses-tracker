@@ -1,0 +1,23 @@
+{
+    "development": {
+      "username": "postgres",
+      "password": "root",
+      "database": "database_test",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+    "test": {
+      "username": "oeqvthgy",
+      "password": "vsAGvqs2IFBw_aoQTIbZ6WqyRPB4hNSt",
+      "database": "oeqvthgy",
+      "host": "raja.db.elephantsql.com",
+      "dialect": "postgres"
+    },
+    "production": {
+      "username": "zuicwmykvaczmu",
+      "password": "0cb287119efcf4e3d44406d4a4e43c0d98e95392b5db8a29c183561958538aa2",
+      "database": "dfprhgki3as7cn",
+      "host": "ec2-54-83-192-245.compute-1.amazonaws.com",
+      "dialect": "postgres"
+    }
+  }

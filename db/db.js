@@ -1,14 +1,13 @@
 const Sequelize = require('sequelize');
+const config = require('../config/config');
+const credentials = config[process.env.NODE_ENV];
+// console.log('CONFIG: ', config);
+// console.log('ENV: ', process.env.NODE_ENV);
+// console.log('CREDENTIALS: ', credentials);
 
-const dbConnectionString; 
-    if(process.env.NODE_ENV === 'production'){
-        dbConnectionString = 'postgres://zuicwmykvaczmu:0cb287119efcf4e3d44406d4a4e43c0d98e95392b5db8a29c183561958538aa2@ec2-54-83-192-245.compute-1.amazonaws.com:5432/dfprhgki3as7cn?ssl=true'
-    }else if(process.env.NODE_ENV === 'development'){
-        dbConnectionString = 'postgres://oeqvthgy:vsAGvqs2IFBw_aoQTIbZ6WqyRPB4hNSt@raja.db.elephantsql.com:5432/oeqvthgy'
-    }else if(process.env.NODE_ENV === 'test'){
-        dbConnectionString = 'postgres://root@localhost:5432/db_test';
-    }
-const db = new Sequelize(dbConnectionString, {
+const db = new Sequelize(credentials.database, credentials.username, credentials.password, {
+        host: credentials.host,
+        dialect: credentials.dialect,
         logging: false,
         pool: {
             max: 5,

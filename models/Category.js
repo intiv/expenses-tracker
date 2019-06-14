@@ -4,10 +4,8 @@ const Sequelize = require('sequelize');
 const Category = db.define('category', {
     type: {
         type: Sequelize.STRING,
-        allowNull: false,
         defaultValue: 'Expense',
         validate: {
-            notEmpty: true,
             isIn: {
                 args: [['Expense', 'Income']],
                 msg: 'Category must be either an Expense or an Income'
@@ -19,7 +17,10 @@ const Category = db.define('category', {
         unique: true,
         allowNull: false,
         validate: {
-            len: 1
+            len: {
+                args: 3,
+                msg: 'Name must be at least 3 characters long'
+            }
         }    
     }
 });

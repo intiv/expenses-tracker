@@ -8,8 +8,10 @@ const User = db.define('user', {
         allowNull: false,
         unique: true,
         validate: {
-            len: [1, 12],
-            msg: 'Username must be 1 to 12 characters long.'
+            len: {
+                args: [3, 12],
+                msg: 'Username must be 3 to 12 characters long.'
+            }
         }
     },
     phone: {
@@ -26,7 +28,7 @@ const User = db.define('user', {
 
 });
 
-User.hasMany(Transaction);
+//User.hasMany(Transaction);
 
 async () => await User.sync({force: true});
 

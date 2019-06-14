@@ -26,11 +26,14 @@ router.post('/', async (req, res, next) => {
 router.post('/create', async (req, res, next) => {
     let dbTransaction = await db.transaction();
     try{
-        let user = await User.create({username: req.body.username}, {dbTransaction});
+        let user = await User.create({...req.body.user}, {dbTransaction});
         await dbTransaction.commit();
         res.status(200).json({user});
     }catch(err){
+        console.log('Error: ', err.message);
         res.status(500).json({errorMessage: err.message});
         next(err);
     }
 });
+
+module.exports = router;

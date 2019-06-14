@@ -11,6 +11,12 @@ if(process.env.NODE_ENV === 'production'){
     });
 }
 
+db.authenticate()
+    .then(() => console.log('Database connected succesfully'))
+    .catch((err) => console.log('Error connecting to database:', err));
+db.sync();
+
+
 app.listen(port, (req, res) => {
     console.log(`App listening on port ${port}`);
 });

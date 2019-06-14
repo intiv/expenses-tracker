@@ -89,6 +89,21 @@ describe('/api/categories', () => {
             expect(response.body.categories[0]).toMatchObject(testCategory);
             expect(response.body.categories[1]).toMatchObject({...testCategory2, type: 'Expense'});
         });
+
+        test('It should get a category from a valid id with status 200', async () => {
+            const response = await (await request(app)).get(`/api/categories/find/id?id=1`);
+            expect(response.statusCode).toBe(200);
+            expect(response.body.category).toBeDefined();
+            expect(response.body.category).toMatchObject(testCategory);
+        });
+
+        test('It shouldn\'t get a category from a non-existent id with status 500', async () => {
+            const response = await (await request(app)).get(`/api/categories/find/id?id=1756`);
+            expect(response.statusCode).toBe(500);
+            expect(response.body).not.toHaveProperty('category');
+            expect(response.body).toHaveProperty('errorMessage');
+            expect(response.body.errorMessage).toBeDefined();
+        });
     });
 
     describe('DELETE /', () => {

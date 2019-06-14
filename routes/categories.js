@@ -15,9 +15,9 @@ router.get('/', async (req, res, next) =>  {
     }
 });
 
-router.post('/find/id/', async (req, res, next) => {
+router.get('/find/id/', async (req, res, next) => {
     try{
-        let category = await Category.findByPk(req.body.categoryId);
+        let category = await Category.findByPk(req.query.id);
         if(!category){
             throw new Error('Transaction category not found');
         }

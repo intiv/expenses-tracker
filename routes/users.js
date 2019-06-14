@@ -7,7 +7,6 @@ const Transaction = require('../models/Transaction');
 
 router.get('/', async (req, res, next) => {
     try{
-        console.log(req.query);
         let user = await User.findOne({
             where: {
                 username: req.query.username

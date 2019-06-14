@@ -2,15 +2,25 @@ const request = require('supertest');
 const app = require('../app/app');
 
 const User = require('../models/User');
+const Category = require('../models/Category');
+const Transaction = require('../models/Transaction');
 const db = require('../db/db');
 
 describe('/api/users', () => {
 
-    beforeAll(() => {
-        return db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE', {
+    beforeAll(async () => {
+    //     await db.query('TRUNCATE TABLE transactions RESTART IDENTITY CASCADE', {
+    //         model: Transaction,
+    //         mapToModel: true
+    //     });
+    //     await db.query('TRUNCATE TABLE categories RESTART IDENTITY CASCADE', {
+    //         model: Category,
+    //         mapToModel: true
+    //     });
+        return await db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE', {
             model: User,
             mapToModel: true
-        }).then();
+        });
     });
 
     const testUser = {

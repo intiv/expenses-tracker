@@ -17,4 +17,10 @@ const db = new Sequelize(credentials.database, credentials.username, credentials
         }
     });
 
+
+
+// db.sync({
+//     force: process.env.NODE_ENV === 'test'
+// });
+
 module.exports = db;

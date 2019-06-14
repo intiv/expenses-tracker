@@ -6,7 +6,11 @@ const Category = require('../models/Category');
 
 router.get('/', async (req, res, next) =>  {
     try{
-        let categories = await Category.findAll({});
+        let categories = await Category.findAll({
+            where: {
+                userId: req.query.userId
+            }
+        });
         // console.log(categories)
         res.status(200).json({categories});
     }catch(err){
@@ -57,6 +61,7 @@ router.delete('/delete/', async (req, res, next) => {
     dbTransaction = await db.transaction();
     try{
         let rows = await Category.destroy({where: {
+            userId: req.body.category.userId,
             name: req.body.category.name
         }});
         if(rows === 1){

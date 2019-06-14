@@ -1,9 +1,6 @@
 //Server - Express
 const express = require('express');
 const app = express();
-const path = require('path');
-const db = require('../db/db');
-
 
 //Express config    
 app.use((req, res, next) => {

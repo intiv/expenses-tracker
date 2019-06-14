@@ -7,9 +7,9 @@
       "dialect": "postgres"
     },
     "test": {
-      "username": "oeqvthgy",
-      "password": "vsAGvqs2IFBw_aoQTIbZ6WqyRPB4hNSt",
-      "database": "oeqvthgy",
+      "username": "ebfyvsbp",
+      "password": "LWx8zs8M0UZlchrZFhLHfuMGmw0VGqVl",
+      "database": "ebfyvsbp",
       "host": "raja.db.elephantsql.com",
       "dialect": "postgres"
     },

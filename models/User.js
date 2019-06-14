@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const db = require('../db/db');
-const Transaction = require('./Transaction');
 
 const User = db.define('user', {
     username: {
@@ -29,8 +28,6 @@ const User = db.define('user', {
 });
 
 //User.hasMany(Transaction);
-
-async () => await User.sync({force: true});
-
+async () => User.sync({force: true});
 module.exports = User;
 

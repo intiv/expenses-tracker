@@ -3,7 +3,6 @@ const router = express.Router();
 
 const db = require('../db/db');
 const User = require('../models/User');
-const Transaction = require('../models/Transaction');
 
 router.get('/', async (req, res, next) => {
     try{
@@ -30,7 +29,6 @@ router.post('/create', async (req, res, next) => {
         await dbTransaction.commit();
         res.status(200).json({user});
     }catch(err){
-        console.log('Error: ', err.message);
         res.status(500).json({errorMessage: err.message});
         next(err);
     }

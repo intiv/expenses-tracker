@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db/db');
 const Category = require('./Category');
+const User = require('./User');
 
 const Transaction = db.define('transaction', {
     quantity: {
@@ -23,8 +24,9 @@ const Transaction = db.define('transaction', {
     }
 });
 
+
 Transaction.belongsTo(Category);
+Transaction.belongsTo(User);
 
-async () => await Transaction.sync({force: true});
-
+async () => Transaction.sync({force: true});
 module.exports = Transaction;

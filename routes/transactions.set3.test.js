@@ -6,9 +6,12 @@ const moment = require('moment');
 
 describe('/api/transactions', () => {
 
-    beforeAll(() => {
-        return Transaction.destroy({truncate: true, cascade: true});
-    });
+    // beforeAll(() => {
+    //     return db.query('TRUNCATE TABLE transactions RESTART IDENTITY CASCADE', {
+    //         model: Transaction,
+    //         mapToModel: true
+    //     }).then();
+    // });
 
     const testTransaction = {
         quantity: '100.00',

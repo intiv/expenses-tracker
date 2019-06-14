@@ -5,11 +5,12 @@ const db = require('../db/db');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 
-router.post('/', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try{
+        console.log(req.query);
         let user = await User.findOne({
             where: {
-                username: req.body.username
+                username: req.query.username
             }
         });
         if(!user){

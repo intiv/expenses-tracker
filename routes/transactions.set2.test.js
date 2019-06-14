@@ -84,11 +84,11 @@ describe('/api/transactions', () => {
         });
 
         test('It should get this month\'s transactions with status 200', async () => {
-            let month = moment().month();
-            const response = await (await request(app)).post('/api/transactions/monthly/').send({
-                beginDate: moment().month(month).date(1).format('YYYY-MM-DD'),
-                endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
-            }).set('Content-Type', 'application/json');
+            const month = moment().month();
+            const beginDate= moment().month(month).date(1).format('YYYY-MM-DD');
+            const endDate= moment().month(month+1).date(1).format('YYYY-MM-DD');
+            
+            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
@@ -98,10 +98,9 @@ describe('/api/transactions', () => {
 
         test('It should not get any transactions with invalid time frame with status 200', async () => {
             let month = moment().month();
-            const response = await (await request(app)).post('/api/transactions/monthly/').send({
-                beginDate: moment().month(month+2).date(1).format('YYYY-MM-DD'),
-                endDate: moment().month(month+3).date(1).format('YYYY-MM-DD')
-            }).set('Content-Type', 'application/json');
+            const beginDate= moment().month(month+2).date(1).format('YYYY-MM-DD');
+            const endDate= moment().month(month+3).date(1).format('YYYY-MM-DD');
+            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();

@@ -18,13 +18,13 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/monthly/', async (req, res, next) => {
+router.get('/monthly/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({
             where: {
                 createdAt: {
-                    [Op.gte]: req.body.beginDate,
-                    [Op.lte]: req.body.endDate
+                    [Op.gte]: req.query.beginDate,
+                    [Op.lte]: req.query.endDate
                 }
             }
         });

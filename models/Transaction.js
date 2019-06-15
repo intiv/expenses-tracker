@@ -28,5 +28,4 @@ const Transaction = db.define('transaction', {
 Transaction.belongsTo(Category);
 Transaction.belongsTo(User);
 
-async () => Transaction.sync({force: true});
 module.exports = Transaction;

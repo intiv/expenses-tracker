@@ -59,7 +59,6 @@ router.post('/create/', async (req, res, next) => {
         res.status(200).json({categories});
     }catch(err){
         if(err){
-            console.log('ERROR: ', err);
             await dbTransaction.rollback();
             let categories = await Category.findAll({});
             res.status(500).send({categories, errorMessage: err});

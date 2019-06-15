@@ -1,17 +1,18 @@
 const request = require('supertest');
 const app = require('../app/app');
-//const Transaction = require('../models/Transaction');
+const Transaction = require('../models/Transaction');
 
 const moment = require('moment');
 
 describe('/api/transactions', () => {
 
-    // beforeAll(() => {
+    beforeAll(async () => {
+        await Transaction.sync({force: true});
     //     return db.query('TRUNCATE TABLE transactions RESTART IDENTITY CASCADE', {
     //         model: Transaction,
     //         mapToModel: true
     //     }).then();
-    // });
+    });
 
     const testTransaction = {
         quantity: '100.00',

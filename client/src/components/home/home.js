@@ -7,7 +7,7 @@ export default class Home extends Component{
 
     state = {
         transactions: [],
-        categories: [],
+        categories: {},
         quantity: 0,
         category: 1,
         errorMessage: '',
@@ -30,14 +30,13 @@ export default class Home extends Component{
         const data = await response.json();
         
         if(!data.errorMessage){
-            let newCategories = [];
+            let newCategories = {};
             data.categories.forEach((category, index) => {
                 newCategories[category.id-1] = category;
             });
             this.setState({categories: newCategories, errorMessage: ''});
-            console.log(this.state.categories);
         }else{
-            this.setState({categories: [], errorMessage: data.errorMessage});
+            this.setState({categories: {}, errorMessage: data.errorMessage});
         }
             
     }
@@ -100,7 +99,7 @@ export default class Home extends Component{
                     pathname: '/categories',
                     state: {userId: this.state.userId}
                 }}>
-                    <Button color="secondary">
+                    <Button color="info">
                         Categories
                     </Button>
                 </Link>

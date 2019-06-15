@@ -35,13 +35,13 @@ class Categories extends Component {
         const data = await response.json();
         
         if(!data.errorMessage){
-            let newCategories = [];
-            data.categories.forEach((category) => {
-                newCategories[category.id - 1] = category;
-            });
-            this.setState({categories: newCategories, errorMessage: ''});
+            // let newCategories = {};
+            // data.categories.forEach((category) => {
+            //     newCategories[category.id - 1] = category;
+            // });
+            this.setState({categories: data.categories, errorMessage: ''});
         }else{
-            this.setState({categories: [], errorMessage: data.errorMessage});
+            this.setState({categories: {}, errorMessage: data.errorMessage});
         }
     }
 
@@ -87,7 +87,7 @@ class Categories extends Component {
                     pathname: '/home',
                     state: {userId: this.state.userId}
                 }}>
-                    <Button color="tertiary">
+                    <Button color="info">
                         Home
                     </Button>
                 </Link>

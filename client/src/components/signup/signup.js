@@ -78,6 +78,7 @@ export default class Signup extends Component {
                 }}/>
                 : 
                 <div></div>}
+                
                 <div className="row">
                     <div className="col-md-8">
                         <Form onSubmit={this.onSubmit}>

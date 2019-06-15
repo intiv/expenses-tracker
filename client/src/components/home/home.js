@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Form, FormGroup, Button, Input, Label, Alert} from 'reactstrap';
 import moment from 'moment';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 export default class Home extends Component{
 
@@ -107,6 +107,14 @@ export default class Home extends Component{
                 :
                 (<div></div>)
                 }
+                <Link to={{
+                    pathname: '/categories',
+                    state: {userId: this.state.userId}
+                }}>
+                    <Button color="secondary">
+                        Categories
+                    </Button>
+                </Link>
                 <Form inline className="mb-4 mt-4" onSubmit={this.onSubmit}>
                     <FormGroup className="mr-2">
                         <Label for="transactionQty" className="mr-1">Quantity</Label>

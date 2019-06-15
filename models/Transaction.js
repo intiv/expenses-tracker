@@ -1,8 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db/db');
 const Category = require('./Category');
-
-const moment = require('moment');
+const User = require('./User');
 
 const Transaction = db.define('transaction', {
     quantity: {
@@ -15,12 +14,18 @@ const Transaction = db.define('transaction', {
             }
         }
     },
-    createdAt:  Sequelize.DATEONLY,
-    updatedAt: Sequelize.DATEONLY
+    createdAt: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+    },
+    updatedAt: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+    }
 });
 
-Transaction.belongsTo(Category);
 
-async () => await Transaction.sync({force: true});
+Transaction.belongsTo(Category);
+Transaction.belongsTo(User);
 
 module.exports = Transaction;

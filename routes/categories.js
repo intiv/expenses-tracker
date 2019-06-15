@@ -6,7 +6,11 @@ const Category = require('../models/Category');
 
 router.get('/', async (req, res, next) =>  {
     try{
-        let categories = await Category.findAll({});
+        let categories = await Category.findAll({
+            where: {
+                userId: req.query.userId
+            }
+        });
         // console.log(categories)
         res.status(200).json({categories});
     }catch(err){
@@ -15,9 +19,9 @@ router.get('/', async (req, res, next) =>  {
     }
 });
 
-router.post('/find/id/', async (req, res, next) => {
+router.get('/find/id/', async (req, res, next) => {
     try{
-        let category = await Category.findByPk(req.body.categoryId);
+        let category = await Category.findByPk(req.query.id);
         if(!category){
             throw new Error('Transaction category not found');
         }
@@ -28,14 +32,6 @@ router.post('/find/id/', async (req, res, next) => {
     }
 });
 
-router.post('/find/ids', async (req, res, next) => {
-    try{
-        //req.body.
-    }catch(err){
-        res.status(500).json({errorMessage: err});
-        next(err);
-    }
-});
 
 router.post('/create/', async (req, res, next) => {
     // const newCategory = {
@@ -44,14 +40,34 @@ router.post('/create/', async (req, res, next) => {
     let dbTransaction;
     dbTransaction = await db.transaction();
     try{
+        if(!req.body.category || !req.body.category.userId){
+            throw new Error('Can\'t create category');
+        }
+        let category = await Category.findOne({
+            where: {
+                userId: req.body.category.userId,
+                name: req.body.category.name
+            }
+        });
+        if(category){
+            throw new Error('Category already exists');
+        }
         await Category.create({...req.body.category}, {dbTransaction});
         await dbTransaction.commit();
-        let categories = await Category.findAll({});
+        let categories = await Category.findAll({
+            where: {
+                userId: req.body.category.userId
+            }
+        });
         res.status(200).json({categories});
     }catch(err){
         if(err){
             await dbTransaction.rollback();
-            let categories = await Category.findAll({});
+            let categories = await Category.findAll({
+                where: {
+                    userId: req.body.category.userId
+                }
+            });
             res.status(500).send({categories, errorMessage: err});
             next(err);
         }
@@ -65,6 +81,7 @@ router.delete('/delete/', async (req, res, next) => {
     dbTransaction = await db.transaction();
     try{
         let rows = await Category.destroy({where: {
+            userId: req.body.category.userId,
             name: req.body.category.name
         }});
         if(rows === 1){
@@ -72,13 +89,21 @@ router.delete('/delete/', async (req, res, next) => {
         }else{
             throw new Error('No categories were deleted');
         }
-        let categories = await Category.findAll({});
+        let categories = await Category.findAll({
+            where: {
+                userId: req.body.category.userId
+            }
+        });
         res.status(rows === 1 ? 200 : 500).json({categories});
     }catch(err){
         if(err){
             await dbTransaction.rollback();
-            let categories = await Category.findAll({});
-            res.status(500).json({categories, errorMessage: err});
+            let categories = await Category.findAll({
+                where: {
+                    userId: req.body.category.userId
+                }
+            });
+            res.status(500).json({categories, errorMessage: err.message});
             next(err);
         }
     }

@@ -11,10 +11,10 @@ class Categories extends Component {
         toSignup: false
     }
 
-    componentDidMount () {
+    componentDidMount = async () => {
         if(this.props.location.state){
-            this.setState({userId: this.props.location.state.userId});
-            this.getCategories();
+            await this.setState({userId: this.props.location.state.userId});
+            await this.getCategories();
         }else{
             this.setState({toSignup: true});
         }

@@ -15,13 +15,13 @@ export default class Home extends Component{
         toSignup: false
     }
 
-    componentDidMount () {
+    componentDidMount = async () => {
         if(this.props.location.state){
-            this.setState({userId: this.props.location.state.userId})
-            this.getMonthTransactions();
-            this.getCategories();
+            await this.setState({userId: this.props.location.state.userId});
+            await this.getMonthTransactions();
+            await this.getCategories();
         }else{
-            this.setState({toSignup: true})
+            await this.setState({toSignup: true})
         }   
     }
 
@@ -31,10 +31,11 @@ export default class Home extends Component{
         
         if(!data.errorMessage){
             let newCategories = [];
-            data.categories.forEach((category) => {
-                newCategories[category.id - 1] = category;
+            data.categories.forEach((category, index) => {
+                newCategories[category.id-1] = category;
             });
             this.setState({categories: newCategories, errorMessage: ''});
+            console.log(this.state.categories);
         }else{
             this.setState({categories: [], errorMessage: data.errorMessage});
         }

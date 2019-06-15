@@ -15,10 +15,12 @@ export default class Signup extends Component {
     onSubmit = async (event) => {
         event.preventDefault();
         if(!this.state.displayPhone){
-            const { user, errorMessage } = await fetch(`/api/users?username=${this.state.username}`);
+            const response = await fetch(`/api/users?username=${this.state.username}`);
+            const { user, errorMessage } = await response.json();
             if(user){
-                console.log('USER ALREADY EXISTS');
-                //redirect to home
+                
+                console.log('USER ALREADY EXISTS', user);
+                this.setState({userId: user.id, toHome: true});
             }else{
                 this.setState({displayPhone: true});
             }

@@ -17,17 +17,17 @@ if(process.env.NODE_ENV === 'production'){
     });
 }
 
-async () => {
-    await User.sync({force: true});
-    await db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE');
-    await Category.sync({force: true});
-    await Transaction.sync({force: true});
-}
+// async () => {
+//     await User.sync({force: true});
+//     await db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE');
+//     await Category.sync({force: true});
+//     await Transaction.sync({force: true});
+// }
 
 db.authenticate()
     .then(() => console.log('Database connected succesfully'))
     .catch((err) => console.log('Error connecting to database:', err));
-db.sync({force: true});
+db.sync();
 
 // try{
 //     await db.authenticate();

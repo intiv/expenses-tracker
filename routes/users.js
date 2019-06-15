@@ -12,7 +12,6 @@ router.get('/', async (req, res, next) => {
             }
         });
         if(!user){
-            
             throw new Error('No user found');
         }
         res.status(200).json({user});

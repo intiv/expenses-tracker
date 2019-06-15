@@ -6,16 +6,39 @@ export default class Signup extends Component {
     state = {
         username: '',
         phone: '',
-        displayPhone: false
+        displayPhone: false,
     }
 
     onSubmit = async (event) => {
         event.preventDefault();
-        let { user, errorMessage } = await fetch(`/api/users?username=${this.state.username}`);
-        if(user){
-            //redirect to home
+        if(!this.state.displayPhone){
+            const { user, errorMessage } = await fetch(`/api/users?username=${this.state.username}`);
+            if(user){
+                console.log('USER ALREADY EXISTS');
+                //redirect to home
+            }else{
+                this.setState({displayPhone: true});
+            }
         }else{
-            this.setState({displayPhone: true});
+            const response = await fetch('/api/users/create', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user: {
+                        username: this.state.username,
+                        phone: this.state.phone
+                    }
+                })
+            });
+            const data = await response.json();
+            if(!data.errorMessage){
+                console.log('USER CREATED: ', data.user)
+            }else{
+                console.log('ERROR: ',data.errorMessage);
+            }
         }
     }
 

@@ -26,6 +26,7 @@ router.post('/create', async (req, res, next) => {
     let dbTransaction = await db.transaction();
     try{
         let user = await User.create({...req.body.user}, {dbTransaction});
+        console.log('USER INSERTED IN DB: ', user);
         await dbTransaction.commit();
         res.status(200).json({user});
     }catch(err){

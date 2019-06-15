@@ -15,7 +15,7 @@ export default class Signup extends Component {
         if(user){
             //redirect to home
         }else{
-            
+            this.setState({displayPhone: true});
         }
     }
 
@@ -23,6 +23,7 @@ export default class Signup extends Component {
         return this.state.displayPhone ? 
         (<FormGroup>
             <Label>
+                Enter your phone to send you notifications!
                 <Input
                     type="text"
                     name="signupPhone"
@@ -42,13 +43,14 @@ export default class Signup extends Component {
                 <Form onSubmit={this.onSubmit}>
                     <FormGroup>
                         <Label>
+                            Enter your username
                             <Input 
                                 type="text" 
                                 name="signupUsername" 
                                 value={this.state.username}
                                 onChange={(event) => {this.setState({username: event.target.value})}}
                             ></Input>
-                            Enter your username
+                            
                         </Label>
                     </FormGroup>
                     {this.renderPhone()}

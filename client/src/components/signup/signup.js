@@ -21,18 +21,22 @@ export default class Signup extends Component {
 
     renderPhone = () => {
         return this.state.displayPhone ? 
-        (<FormGroup>
-            <Label>
-                Enter your phone to send you notifications!
-                <Input
-                    type="text"
-                    name="signupPhone"
-                    value={this.state.phone}
-                    onChange={(event) => {this.setState({phone: event.target.value})}}
-                >
-                </Input>
-            </Label>
-        </FormGroup>)
+        (<div className="row">
+            <div className="col-md-6">
+                <FormGroup>
+                    <Label>
+                        Enter your phone to send you notifications!
+                        <Input
+                            type="text"
+                            name="signupPhone"
+                            value={this.state.phone}
+                            onChange={(event) => {this.setState({phone: event.target.value})}}
+                        >
+                        </Input>
+                    </Label>
+                </FormGroup>
+            </div>
+        </div>)
         :
         (<div></div>)
     }
@@ -40,24 +44,36 @@ export default class Signup extends Component {
     render () {
         return (
             <div id="signupRoot">
-                <Form onSubmit={this.onSubmit}>
-                    <FormGroup>
-                        <Label>
-                            Enter your username
-                            <Input 
-                                type="text" 
-                                name="signupUsername" 
-                                value={this.state.username}
-                                onChange={(event) => {this.setState({username: event.target.value})}}
-                            ></Input>
-                            
-                        </Label>
-                    </FormGroup>
-                    {this.renderPhone()}
-                    <FormGroup>
-                        <Button color="primary">Enter</Button>
-                    </FormGroup>
-                </Form>
+                <div className="row">
+                    <div className="col-md-8">
+                        <Form onSubmit={this.onSubmit}>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <FormGroup>
+                                            <Label>Enter your username</Label>
+                                            <Input 
+                                                type="text" 
+                                                name="signupUsername" 
+                                                value={this.state.username}
+                                                onChange={(event) => {this.setState({username: event.target.value})}}
+                                                disabled={this.state.displayPhone}
+                                            ></Input>
+                                                
+                                            
+                                        </FormGroup>
+                                    </div>
+                                </div>  
+                            {this.renderPhone()}
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <FormGroup>
+                                        <Button color="primary">Enter</Button>
+                                    </FormGroup>
+                                </div>
+                            </div>
+                        </Form>
+                    </div>
+                </div>
             </div>
         )
     }

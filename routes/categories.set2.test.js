@@ -13,22 +13,26 @@ describe('/api/categories', () => {
         testCategories = [ {
             name: 'Medical supplies',
             type: 'Income',
-            userId: user.id
+            userId: 1
         },
         {
             name: 'Coffee',
-            userId: user.id
+            userId: 1
         },
         {
             name: '',
-            userId: user.id
+            userId: 1
         },
         {
-            userId: user.id
+            userId: 1
         },
         {
             name: 'Food',
-            userId: user.id
+            userId: 1
+        },
+        {
+            name: 'Tax refunds',
+            userId: 2
         }];
 
 
@@ -44,21 +48,15 @@ describe('/api/categories', () => {
     describe('POST /create', () => {
         test('It should insert a test category with status 200', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: testCategories[0]}).set('Content-Type', 'application/json');
-            
             expect(response.statusCode).toBe(200);
             expect(response.body.categories.length).toEqual(1);
-            const retCategory = response.body.categories[0];
-            expect(retCategory.name).toEqual(testCategories[0].name);
-            expect(retCategory.type).toEqual(testCategories[0].type);
-
+            expect(response.body.categories[0]).toMatchObject(testCategories[0]);
         });
 
         test('It should insert a category with a valid name but no type, setting it to Expense by default with status 200', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: testCategories[1]}).set('Content-Type', 'application/json');
             expect(response.body.categories.length).toEqual(2);
-            const retCategory = response.body.categories[1];
-            expect(retCategory.name).toEqual(testCategories[1].name);
-            expect(retCategory.type).toEqual('Expense');
+            expect(response.body.categories[1]).toMatchObject(testCategories[1]);
         });
 
         test('It should not insert a category with an existing name and equal userId with status 500', async () => {
@@ -84,6 +82,14 @@ describe('/api/categories', () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: testCategories[3]}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(500);
             expect(response.body.categories.length).toEqual(2);
+        });
+
+        test('It should insert a category for a different user with status 200', async () => {
+            const response = await (await request(app)).post('/api/categories/create/').send({category: testCategories[5]}).set('Content-Type', 'application/json');
+            
+            expect(response.statusCode).toBe(200);
+            expect(response.body.categories.length).toEqual(1);
+            expect(response.body.categories[0]).toMatchObject(testCategories[5]);
         });
 
     });

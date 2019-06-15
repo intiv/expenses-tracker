@@ -55,6 +55,9 @@ router.post('/create/', async (req, res, next) => {
         if(!req.body.transaction.categoryId){
             throw new Error('Transaction must belong to a category');
         }
+        if(!req.body.transaction.userId){
+            throw new Error('Transaction must belong to a user');
+        }
         const category = await Category.findOne({
             where: {
                 id: req.body.transaction.categoryId,
@@ -70,6 +73,7 @@ router.post('/create/', async (req, res, next) => {
         res.status(200).json({transactions});
     }catch(err){
         if(err){
+            //console.log('ERROR: ', err);
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
             res.status(500).json({transactions, errorMessage: err.message});

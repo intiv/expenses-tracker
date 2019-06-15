@@ -14,13 +14,12 @@ export default class Home extends Component{
     }
 
     componentDidMount () {
-        console.log('USER ID:', this.state.userId);
         this.getMonthTransactions();
         this.getCategories();
     }
 
     getCategories = () => {
-        fetch('/api/categories')
+        fetch(`/api/categories?userId=${this.state.userId}`)
             .then((res) => res.json())
             .then((resData) => {
                 if(!resData.errorMessage){
@@ -36,28 +35,15 @@ export default class Home extends Component{
             });
     }
 
-    getMonthTransactions = () => {
-        let month = moment().month();
-        fetch('/api/transactions/monthly/', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                beginDate: moment().date(1).format('YYYY-MM-DD'),
-                endDate: moment().month(month+1).date(1).format('YYYY-MM-DD')
-            }) 
-        })
-        .then((res) => res.json())
-        .then((resData) => {
-            console.log(resData);
-            if(!resData.errorMessage){
-                this.setState({transactions: resData.transactions, errorMessage: ''});
-            }else{
-                this.setState({ errorMessage: resData.errorMessage});
-            }
-        });
+    getMonthTransactions = async () => {
+        const month = moment().month();
+        const response = await fetch(`/api/transactions/monthly?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
+        const data = await response.json();
+        if(!data.errorMessage){
+            this.setState({transactions: data.transactions, errorMessage: ''});
+        }else{
+            this.setState({ errorMessage: data.errorMessage});
+        }
         
     }
 
@@ -70,7 +56,12 @@ export default class Home extends Component{
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({transaction: {quantity: this.state.quantity, categoryId: this.state.category}})
+            body: JSON.stringify({
+                transaction: {
+                    quantity: this.state.quantity, 
+                    categoryId: this.state.category,
+                    userId: this.state.userId
+                }})
         });
         let data = await response.json();
         console.log(data);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Redirect  } from 'react-router-dom';
 
 export default class Signup extends Component {
 
@@ -7,6 +8,7 @@ export default class Signup extends Component {
         username: '',
         phone: '',
         displayPhone: false,
+        toHome: false
     }
 
     onSubmit = async (event) => {
@@ -34,7 +36,8 @@ export default class Signup extends Component {
                 })
             });
             const data = await response.json();
-            if(!data.errorMessage){
+            if(!data.errorMessage && data.user){
+                this.setState({toHome: true});
                 console.log('USER CREATED: ', data.user)
             }else{
                 console.log('ERROR: ',data.errorMessage);
@@ -66,7 +69,9 @@ export default class Signup extends Component {
 
     render () {
         return (
+            
             <div id="signupRoot">
+                {this.state.toHome ? <Redirect to='/home'/> : <div></div>}
                 <div className="row">
                     <div className="col-md-8">
                         <Form onSubmit={this.onSubmit}>

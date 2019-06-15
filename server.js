@@ -27,7 +27,7 @@ async () => {
 db.authenticate()
     .then(() => console.log('Database connected succesfully'))
     .catch((err) => console.log('Error connecting to database:', err));
-db.sync();
+db.sync({force: true});
 
 // try{
 //     await db.authenticate();

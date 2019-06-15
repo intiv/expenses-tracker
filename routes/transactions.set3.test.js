@@ -99,7 +99,7 @@ describe('/api/transactions', () => {
     });
 
     describe('GET /', () => {
-        test('It should get all transactions with status 200', async () => {
+        test('It should get all transactions for user 1 with status 200', async () => {
             const response = await (await request(app)).get(`/api/transactions?userId=${testTransaction.userId}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
@@ -117,8 +117,10 @@ describe('/api/transactions', () => {
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
-            expect(response.body.transactions.length).not.toBe(0);
+            expect(response.body.transactions.length).toBe(2);
             expect(response.body.transactions[0]).toMatchObject(testTransaction);
+            expect(response.body.transactions[1]).toMatchObject(invalidPrecisionTransaction);
+
         });
 
         test('It should get only this month\'s transactions for user 2 with status 200', async () => {
@@ -127,7 +129,11 @@ describe('/api/transactions', () => {
             const endDate = moment().month(month+1).date(1).format('YYYY-MM-DD');
             
             const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}&userId=${testTransaction2.userId}`);
-            //expect(response.statusCode)
+            expect(response.statusCode).toBe(200);
+            expect(response.body).toHaveProperty('transactions');
+            expect(response.body.transactions).toBeDefined();
+            expect(response.body.transactions.length).toBe(1);
+            expect(response.body.transactions[0]).toMatchObject(testTransaction2);
         });
 
         test('It should not get any transactions with invalid time frame with status 200', async () => {
@@ -149,6 +155,7 @@ describe('/api/transactions', () => {
             expect(response.statusCode).toBe(200);
             expect(response.body.transactions.length).toBe(1);
             expect(response.body.transactions[0]).not.toMatchObject(testTransaction);
+            expect(response.body.transactions[0]).toMatchObject(invalidPrecisionTransaction);
         });
 
         test('It shouldnt delete a transaction if none match the id with status 500', async () => {

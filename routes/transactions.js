@@ -92,12 +92,20 @@ router.delete('/delete/', async (req, res, next) => {
             throw new Error(`No such transaction was found`);
         }
         dbTransaction.commit();
-        const transactions = await Transaction.findAll({});
+        const transactions = await Transaction.findAll({
+            where: {
+                userId: req.body.transaction.userId
+            }
+        });
         res.status(200).json({transactions});
     }catch(err){
         if(err){
             await dbTransaction.rollback();
-            let transactions = await Transaction.findAll({});
+            let transactions = await Transaction.findAll({
+                where: {
+                    userId: req.body.transaction.userId
+                }
+            });
             res.status(500).json({transactions, errorMessage: err});
             next(err);
         }

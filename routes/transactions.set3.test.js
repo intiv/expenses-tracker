@@ -109,7 +109,7 @@ describe('/api/transactions', () => {
             let month = moment().month();
             const beginDate= moment().month(month+2).date(1).format('YYYY-MM-DD');
             const endDate= moment().month(month+3).date(1).format('YYYY-MM-DD');
-            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}`);
+            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}&userId=${testTransaction.userId}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();

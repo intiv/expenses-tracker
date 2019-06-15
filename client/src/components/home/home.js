@@ -70,7 +70,6 @@ export default class Home extends Component{
                 }})
         });
         const data = await response.json();
-        console.log(data);
         if(!data.errorMessage){
             this.setState({quantity: 0, category: 0, errorMessage: ''});
             this.getMonthTransactions();

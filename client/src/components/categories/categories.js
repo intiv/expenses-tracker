@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Table, Button, FormGroup, Label, Input } from 'reactstrap';
-import { Redirect } from 'react-router-dom';
+import { Table, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Redirect, Link } from 'react-router-dom';
 
 class Categories extends Component {
     state = {
@@ -45,24 +45,29 @@ class Categories extends Component {
         }
     }
 
-    onSubmit = (event) => {
+    onSubmit = async (event) => {
         event.preventDefault();
-        fetch('/api/categories/create/', {
+        const response = await fetch('/api/categories/create/', {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({category: {name: this.state.name, type: this.state.type}})
-            })
-            .then((res) => res.json())
-            .then((resData) => {
-                if(!resData.errorMessage){
-                    this.setState({categories: resData.categories, errorMessage: '', name: ''});
-                }else{
-                    this.setState({categories: [], errorMessage: resData.errorMessage, name: ''});
-                }
+                body: JSON.stringify({
+                    category: {
+                        name: this.state.name, 
+                        type: this.state.type,
+                        userId: this.state.userId
+                    }
+                })
             });
+        const data = await response.json();
+        if(!data.errorMessage){
+            this.setState({categories: data.categories, errorMessage: '', name: ''});
+        }else{
+            this.setState({categories: [], errorMessage: data.errorMessage, name: ''});
+        }
+            
     }
 
     setType = (type) => {
@@ -78,7 +83,15 @@ class Categories extends Component {
                 }}/>)
                 :
                 (<div></div>)}
-                <form onSubmit={this.onSubmit}>
+                <Link to={{
+                    pathname: '/home',
+                    state: {userId: this.state.userId}
+                }}>
+                    <Button color="tertiary">
+                        Home
+                    </Button>
+                </Link>
+                <Form onSubmit={this.onSubmit}>
                     <div className="row">
                         <div className="col-md-12">
                             <h2>Add category</h2>
@@ -109,7 +122,7 @@ class Categories extends Component {
                             
                         </div>
                     </div>
-                </form>
+                </Form>
                 <h2>Categories</h2>
                 <Table dark striped>
                     <thead>

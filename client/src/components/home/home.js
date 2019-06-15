@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Form, FormGroup, Button, Input, Label, Alert} from 'reactstrap';
 import moment from 'moment';
+import { Redirect } from 'react-router-dom';
 
 export default class Home extends Component{
 
@@ -10,29 +11,42 @@ export default class Home extends Component{
         quantity: 0,
         category: 1,
         errorMessage: '',
-        userId: this.props.location.state.userId
+        userId: 0,
+        toSignup: false
     }
+
+    componentWillMount () {
+        
+        //this.props.location.state.userId
+    }
+
 
     componentDidMount () {
-        this.getMonthTransactions();
-        this.getCategories();
+        if(this.props.location.state){
+            this.setState({userID: this.props.location.state.userId})
+            this.getMonthTransactions();
+            this.getCategories();
+        }else{
+            this.setState({toSignup: true})
+        }
+        
+        
     }
 
-    getCategories = () => {
-        fetch(`/api/categories?userId=${this.state.userId}`)
-            .then((res) => res.json())
-            .then((resData) => {
-                if(!resData.errorMessage){
-                    let newCategories = [];
-                    resData.categories.forEach((category) => {
-                        newCategories[category.id - 1] = category;
-                    });
-                    console.log(newCategories);
-                    this.setState({categories: newCategories, errorMessage: ''});
-                }else{
-                    this.setState({categories: [], errorMessage: resData.errorMessage});
-                }
+    getCategories = async () => {
+        const response = await fetch(`/api/categories?userId=${this.state.userId}`);
+        const data = await response.json();
+        
+        if(!data.errorMessage){
+            let newCategories = [];
+            data.categories.forEach((category) => {
+                newCategories[category.id - 1] = category;
             });
+            this.setState({categories: newCategories, errorMessage: ''});
+        }else{
+            this.setState({categories: [], errorMessage: data.errorMessage});
+        }
+            
     }
 
     getMonthTransactions = async () => {
@@ -50,7 +64,7 @@ export default class Home extends Component{
     onSubmit = async (event) => {
         event.preventDefault();
         
-        let response = await fetch('/api/transactions/create/', {
+        const response = await fetch('/api/transactions/create/', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -63,7 +77,7 @@ export default class Home extends Component{
                     userId: this.state.userId
                 }})
         });
-        let data = await response.json();
+        const data = await response.json();
         console.log(data);
         if(!data.errorMessage){
             this.setState({quantity: 0, category: 0, errorMessage: ''});
@@ -86,6 +100,13 @@ export default class Home extends Component{
     render () {
         return (
             <div id="homeRoot" className="dark-background">
+                {this.state.toSignup ? 
+                (<Redirect to={{
+                    pathname: '/'
+                }}/>)
+                :
+                (<div></div>)
+                }
                 <Form inline className="mb-4 mt-4" onSubmit={this.onSubmit}>
                     <FormGroup className="mr-2">
                         <Label for="transactionQty" className="mr-1">Quantity</Label>

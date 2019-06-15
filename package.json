@@ -8,8 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest --runInBand --detectOpenHandles --forceExit .set1.test && jest --runInBand --detectOpenHandles --forceExit .set2.test",
+    "dev": "set NODE_ENV=development&& concurrently \"npm run server\" \"npm run client\"",
+    "test": "jest --runInBand --forceExit .set1.test && jest --runInBand --forceExit .set2.test && jest --runInBand --forceExit .set3.test",
     "test-server": "jest",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
@@ -22,7 +22,8 @@
     "path": "^0.12.7",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^5.8.7"
+    "sequelize": "^5.8.7",
+    "sequelize-cli": "^5.5.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -10,7 +10,11 @@ const moment = require('moment');
 
 router.get('/', async (req, res, next) => {
     try{
-        let transactions = await Transaction.findAll({});
+        let transactions = await Transaction.findAll({
+            where: {
+                userId: req.query.userId
+            }
+        });
         res.status(200).json({transactions});
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});
@@ -18,13 +22,14 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/monthly/', async (req, res, next) => {
+router.get('/monthly/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({
             where: {
+                userId: req.query.userId,
                 createdAt: {
-                    [Op.gte]: req.body.beginDate,
-                    [Op.lte]: req.body.endDate
+                    [Op.gte]: req.query.beginDate,
+                    [Op.lte]: req.query.endDate
                 }
             }
         });
@@ -44,14 +49,21 @@ router.post('/monthly/', async (req, res, next) => {
 });
 
 router.post('/create/', async (req, res, next) => {
-    let dbTransaction;
-    dbTransaction = await db.transaction();
+    let dbTransaction = await db.transaction();
 
     try{
         if(!req.body.transaction.categoryId){
             throw new Error('Transaction must belong to a category');
         }
-        const category = await Category.findByPk(req.body.transaction.categoryId);
+        if(!req.body.transaction.userId){
+            throw new Error('Transaction must belong to a user');
+        }
+        const category = await Category.findOne({
+            where: {
+                id: req.body.transaction.categoryId,
+                userId: req.body.transaction.userId
+            }
+        });
         if(!category){
             throw new Error('Transaction can\'t belong to non-existent category');
         }
@@ -61,7 +73,7 @@ router.post('/create/', async (req, res, next) => {
         res.status(200).json({transactions});
     }catch(err){
         if(err){
-            console.log(err);
+            //console.log('ERROR: ', err);
             await dbTransaction.rollback();
             let transactions = await Transaction.findAll({});
             res.status(500).json({transactions, errorMessage: err.message});
@@ -80,12 +92,20 @@ router.delete('/delete/', async (req, res, next) => {
             throw new Error(`No such transaction was found`);
         }
         dbTransaction.commit();
-        const transactions = await Transaction.findAll({});
+        const transactions = await Transaction.findAll({
+            where: {
+                userId: req.body.transaction.userId
+            }
+        });
         res.status(200).json({transactions});
     }catch(err){
         if(err){
             await dbTransaction.rollback();
-            let transactions = await Transaction.findAll({});
+            let transactions = await Transaction.findAll({
+                where: {
+                    userId: req.body.transaction.userId
+                }
+            });
             res.status(500).json({transactions, errorMessage: err});
             next(err);
         }

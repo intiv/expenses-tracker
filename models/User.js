@@ -28,6 +28,6 @@ const User = db.define('user', {
 });
 
 //User.hasMany(Transaction);
-async () => User.sync({force: true});
+//async () => await User.sync({force: true});
 module.exports = User;
 

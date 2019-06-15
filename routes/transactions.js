@@ -10,7 +10,11 @@ const moment = require('moment');
 
 router.get('/', async (req, res, next) => {
     try{
-        let transactions = await Transaction.findAll({});
+        let transactions = await Transaction.findAll({
+            where: {
+                userId: req.query.userId
+            }
+        });
         res.status(200).json({transactions});
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});
@@ -22,6 +26,7 @@ router.get('/monthly/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({
             where: {
+                userId: req.query.userId,
                 createdAt: {
                     [Op.gte]: req.query.beginDate,
                     [Op.lte]: req.query.endDate
@@ -50,7 +55,12 @@ router.post('/create/', async (req, res, next) => {
         if(!req.body.transaction.categoryId){
             throw new Error('Transaction must belong to a category');
         }
-        const category = await Category.findByPk(req.body.transaction.categoryId);
+        const category = await Category.findOne({
+            where: {
+                id: req.body.transaction.categoryId,
+                userId: req.body.transaction.userId
+            }
+        });
         if(!category){
             throw new Error('Transaction can\'t belong to non-existent category');
         }

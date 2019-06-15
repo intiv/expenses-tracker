@@ -40,12 +40,26 @@ router.post('/create/', async (req, res, next) => {
     let dbTransaction;
     dbTransaction = await db.transaction();
     try{
+        let category = await Category.findOne({
+            where: {
+                userId: req.body.category.userId,
+                name: req.body.category.name
+            }
+        });
+        if(category){
+            throw new Error('Category already exists');
+        }
         await Category.create({...req.body.category}, {dbTransaction});
         await dbTransaction.commit();
-        let categories = await Category.findAll({});
+        let categories = await Category.findAll({
+            where: {
+                userId: req.body.category.userId
+            }
+        });
         res.status(200).json({categories});
     }catch(err){
         if(err){
+            console.log('ERROR: ', err);
             await dbTransaction.rollback();
             let categories = await Category.findAll({});
             res.status(500).send({categories, errorMessage: err});

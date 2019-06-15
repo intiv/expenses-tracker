@@ -16,7 +16,6 @@ const Category = db.define('category', {
     },
     name: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false,
         validate: {
             len: {
@@ -37,5 +36,5 @@ const Category = db.define('category', {
 
 Category.belongsTo(User);
 
-async () => Category.sync({force: true});
+//async () => await Category.sync({force: true});
 module.exports = Category;

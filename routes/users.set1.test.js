@@ -2,8 +2,6 @@ const request = require('supertest');
 const app = require('../app/app');
 
 const User = require('../models/User');
-const Category = require('../models/Category');
-const Transaction = require('../models/Transaction');
 const db = require('../db/db');
 
 describe('/api/users', () => {
@@ -17,6 +15,7 @@ describe('/api/users', () => {
     //         model: Category,
     //         mapToModel: true
     //     });
+        await User.sync({force: true});
         return await db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE', {
             model: User,
             mapToModel: true

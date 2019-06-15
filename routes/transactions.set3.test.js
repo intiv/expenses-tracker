@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../app/app');
-const Transaction = require('../models/Transaction');
+//const Transaction = require('../models/Transaction');
 
 const moment = require('moment');
 
@@ -15,26 +15,31 @@ describe('/api/transactions', () => {
 
     const testTransaction = {
         quantity: '100.00',
-        categoryId: 1
+        categoryId: 1,
+        userId: 1
     }
 
     const invalidPrecisionTransaction = {
         quantity: '50.567',
-        categoryId: 1
+        categoryId: 1,
+        userId: 1
     }
 
     const invalidQtyTransaction = {
         quantity: '0',
-        categoryId: 1
+        categoryId: 1,
+        userId: 1
     }
 
     const invalidCatTransaction = {
         quantity: '20.00',
-        categoryId: 2
+        categoryId: 2,
+        userId: 1
     }
 
     const noCatTransaction = {
-        quantity: '50.00'
+        quantity: '50.00',
+        userId: 1
     }
 
     describe('POST /create/', () => {
@@ -78,7 +83,7 @@ describe('/api/transactions', () => {
 
     describe('GET /', () => {
         test('It should get all transactions with status 200', async () => {
-            const response = await (await request(app)).get('/api/transactions');
+            const response = await (await request(app)).get(`/api/transactions?userId=${testTransaction.userId}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();
@@ -91,7 +96,7 @@ describe('/api/transactions', () => {
             const beginDate= moment().month(month).date(1).format('YYYY-MM-DD');
             const endDate= moment().month(month+1).date(1).format('YYYY-MM-DD');
             
-            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}`);
+            const response = await (await request(app)).get(`/api/transactions/monthly?beginDate=${beginDate}&endDate=${endDate}&userId=${testTransaction.userId}`);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('transactions');
             expect(response.body.transactions).toBeDefined();

@@ -1,12 +1,13 @@
 const request = require('supertest');
 const app = require('../app/app');
+
 const Category = require('../models/Category');
-const db = require('../db/db');
 
 describe('/api/categories', () => {
     let user;
     let testCategories = [];
     beforeAll(async () => {
+        await Category.sync({force: true});
         let res = await (await request(app)).get('/api/users?username=intiv');
         user = res.body.user;
         testCategories = [ {
@@ -43,6 +44,7 @@ describe('/api/categories', () => {
     describe('POST /create', () => {
         test('It should insert a test category with status 200', async () => {
             const response = await (await request(app)).post('/api/categories/create/').send({category: testCategories[0]}).set('Content-Type', 'application/json');
+            
             expect(response.statusCode).toBe(200);
             expect(response.body.categories.length).toEqual(1);
             const retCategory = response.body.categories[0];
@@ -59,8 +61,8 @@ describe('/api/categories', () => {
             expect(retCategory.type).toEqual('Expense');
         });
 
-        test('It should not insert a category with an existing name with status 500', async () => {
-            const response = await (await request(app)).post('/api/categories/create').send({category: testCategories[1]}).set('Content-Type', 'application/json');
+        test('It should not insert a category with an existing name and equal userId with status 500', async () => {
+            const response = await (await request(app)).post('/api/categories/create').send({category: testCategories[0]}).set('Content-Type', 'application/json');
             expect(response.statusCode).toBe(500);
             expect(response.body.categories.length).toEqual(2);
         });

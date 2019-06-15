@@ -1,24 +1,48 @@
 import React, { Component } from 'react';
 import { Table, Button, FormGroup, Label, Input } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 class Categories extends Component {
     state = {
         categories: [],
         name: '',
-        type: ''
+        type: '',
+        userId: 0,
+        toSignup: false
     }
 
     componentDidMount () {
-            fetch('/api/categories')
-                .then((res) => res.json())
-                .then((resData) => {
-                    console.log('resData:', resData);
-                    if(!resData.errorMessage){
-                        this.setState({categories: resData.categories, errorMessage: ''});
-                    }else{
-                        this.setState({categories: [], errorMessage: resData.errorMessage});
-                    }
-                });
+        if(this.props.location.state){
+            this.setState({userId: this.props.location.state.userId});
+            this.getCategories();
+        }else{
+            this.setState({toSignup: true});
+        }
+            // fetch('/api/categories')
+            //     .then((res) => res.json())
+            //     .then((resData) => {
+            //         console.log('resData:', resData);
+            //         if(!resData.errorMessage){
+            //             this.setState({categories: resData.categories, errorMessage: ''});
+            //         }else{
+            //             this.setState({categories: [], errorMessage: resData.errorMessage});
+            //         }
+            //     });
+    }
+
+    getCategories = async () => {
+        const response = await fetch(`/api/categories?userId=${this.state.userId}`);
+        const data = await response.json();
+        
+        if(!data.errorMessage){
+            let newCategories = [];
+            data.categories.forEach((category) => {
+                newCategories[category.id - 1] = category;
+            });
+            this.setState({categories: newCategories, errorMessage: ''});
+        }else{
+            this.setState({categories: [], errorMessage: data.errorMessage});
+        }
     }
 
     onSubmit = (event) => {
@@ -48,6 +72,12 @@ class Categories extends Component {
     render () {
         return (
             <div id="categoriesRoot">
+                {this.state.toSignup ?
+                (<Redirect to={{
+                    pathname: '/'
+                }}/>)
+                :
+                (<div></div>)}
                 <form onSubmit={this.onSubmit}>
                     <div className="row">
                         <div className="col-md-12">

@@ -9,8 +9,8 @@ export const router = (
     <Router>
         <Switch>
             <Route exact path="/" component={Signup}/>
-             <Route path="/home" component={Home}/>
-            {/*<Route path="/categories" component={Categories}/> */}
+            <Route path="/home" component={Home}/>
+            <Route path="/categories" component={Categories}/>
         </Switch>
         
     </Router>

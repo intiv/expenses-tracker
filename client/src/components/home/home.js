@@ -15,22 +15,14 @@ export default class Home extends Component{
         toSignup: false
     }
 
-    componentWillMount () {
-        
-        //this.props.location.state.userId
-    }
-
-
     componentDidMount () {
         if(this.props.location.state){
-            this.setState({userID: this.props.location.state.userId})
+            this.setState({userId: this.props.location.state.userId})
             this.getMonthTransactions();
             this.getCategories();
         }else{
             this.setState({toSignup: true})
-        }
-        
-        
+        }   
     }
 
     getCategories = async () => {
@@ -93,9 +85,6 @@ export default class Home extends Component{
         :
         (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
-
-    
-    
 
     render () {
         return (

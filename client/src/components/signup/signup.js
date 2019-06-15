@@ -8,7 +8,8 @@ export default class Signup extends Component {
         username: '',
         phone: '',
         displayPhone: false,
-        toHome: false
+        toHome: false,
+        userId: 0
     }
 
     onSubmit = async (event) => {
@@ -37,8 +38,7 @@ export default class Signup extends Component {
             });
             const data = await response.json();
             if(!data.errorMessage && data.user){
-                this.setState({toHome: true});
-                console.log('USER CREATED: ', data.user)
+                this.setState({userId: data.user.id, toHome: true});
             }else{
                 console.log('ERROR: ',data.errorMessage);
             }
@@ -71,7 +71,13 @@ export default class Signup extends Component {
         return (
             
             <div id="signupRoot">
-                {this.state.toHome ? <Redirect to='/home'/> : <div></div>}
+                {this.state.toHome ? 
+                <Redirect to={{
+                    pathname: '/home',
+                    state: {userId: this.state.userId}
+                }}/>
+                : 
+                <div></div>}
                 <div className="row">
                     <div className="col-md-8">
                         <Form onSubmit={this.onSubmit}>

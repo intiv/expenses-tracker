@@ -9,10 +9,12 @@ export default class Home extends Component{
         categories: [],
         quantity: 0,
         category: 1,
-        errorMessage: ''
+        errorMessage: '',
+        userId: this.props.location.state.userId
     }
 
     componentDidMount () {
+        console.log('USER ID:', this.state.userId);
         this.getMonthTransactions();
         this.getCategories();
     }

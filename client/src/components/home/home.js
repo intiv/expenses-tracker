@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link, Redirect } from 'react-router-dom';
 import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
+import './home.css';
 
 export default class Home extends Component{
 
@@ -14,7 +15,7 @@ export default class Home extends Component{
         errorMessage: '',
         userId: 0,
         toSignup: false,
-        budget: 0,
+        budget: 0.00,
         options: [],
         showModal: false,
         addCategory: false,
@@ -43,7 +44,7 @@ export default class Home extends Component{
             data.categories.forEach((category, index) => {
                 newCategories[category.id] = category;
             });
-            this.setState({categories: newCategories, errorMessage: ''});
+            this.setState({categories: newCategories, name:'', errorMessage: ''});
         }else{
             this.setState({categories: {}, errorMessage: data.errorMessage});
         }
@@ -136,7 +137,7 @@ export default class Home extends Component{
             });
             this.setState({budget});
         }else{
-            this.setState({budget: 0});
+            this.setState({budget: 0.00});
         }
     }
 
@@ -144,7 +145,7 @@ export default class Home extends Component{
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <Form className="pb-4 pt-4 pl-2" onSubmit={this.state.addCategory ? this.submitCategory : this.submitTransaction}>
+                    <Form className="pb-4 pt-4 pl-2" id="modalForm" onSubmit={this.state.addCategory ? this.submitCategory : this.submitTransaction}>
                         <div className="row">
                             <div className="col-md-12">
                                 {this.state.addCategory ? (
@@ -188,8 +189,7 @@ export default class Home extends Component{
                                     <FormGroup>
                                         <Label for="transactionCatId" className="pr-1">Category</Label>
                                         <Select name="transactionCatId" options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
-                                    </FormGroup>
-                                    
+                                    </FormGroup> 
                                 )} 
                             </div>
                         </div>
@@ -255,13 +255,13 @@ export default class Home extends Component{
                         <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
                     </div>
                 </div>
-                <Modal isOpen={this.state.showModal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
-                    <ModalBody>
+                <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
+                    <ModalHeader toggle={this.toggleModal}  className="dark-background">{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
+                    <ModalBody  className="light-dark-background">
                         {this.renderForm()}
                     </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggleModal}>Accept</Button>
+                    <ModalFooter  className="dark-background">
+                        <Button color="primary" form="modalForm" type="submit">Accept</Button>
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
@@ -272,25 +272,34 @@ export default class Home extends Component{
                 <Table dark striped hover className="table">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Quantity</th>
-                            <th scope="col">CategoryId</th>
                             <th scope="col">Category</th>
                             <th scope="col">Type</th>
                             <th scope="col">Created At</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.transactions.map((transaction, index) => (
-                            <tr key={index}>
-                                <td>{transaction.id}</td>
-                                <td>{transaction.quantity}</td>                                
-                                <td>{this.state.categories[transaction.categoryId] ? this.state.categories[transaction.categoryId].id : ''}</td>
-                                <td>{this.state.categories[transaction.categoryId] ? this.state.categories[transaction.categoryId].name : ''}</td>
-                                <td>{this.state.categories[transaction.categoryId] ? this.state.categories[transaction.categoryId].type : ''}</td>
-                                <td>{transaction.createdAt}</td>
-                            </tr>
-                        ))}
+                        {this.state.transactions.map((transaction, index) => 
+                            
+                            {return this.state.categories[transaction.categoryId] ?
+                                (<tr key={index}>
+                                    <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                        'expense' : 'income'}>{transaction.quantity}</td>                                
+                                    <td>{this.state.categories[transaction.categoryId].name}</td>
+                                    <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                        'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>
+                                    <td>{transaction.createdAt}</td>
+                                </tr>)
+                                :
+                                (<tr key={index}>
+                                    <td>{''}</td>
+                                    <td>{''}</td>
+                                    <td>{''}</td>
+                                    <td>{''}</td>
+                                </tr>)
+                            }
+
+                        )}
                         
                     </tbody>
                 </Table>

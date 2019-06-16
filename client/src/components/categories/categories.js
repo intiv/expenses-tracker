@@ -18,16 +18,6 @@ class Categories extends Component {
         }else{
             this.setState({toSignup: true});
         }
-            // fetch('/api/categories')
-            //     .then((res) => res.json())
-            //     .then((resData) => {
-            //         console.log('resData:', resData);
-            //         if(!resData.errorMessage){
-            //             this.setState({categories: resData.categories, errorMessage: ''});
-            //         }else{
-            //             this.setState({categories: [], errorMessage: resData.errorMessage});
-            //         }
-            //     });
     }
 
     getCategories = async () => {
@@ -35,10 +25,6 @@ class Categories extends Component {
         const data = await response.json();
         
         if(!data.errorMessage){
-            // let newCategories = {};
-            // data.categories.forEach((category) => {
-            //     newCategories[category.id - 1] = category;
-            // });
             this.setState({categories: data.categories, errorMessage: ''});
         }else{
             this.setState({categories: {}, errorMessage: data.errorMessage});
@@ -108,18 +94,18 @@ class Categories extends Component {
                                     </div>
                                     
                                     <div className="row">
-                                        <div className="col-md-12">
+                                        <div className="col-md-12 col-sm-12">
                                             <FormGroup tag="fieldset">
                                                 <legend>This category is a:</legend>
                                                 <FormGroup check>
                                                     <Label check>
-                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>{' '}
+                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>
                                                         Income
                                                     </Label>
                                                 </FormGroup>
                                                 <FormGroup check>
                                                     <Label check>
-                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/>{' '}
+                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/> 
                                                         Expense
                                                     </Label>
                                                 </FormGroup>
@@ -135,14 +121,14 @@ class Categories extends Component {
                             </div>
                         </Form>
                         <h2>Categories</h2>
-                        <Table dark striped>
+                        <Table dark striped hover className="table">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Type</th>
-                                    <th scope="col">Created at</th>
-                                    <th scope="col">Updated at</th>
+                                    <th scope="col">Created</th>
+                                    <th scope="col">Updated</th>
                                 </tr>
                             </thead>    
                             <tbody>

@@ -10,7 +10,13 @@ body {
 #root {
   background-color: #181A1B;
   height: 100vh;
+  overflow: hidden;
   color: #DDD;
+}
+
+.table {
+  max-height: 5vh !important;
+  overflow-y: auto !important;
 }
 
 * {

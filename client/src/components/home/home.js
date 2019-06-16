@@ -135,9 +135,9 @@ export default class Home extends Component{
             this.state.transactions.forEach((transaction) => {
                 budget += this.state.categories[transaction.categoryId].type === 'Income' ? parseFloat(transaction.quantity) : -parseFloat(transaction.quantity)
             });
-            this.setState({budget});
+            this.setState({budget: parseFloat(budget)});
         }else{
-            this.setState({budget: 0.00});
+            this.setState({budget: parseFloat(0.00)});
         }
     }
 
@@ -285,10 +285,10 @@ export default class Home extends Component{
                                 (<tr key={index}>
                                     <td className={this.state.categories[transaction.categoryId].type==='Expense'?
                                         'expense' : 'income'}>{transaction.quantity}</td>                                
-                                    <td>{this.state.categories[transaction.categoryId].name}</td>
+                                    <td className="table-font">{this.state.categories[transaction.categoryId].name}</td>
                                     <td className={this.state.categories[transaction.categoryId].type==='Expense'?
                                         'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>
-                                    <td>{transaction.createdAt}</td>
+                                    <td className="table-font">{transaction.createdAt}</td>
                                 </tr>)
                                 :
                                 (<tr key={index}>

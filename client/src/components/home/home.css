@@ -8,13 +8,20 @@
     color: #CCC;
 }
 
+.table-font {
+    color: #CCC;
+    font-size: 1.3rem;
+}
+
 .income {
-    color: #169331;
-    font-size: 1.5rem;
+    color: #CCC;
+    font-size: 1.3rem;
+    text-shadow: -1px 0 #169331, 0 1px #169331, 1px 0 #169331, 0 -1px #169331;
 }
 
 .expense {
-    color: #ad2020;
-    font-size: 1.5rem;
+    color: #CCC;
+    font-size: 1.3rem;
+    text-shadow: -1px 0 #ad2020, 0 1px #ad2020, 1px 0 #ad2020, 0 -1px #ad2020;
 }
 

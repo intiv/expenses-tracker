@@ -9,7 +9,7 @@ export const router = (
         <Switch>
             <Route exact path='/' component={Signup}/>
             <Route path='/home' component={Home}/>
-            <Route path='/categories' component={Categories}/>
+            {/* <Route path='/categories' component={Categories}/> */}
             <Redirect to='/'/>
         </Switch>
     </Router>

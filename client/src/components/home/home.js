@@ -3,6 +3,8 @@ import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './home.css';
 
 export default class Home extends Component{
@@ -27,6 +29,7 @@ export default class Home extends Component{
     componentDidMount = async () => {
         if(this.props.location.state){
             await this.setState({userId: this.props.location.state.userId});
+            toast.success('Welcome!');
             await this.getMonthTransactions();
             await this.getCategories();
             this.calculateBudget();
@@ -84,7 +87,7 @@ export default class Home extends Component{
             this.setState({quantity: 0, category: 0, errorMessage: ''});
             this.getMonthTransactions();
         }else{
-            this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
+            await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
         this.calculateBudget();
         this.toggleModal();
@@ -193,13 +196,6 @@ export default class Home extends Component{
                                 )} 
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-md-2 pt-12">
-                                <FormGroup>
-                                    <Button color="primary" className="ml-1">Add</Button>
-                                </FormGroup>
-                            </div>
-                        </div>
                     </Form>
                 </div>
             </div>
@@ -268,13 +264,14 @@ export default class Home extends Component{
                 
                 
                 {this.printAlert()}
-                <Table responsive dark striped hover className="table-header">
+                <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
-                            <th scope="col">Type</th>
-                            <th scope="col">Category</th>
+                            <th scope="col" width="20%">Type</th>
+                            <th scope="col" width="%">Category</th>
                             <th scope="col" >Quantity</th>
                             <th scope="col">Date</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                 </Table>
@@ -292,9 +289,11 @@ export default class Home extends Component{
                                         <td className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{transaction.quantity}</td>
                                         <td className="table-font">{transaction.createdAt}</td>
+                                        <td></td>
                                     </tr>)
                                     :
                                     (<tr key={index}>
+                                        <td>{''}</td>
                                         <td>{''}</td>
                                         <td>{''}</td>
                                         <td>{''}</td>
@@ -307,6 +306,7 @@ export default class Home extends Component{
                         </tbody>
                     </Table>
                 </div>
+                <ToastContainer/>
             </div>
         );
     }

@@ -268,41 +268,44 @@ export default class Home extends Component{
                 
                 
                 {this.printAlert()}
-                <div className="table-scroll">
-                <Table dark striped hover>
+                <Table responsive dark striped hover className="table-header">
                     <thead>
                         <tr>
                             <th scope="col">Type</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Quantity</th>
+                            <th scope="col" >Quantity</th>
                             <th scope="col">Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {this.state.transactions.map((transaction, index) => 
-                            
-                            {return this.state.categories[transaction.categoryId] ?
-                                (<tr key={index}>
-                                    <td className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                        'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
-                                    <td className="table-font">{this.state.categories[transaction.categoryId].name}</td>
-                                    <td className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                        'expense' : 'income'}>{transaction.quantity}</td>
-                                    <td className="table-font">{transaction.createdAt}</td>
-                                </tr>)
-                                :
-                                (<tr key={index}>
-                                    <td>{''}</td>
-                                    <td>{''}</td>
-                                    <td>{''}</td>
-                                    <td>{''}</td>
-                                </tr>)
-                            }
-
-                        )}
-                        
-                    </tbody>
                 </Table>
+                <div className="table-scroll">
+                    <Table responsive dark striped hover>
+                        
+                        <tbody>
+                            {this.state.transactions.map((transaction, index) => 
+                                
+                                {return this.state.categories[transaction.categoryId] ?
+                                    (<tr key={index}>
+                                        <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                            'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
+                                        <td className="table-font">{this.state.categories[transaction.categoryId].name}</td>
+                                        <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                            'expense' : 'income'}>{transaction.quantity}</td>
+                                        <td className="table-font">{transaction.createdAt}</td>
+                                    </tr>)
+                                    :
+                                    (<tr key={index}>
+                                        <td>{''}</td>
+                                        <td>{''}</td>
+                                        <td>{''}</td>
+                                        <td>{''}</td>
+                                    </tr>)
+                                }
+
+                            )}
+                            
+                        </tbody>
+                    </Table>
                 </div>
             </div>
         );

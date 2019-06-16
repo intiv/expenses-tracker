@@ -18,7 +18,9 @@ export default class Home extends Component{
         options: [],
         showModal: false,
         addCategory: false,
-        addTransaction: false
+        addTransaction: false,
+        name: '',
+        type: 'Expense'
     }
 
     componentDidMount = async () => {
@@ -87,6 +89,32 @@ export default class Home extends Component{
         this.toggleModal();
     } 
 
+    submitCategory = async (event) => {
+        event.preventDefault();
+        const response = await fetch('/api/categories/create/', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                category: {
+                    name: this.state.name, 
+                    type: this.state.type,
+                    userId: this.state.userId
+                }
+            })
+        });
+        const data = await response.json();
+        if(!data.errorMessage){
+            await this.getCategories();
+            await this.categoriesSelect();
+        }else{
+            this.setState({categories: {}, errorMessage: data.errorMessage, name: '', type: ''});
+        }
+        this.toggleModal();
+    }
+
     categoriesSelect = () => {
         let selectOptions = [];
         if(Object.keys(this.state.categories).length>0){
@@ -112,28 +140,57 @@ export default class Home extends Component{
         }
     }
 
-    renderTransactionForm = () => {
+    renderForm = () => {
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <Form className="pb-4 pt-4 pl-2" onSubmit={this.submitTransaction}>
+                    <Form className="pb-4 pt-4 pl-2" onSubmit={this.state.addCategory ? this.submitCategory : this.submitTransaction}>
                         <div className="row">
                             <div className="col-md-12">
-                                <FormGroup className="pr-2">
-                                    <Label for="transactionQty" className="pr-1">Quantity</Label>
-                                    <Input type="number" min="0.01" step="0.01" 
-                                        value={this.state.quantity}
-                                        onChange={(event) => { this.setState({quantity: event.target.value}) }}
-                                    />
-                                </FormGroup>
+                                {this.state.addCategory ? (
+                                    <FormGroup className="pr-2">
+                                        <Label for="categoryName" className="pr-1">Name</Label>
+                                        <Input name="categoryName" type="text"
+                                            value={this.state.name}
+                                            onChange={(event) => {this.setState({name: event.target.value})}}
+                                        />
+                                    </FormGroup>
+                                ) : (
+                                    <FormGroup className="pr-2">
+                                        <Label for="transactionQty" className="pr-1">Quantity</Label>
+                                        <Input name="transactionQty" type="number" min="0.01" step="0.01" 
+                                            value={this.state.quantity}
+                                            onChange={(event) => { this.setState({quantity: event.target.value}) }}
+                                        />
+                                    </FormGroup>
+                                )}
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-12">
-                                <FormGroup>
-                                    <Label for="transactionCatId" className="pr-1">Category</Label>
-                                    <Select options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
-                                </FormGroup>
+                                {this.state.addCategory ? (
+                                    <FormGroup tag="fieldset">
+                                        <legend>This category represents an: </legend>
+                                        <FormGroup check>
+                                            <Label check>
+                                                <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>
+                                                Income
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                            <Label check>
+                                                <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/> 
+                                                Expense
+                                            </Label>
+                                        </FormGroup>
+                                    </FormGroup>
+                                ) : (
+                                    <FormGroup>
+                                        <Label for="transactionCatId" className="pr-1">Category</Label>
+                                        <Select name="transactionCatId" options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
+                                    </FormGroup>
+                                    
+                                )} 
                             </div>
                         </div>
                         <div className="row">
@@ -201,10 +258,7 @@ export default class Home extends Component{
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
                     <ModalBody>
-                        {this.state.addCategory ? 
-                        this.renderTransactionForm() 
-                        :
-                        <div></div>}
+                        {this.renderForm()}
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.toggleModal}>Accept</Button>

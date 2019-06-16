@@ -87,6 +87,9 @@ router.delete('/delete/', async (req, res, next) => {
     dbTransaction = await db.transaction();
 
     try{
+        if(!req.body.transaction || !req.body.transaction.id){
+            throw new Error('Need a transaction\'s id to delete it');
+        }
         let rows = await Transaction.destroy({where: {id: req.body.transaction.id}}, {dbTransaction});
         if(!rows){
             throw new Error(`No such transaction was found`);

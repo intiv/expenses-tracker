@@ -84,8 +84,8 @@ export default class Home extends Component{
         });
         const data = await response.json();
         if(!data.errorMessage){
-            this.setState({quantity: 0, category: 0, errorMessage: ''});
-            this.getMonthTransactions();
+            await this.setState({quantity: 0, category: 0, errorMessage: ''});
+            await this.getMonthTransactions();
         }else{
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
@@ -114,7 +114,7 @@ export default class Home extends Component{
             await this.getCategories();
             await this.categoriesSelect();
         }else{
-            this.setState({categories: {}, errorMessage: data.errorMessage, name: '', type: ''});
+            await this.setState(prevState => ({categories: prevState.categories, errorMessage: data.errorMessage, name: '', type: ''}));
         }
         this.toggleModal();
     }
@@ -132,15 +132,15 @@ export default class Home extends Component{
         this.setState({options: selectOptions});
     }
 
-    calculateBudget = () => {
+    calculateBudget = async () => {
         let budget = 0.00;
         if(this.state.transactions.length>0 && Object.keys(this.state.categories).length > 0){
             this.state.transactions.forEach((transaction) => {
                 budget += this.state.categories[transaction.categoryId].type === 'Income' ? parseFloat(transaction.quantity) : -parseFloat(transaction.quantity)
             });
-            this.setState({budget: parseFloat(budget).toFixed(2)});
+            await this.setState({budget: parseFloat(budget).toFixed(2)});
         }else{
-            this.setState({budget: parseFloat(0.00).toFixed(2)});
+            await this.setState({budget: parseFloat(0.00).toFixed(2)});
         }
     }
 
@@ -177,13 +177,13 @@ export default class Home extends Component{
                                         <legend>This category represents an: </legend>
                                         <FormGroup check>
                                             <Label check>
-                                                <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>
+                                                <Input type="radio" name="radioType" onChange={() => this.setState({type: 'Income'})} checked={this.state.type === 'Income'}/>
                                                 Income
                                             </Label>
                                         </FormGroup>
                                         <FormGroup check>
                                             <Label check>
-                                                <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/> 
+                                                <Input type="radio" name="radioType" onChange={() => this.setState({type: 'Expense'})} checked={this.state.type === 'Expense'}/> 
                                                 Expense
                                             </Label>
                                         </FormGroup>
@@ -205,7 +205,7 @@ export default class Home extends Component{
 
     printAlert = () => {
         return this.state.errorMessage === '' ?
-        (<div> </div>)
+        null
         :
         (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
@@ -218,15 +218,40 @@ export default class Home extends Component{
         }));
     }
 
+    deleteTransaction = async (transaction) => {
+        let answer = window.confirm('Delete transaction?');
+        if(answer){
+            const response = await fetch('/api/transactions/delete/', {
+                method: 'delete',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    transaction
+                })
+            });
+            const data = await response.json();
+            if(!data.errorMessage){
+                this.setState({transactions: data.transactions});
+                toast.success('Transaction deleted succesfully!');
+                this.calculateBudget();
+            }else{
+                toast.error('An error occured, could not delete transaction');
+            }
+        }
+    }
+
     render () {
         return (
             <div id="homeRoot" className="dark-background pt-2">
                 {this.state.toSignup ? 
-                (<Redirect to={{
-                    pathname: '/',
-                    state: {invalid: true}
-                }}/>)
-                : null
+                    (<Redirect to={{
+                        pathname: '/',
+                        state: {invalid: true}
+                    }}/>)
+                    : 
+                    null
                 }
                 <div className="row">
                     <div className="col-md-2 col-sm-4">
@@ -245,10 +270,9 @@ export default class Home extends Component{
                             </Button>
                         </Link> */}
                     </div>
-                    <div className="col-md-2 col-sm-6" className={this.state.budget > 0 ? 'income' : 'expense'}>
+                    <div className={this.state.budget > 0 ? 'income' : 'expense'}>
                         Budget: {this.state.budget}
                     </div>
-                    
                 </div>
                 
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
@@ -267,10 +291,10 @@ export default class Home extends Component{
                 <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
-                            <th scope="col" width="20%">Type</th>
-                            <th scope="col" width="%">Category</th>
-                            <th scope="col" >Quantity</th>
-                            <th scope="col">Date</th>
+                            <th scope="col" width="14%">Type</th>
+                            <th scope="col" width="30%">Category</th>
+                            <th scope="col" width="20%">Quantity</th>
+                            <th scope="col" >Date</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -282,10 +306,10 @@ export default class Home extends Component{
                             {this.state.transactions.map((transaction, index) => 
                                 
                                 {return this.state.categories[transaction.categoryId] ?
-                                    (<tr key={index}>
-                                        <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                    (<tr key={transaction.id} onClick={this.deleteTransaction.bind(this, transaction)}>
+                                        <td width="15%" className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
-                                        <td className="table-font">{this.state.categories[transaction.categoryId].name}</td>
+                                        <td width="30%" className="table-font">{this.state.categories[transaction.categoryId].name}</td>
                                         <td className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{transaction.quantity}</td>
                                         <td className="table-font">{transaction.createdAt}</td>

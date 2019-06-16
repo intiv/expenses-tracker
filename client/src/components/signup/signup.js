@@ -77,7 +77,7 @@ export default class Signup extends Component {
     }
 
     cancel = () => {
-        this.setState({displayPhone: false});
+        this.setState({displayPhone: false, phone: ''});
     }
 
 

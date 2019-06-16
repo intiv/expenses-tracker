@@ -14,6 +14,10 @@
     width: 100%;
 }
 
+.table-header > thead {
+    height: 10vh;
+}
+
 .table-scroll {
     display: block;
     width: 100%;
@@ -21,19 +25,42 @@
     overflow-y: scroll;
 }
 
-
-.table-font {
-    color: #CCC;
-    font-size: 1.3rem;
+tbody > tr:hover {
+    cursor: pointer;
 }
 
-.income {
-    color: #07BC0C;
-    font-size: 1.4rem;
+@media screen and (max-width: 800px){
+
+    .table-font {
+        color: #CCC;
+        font-size: 1rem;
+    }
+
+    .income {
+        color: #07BC0C;
+        font-size: 1rem;
+    }
+
+    .expense {
+        color: #bc2121;
+        font-size: 1rem;
+    }
 }
 
-.expense {
-    color: #bc2121;
-    font-size: 1.4rem;
+@media screen and (min-width: 801px){
+    .table-font {
+        color: #CCC;
+        font-size: 1.3rem;
+    }
+
+    .income {
+        color: #07BC0C;
+        font-size: 1.4rem;
+    }
+
+    .expense {
+        color: #bc2121;
+        font-size: 1.4rem;
+    }
 }
 

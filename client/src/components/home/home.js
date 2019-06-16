@@ -144,25 +144,31 @@ export default class Home extends Component{
                 <div className="row">
                     <div className="col-md-12">
                         <Form className="pb-4 pt-4 pl-2" onSubmit={this.onSubmit}>
-                            <FormGroup className="pr-2">
-                                <Label for="transactionQty" className="pr-1">Quantity</Label>
-                                <Input type="number" min="0.01" step="0.01" 
-                                    value={this.state.quantity}
-                                    onChange={(event) => { this.setState({quantity: event.target.value}) }}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="transactionCatId" className="pr-1">Category</Label>
-                                <Select options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
-                                {/* <Input type="number" min="1" step="1"
-                                    value={this.state.category} 
-                                    onChange={(event) => { this.setState({category: event.target.value }) }}
-                                /> */}
-                            </FormGroup>
+                            <div className="row">
+                                <div className="col-md-2">
+                                    <FormGroup className="pr-2">
+                                        <Label for="transactionQty" className="pr-1">Quantity</Label>
+                                        <Input type="number" min="0.01" step="0.01" 
+                                            value={this.state.quantity}
+                                            onChange={(event) => { this.setState({quantity: event.target.value}) }}
+                                        />
+                                    </FormGroup>
+                                </div>
+                                <div className="col-md-4">
+                                    <FormGroup>
+                                        <Label for="transactionCatId" className="pr-1">Category</Label>
+                                        <Select options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
+                                    </FormGroup>
+                                </div>
+                                <div className="col-md-2 pt-4">
+                                    <FormGroup>
+                                        <Button color="primary" className="ml-1">Add</Button>
+                                    </FormGroup>
+                                </div>
+                            </div>
                             
-                            <FormGroup>
-                                <Button color="primary" className="ml-1">Add</Button>
-                            </FormGroup>
+                            
+                            
                         </Form>
                     </div>
                 </div>

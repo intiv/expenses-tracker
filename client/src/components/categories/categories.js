@@ -83,69 +83,82 @@ class Categories extends Component {
                 }}/>)
                 :
                 (<div></div>)}
-                <Link to={{
-                    pathname: '/home',
-                    state: {userId: this.state.userId}
-                }}>
-                    <Button color="info">
-                        Home
-                    </Button>
-                </Link>
-                <Form onSubmit={this.onSubmit}>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h2>Add category</h2>
-                        </div>
-                        <div className="col-md-12">
-                            <input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
-                        </div>
-                        
-                        <div className="col-md-12">
-                            <FormGroup tag="fieldset">
-                                <legend>This category is a:</legend>
-                                <FormGroup check>
-                                    <Label check>
-                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>{' '}
-                                        Income
-                                    </Label>
-                                </FormGroup>
-                                <FormGroup check>
-                                    <Label check>
-                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/>{' '}
-                                        Expense
-                                    </Label>
-                                </FormGroup>
-                            </FormGroup>
-                        </div>
-                        <div className="col-md-12">
-                            <Button color="primary">Add</Button>
-                            
-                        </div>
-                    </div>
-                </Form>
-                <h2>Categories</h2>
-                <Table dark striped>
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Created at</th>
-                            <th scope="col">Updated at</th>
-                        </tr>
-                    </thead>    
-                    <tbody>
-                        {this.state.categories.map((category, index) => (
-                            <tr key={index}>
-                                <td>{ category.id }</td>
-                                <td>{ category.name }</td>
-                                <td>{ category.type }</td>
-                                <td>{ category.createdAt }</td>
-                                <td>{ category.updatedAt }</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                <div className="row">
+                    <div className="col-md-12 mt-2">
+                        <Link to={{
+                            pathname: '/home',
+                            state: {userId: this.state.userId}
+                        }}>
+                            <Button color="info" className="ml-2">
+                                Home
+                            </Button>
+                        </Link>
+                        <Form onSubmit={this.onSubmit}>
+                            <div className="row">
+                                <div className="ml-2 col-md-10">
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <h2>Add category</h2>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            <Input type="text" id="categoryName" placeholder="New category name" value={this.state.name} onChange={(event) => { this.setState({name: event.target.value}) }}/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <FormGroup tag="fieldset">
+                                                <legend>This category is a:</legend>
+                                                <FormGroup check>
+                                                    <Label check>
+                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Income'})}/>{' '}
+                                                        Income
+                                                    </Label>
+                                                </FormGroup>
+                                                <FormGroup check>
+                                                    <Label check>
+                                                        <Input type="radio" name="radioType" onClick={() => this.setState({type: 'Expense'})}/>{' '}
+                                                        Expense
+                                                    </Label>
+                                                </FormGroup>
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <Button color="primary">Add</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Form>
+                        <h2>Categories</h2>
+                        <Table dark striped>
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Created at</th>
+                                    <th scope="col">Updated at</th>
+                                </tr>
+                            </thead>    
+                            <tbody>
+                                {this.state.categories.map((category, index) => (
+                                    <tr key={index}>
+                                        <td>{ category.id }</td>
+                                        <td>{ category.name }</td>
+                                        <td>{ category.type }</td>
+                                        <td>{ category.createdAt }</td>
+                                        <td>{ category.updatedAt }</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>    
+                </div>
             </div>
         );
     }

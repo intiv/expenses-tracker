@@ -82,10 +82,10 @@ export default class Signup extends Component {
                 <div></div>}
                 
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-8 mt-2">
                         <Form onSubmit={this.onSubmit}>
                                 <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-6 ml-2">
                                         <FormGroup>
                                             <Label>Enter your username</Label>
                                             <Input 

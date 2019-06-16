@@ -87,7 +87,7 @@ export default class Home extends Component{
 
     render () {
         return (
-            <div id="homeRoot" className="dark-background">
+            <div id="homeRoot" className="dark-background mt-2">
                 {this.state.toSignup ? 
                 (<Redirect to={{
                     pathname: '/'
@@ -99,11 +99,11 @@ export default class Home extends Component{
                     pathname: '/categories',
                     state: {userId: this.state.userId}
                 }}>
-                    <Button color="info">
+                    <Button color="info" className="ml-2">
                         Categories
                     </Button>
                 </Link>
-                <Form inline className="mb-4 mt-4" onSubmit={this.onSubmit}>
+                <Form inline className="mb-4 mt-4 ml-2" onSubmit={this.onSubmit}>
                     <FormGroup className="mr-2">
                         <Label for="transactionQty" className="mr-1">Quantity</Label>
                         <Input type="number" min="0.01" step="0.01" 
@@ -119,7 +119,7 @@ export default class Home extends Component{
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary">Add</Button>
+                        <Button color="primary" className="ml-1">Add</Button>
                     </FormGroup>
                 </Form>
                 {this.printAlert()}

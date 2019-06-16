@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Redirect  } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default class Signup extends Component {
 
@@ -9,7 +10,14 @@ export default class Signup extends Component {
         phone: '',
         displayPhone: false,
         toHome: false,
-        userId: 0
+        userId: 0,
+        invalid: false
+    }
+
+    componentDidMount () {
+        if(this.props.location.state && this.props.location.state.invalid){
+            toast.error('You must enter your username first!');
+        }
     }
 
     onSubmit = async (event) => {
@@ -19,7 +27,6 @@ export default class Signup extends Component {
             const { user, errorMessage } = await response.json();
             if(user){
                 
-                console.log('USER ALREADY EXISTS', user);
                 this.setState({userId: user.id, toHome: true});
             }else{
                 this.setState({displayPhone: true});
@@ -48,9 +55,10 @@ export default class Signup extends Component {
     }
 
     renderPhone = () => {
+        
         return this.state.displayPhone ? 
         (<div className="row">
-            <div className="col-md-6">
+            <div className="col-md-6 ml-2">
                 <FormGroup>
                     <Label>
                         Enter your phone to send you notifications!
@@ -65,9 +73,13 @@ export default class Signup extends Component {
                 </FormGroup>
             </div>
         </div>)
-        :
-        (<div></div>)
+        : null
     }
+
+    cancel = () => {
+        this.setState({displayPhone: false});
+    }
+
 
     render () {
         return (
@@ -78,8 +90,7 @@ export default class Signup extends Component {
                     pathname: '/home',
                     state: {userId: this.state.userId}
                 }}/>
-                : 
-                <div></div>}
+                : null}
                 
                 <div className="row">
                     <div className="col-md-8 mt-2">
@@ -94,6 +105,7 @@ export default class Signup extends Component {
                                             value={this.state.username}
                                             onChange={(event) => {this.setState({username: event.target.value})}}
                                             disabled={this.state.displayPhone}
+                                            
                                         ></Input>
                                     </FormGroup>
                                 </div>
@@ -102,15 +114,23 @@ export default class Signup extends Component {
                             {this.renderPhone()}
                             
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-1 ml-2">
                                     <FormGroup>
-                                        <Button color="primary">Enter</Button>
+                                        <Button color="primary" type="submit">Enter</Button>
                                     </FormGroup>
                                 </div>
+                                {this.state.displayPhone?
+                                (<div className="col-md-2">
+                                    <FormGroup>
+                                        <Button color="secondary" onClick={this.cancel}>Cancel</Button>
+                                    </FormGroup>
+                                </div>) 
+                                : null}
                             </div>
                         </Form>
                     </div>
                 </div>
+                <ToastContainer/>
             </div>
         )
     }

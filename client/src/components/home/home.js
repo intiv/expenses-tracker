@@ -223,10 +223,10 @@ export default class Home extends Component{
             <div id="homeRoot" className="dark-background pt-2">
                 {this.state.toSignup ? 
                 (<Redirect to={{
-                    pathname: '/'
+                    pathname: '/',
+                    state: {invalid: true}
                 }}/>)
-                :
-                (<div></div>)
+                : null
                 }
                 <div className="row">
                     <div className="col-md-2 col-sm-4">
@@ -245,7 +245,7 @@ export default class Home extends Component{
                             </Button>
                         </Link> */}
                     </div>
-                    <div className="col-md-2 col-sm-6" className={this.state.budget>0.00 ? 'income' : 'expense'}>
+                    <div className="col-md-2 col-sm-6" className={this.state.budget > 0 ? 'income' : 'expense'}>
                         Budget: {this.state.budget}
                     </div>
                     

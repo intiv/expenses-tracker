@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
 import './home.css';
@@ -135,9 +135,9 @@ export default class Home extends Component{
             this.state.transactions.forEach((transaction) => {
                 budget += this.state.categories[transaction.categoryId].type === 'Income' ? parseFloat(transaction.quantity) : -parseFloat(transaction.quantity)
             });
-            this.setState({budget: parseFloat(budget)});
+            this.setState({budget: parseFloat(budget).toFixed(2)});
         }else{
-            this.setState({budget: parseFloat(0.00)});
+            this.setState({budget: parseFloat(0.00).toFixed(2)});
         }
     }
 
@@ -233,28 +233,28 @@ export default class Home extends Component{
                 (<div></div>)
                 }
                 <div className="row">
-                    <div className="col-md-10 col-sm-6">
-                        <Link to={{
+                    <div className="col-md-2 col-sm-4">
+                        <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>Add Category</Button>
+                    </div>
+                    <div className="col-md-2 col-sm-4">
+                        <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
+                    </div>
+                    <div className="col-md-4 col-sm-4">
+                        {/* <Link to={{
                             pathname: '/categories',
                             state: {userId: this.state.userId}
                         }}>
                             <Button color="info" className="pl-2">
                                 Categories
                             </Button>
-                        </Link>
+                        </Link> */}
                     </div>
-                    <div className="col-md-2 col-sm-6">
+                    <div className="col-md-2 col-sm-6" className={this.state.budget>0.00 ? 'income' : 'expense'}>
                         Budget: {this.state.budget}
                     </div>
+                    
                 </div>
-                <div className="row">
-                    <div className="col-md-2">
-                        <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>Add Category</Button>
-                    </div>
-                    <div className="col-md-2">
-                        <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
-                    </div>
-                </div>
+                
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
                     <ModalHeader toggle={this.toggleModal}  className="dark-background">{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
                     <ModalBody  className="light-dark-background">
@@ -268,14 +268,14 @@ export default class Home extends Component{
                 
                 
                 {this.printAlert()}
-
-                <Table dark striped hover className="table">
+                <div className="table-scroll">
+                <Table dark striped hover>
                     <thead>
                         <tr>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Category</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Created At</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -284,10 +284,10 @@ export default class Home extends Component{
                             {return this.state.categories[transaction.categoryId] ?
                                 (<tr key={index}>
                                     <td className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                        'expense' : 'income'}>{transaction.quantity}</td>                                
+                                        'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
                                     <td className="table-font">{this.state.categories[transaction.categoryId].name}</td>
                                     <td className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                        'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>
+                                        'expense' : 'income'}>{transaction.quantity}</td>
                                     <td className="table-font">{transaction.createdAt}</td>
                                 </tr>)
                                 :
@@ -303,6 +303,7 @@ export default class Home extends Component{
                         
                     </tbody>
                 </Table>
+                </div>
             </div>
         );
     }

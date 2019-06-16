@@ -16,7 +16,9 @@ export default class Home extends Component{
         toSignup: false,
         budget: 0,
         options: [],
-        showModal: false
+        showModal: false,
+        addCategory: false,
+        addTransaction: false
     }
 
     componentDidMount = async () => {
@@ -58,7 +60,7 @@ export default class Home extends Component{
         
     }
 
-    onSubmit = async (event) => {
+    submitTransaction = async (event) => {
         event.preventDefault();
         
         const response = await fetch('/api/transactions/create/', {
@@ -82,6 +84,7 @@ export default class Home extends Component{
             this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
         this.calculateBudget();
+        this.toggleModal();
     } 
 
     categoriesSelect = () => {
@@ -109,6 +112,44 @@ export default class Home extends Component{
         }
     }
 
+    renderTransactionForm = () => {
+        return (
+            <div className="row">
+                <div className="col-md-12">
+                    <Form className="pb-4 pt-4 pl-2" onSubmit={this.submitTransaction}>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <FormGroup className="pr-2">
+                                    <Label for="transactionQty" className="pr-1">Quantity</Label>
+                                    <Input type="number" min="0.01" step="0.01" 
+                                        value={this.state.quantity}
+                                        onChange={(event) => { this.setState({quantity: event.target.value}) }}
+                                    />
+                                </FormGroup>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <FormGroup>
+                                    <Label for="transactionCatId" className="pr-1">Category</Label>
+                                    <Select options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
+                                </FormGroup>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-2 pt-12">
+                                <FormGroup>
+                                    <Button color="primary" className="ml-1">Add</Button>
+                                </FormGroup>
+                            </div>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        )
+    }
+
+
     printAlert = () => {
         return this.state.errorMessage === '' ?
         (<div> </div>)
@@ -118,7 +159,9 @@ export default class Home extends Component{
 
     toggleModal = () => {
         this.setState(prevState => ({
-            showModal: !prevState.showModal
+            showModal: !prevState.showModal,
+            addCategory: false,
+            addTransaction: false
         }));
     }
 
@@ -147,45 +190,28 @@ export default class Home extends Component{
                         Budget: {this.state.budget}
                     </div>
                 </div>
-                <Button color="info" onClick={this.toggleModal}>Show modal</Button>
+                <div className="row">
+                    <div className="col-md-2">
+                        <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>Add Category</Button>
+                    </div>
+                    <div className="col-md-2">
+                        <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
+                    </div>
+                </div>
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Modal title</ModalHeader>
+                    <ModalHeader toggle={this.toggleModal}>{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
                     <ModalBody>
-                        Holiwis
+                        {this.state.addCategory ? 
+                        this.renderTransactionForm() 
+                        :
+                        <div></div>}
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.toggleModal}>Accept</Button>
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <div className="row">
-                    <div className="col-md-12">
-                        <Form className="pb-4 pt-4 pl-2" onSubmit={this.onSubmit}>
-                            <div className="row">
-                                <div className="col-md-2">
-                                    <FormGroup className="pr-2">
-                                        <Label for="transactionQty" className="pr-1">Quantity</Label>
-                                        <Input type="number" min="0.01" step="0.01" 
-                                            value={this.state.quantity}
-                                            onChange={(event) => { this.setState({quantity: event.target.value}) }}
-                                        />
-                                    </FormGroup>
-                                </div>
-                                <div className="col-md-4">
-                                    <FormGroup>
-                                        <Label for="transactionCatId" className="pr-1">Category</Label>
-                                        <Select options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
-                                    </FormGroup>
-                                </div>
-                                <div className="col-md-2 pt-4">
-                                    <FormGroup>
-                                        <Button color="primary" className="ml-1">Add</Button>
-                                    </FormGroup>
-                                </div>
-                            </div>
-                        </Form>
-                    </div>
-                </div>
+                
                 
                 {this.printAlert()}
 

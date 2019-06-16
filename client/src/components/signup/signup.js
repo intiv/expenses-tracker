@@ -84,23 +84,23 @@ export default class Signup extends Component {
                 <div className="row">
                     <div className="col-md-8 mt-2">
                         <Form onSubmit={this.onSubmit}>
-                                <div className="row">
-                                    <div className="col-md-6 ml-2">
-                                        <FormGroup>
-                                            <Label>Enter your username</Label>
-                                            <Input 
-                                                type="text" 
-                                                name="signupUsername" 
-                                                value={this.state.username}
-                                                onChange={(event) => {this.setState({username: event.target.value})}}
-                                                disabled={this.state.displayPhone}
-                                            ></Input>
-                                                
-                                            
-                                        </FormGroup>
-                                    </div>
-                                </div>  
+                            <div className="row">
+                                <div className="col-md-6 ml-2">
+                                    <FormGroup>
+                                        <Label>Enter your username</Label>
+                                        <Input 
+                                            type="text" 
+                                            name="signupUsername" 
+                                            value={this.state.username}
+                                            onChange={(event) => {this.setState({username: event.target.value})}}
+                                            disabled={this.state.displayPhone}
+                                        ></Input>
+                                    </FormGroup>
+                                </div>
+                            </div>
+
                             {this.renderPhone()}
+                            
                             <div className="row">
                                 <div className="col-md-6">
                                     <FormGroup>

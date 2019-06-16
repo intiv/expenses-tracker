@@ -87,7 +87,7 @@ export default class Home extends Component{
 
     render () {
         return (
-            <div id="homeRoot" className="dark-background mt-2">
+            <div id="homeRoot" className="dark-background pt-2">
                 {this.state.toSignup ? 
                 (<Redirect to={{
                     pathname: '/'
@@ -99,30 +99,32 @@ export default class Home extends Component{
                     pathname: '/categories',
                     state: {userId: this.state.userId}
                 }}>
-                    <Button color="info" className="ml-2">
+                    <Button color="info" className="pl-2">
                         Categories
                     </Button>
                 </Link>
-                <Form inline className="mb-4 mt-4 ml-2" onSubmit={this.onSubmit}>
-                    <FormGroup className="mr-2">
-                        <Label for="transactionQty" className="mr-1">Quantity</Label>
+                <Form inline className="pb-4 pt-4 pl-2" onSubmit={this.onSubmit}>
+                    <FormGroup className="pr-2">
+                        <Label for="transactionQty" className="pr-1">Quantity</Label>
                         <Input type="number" min="0.01" step="0.01" 
                             value={this.state.quantity}
                             onChange={(event) => { this.setState({quantity: event.target.value}) }}
                             />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="transactionCatId" className="mr-1">Category</Label>
+                        <Label for="transactionCatId" className="pr-1">Category</Label>
                         <Input type="number" min="1" step="1"
                             value={this.state.category} 
                             onChange={(event) => { this.setState({category: event.target.value }) }}
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary" className="ml-1">Add</Button>
+                        <Button color="primary" className="pl-1">Add</Button>
                     </FormGroup>
                 </Form>
+
                 {this.printAlert()}
+
                 <Table dark striped>
                     <thead>
                         <tr>

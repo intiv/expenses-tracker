@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Link, Redirect } from 'react-router-dom';
-import { Table, Form, FormGroup, Button, Input, Label, Alert} from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
 
 export default class Home extends Component{
@@ -15,7 +15,8 @@ export default class Home extends Component{
         userId: 0,
         toSignup: false,
         budget: 0,
-        options: []
+        options: [],
+        showModal: false
     }
 
     componentDidMount = async () => {
@@ -36,7 +37,6 @@ export default class Home extends Component{
         if(!data.errorMessage){
             let newCategories = {};
             data.categories.forEach((category, index) => {
-                console.log(category);
                 newCategories[category.id] = category;
             });
             this.setState({categories: newCategories, errorMessage: ''});
@@ -81,13 +81,13 @@ export default class Home extends Component{
         }else{
             this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
+        this.calculateBudget();
     } 
 
     categoriesSelect = () => {
         let selectOptions = [];
         if(Object.keys(this.state.categories).length>0){
             Object.keys(this.state.categories).forEach((category) => {
-                //console.log(category);
                 selectOptions.push({
                     value: this.state.categories[category].id,
                     label: this.state.categories[category].name
@@ -116,6 +116,12 @@ export default class Home extends Component{
         (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
 
+    toggleModal = () => {
+        this.setState(prevState => ({
+            showModal: !prevState.showModal
+        }));
+    }
+
     render () {
         return (
             <div id="homeRoot" className="dark-background pt-2">
@@ -141,6 +147,17 @@ export default class Home extends Component{
                         Budget: {this.state.budget}
                     </div>
                 </div>
+                <Button color="info" onClick={this.toggleModal}>Show modal</Button>
+                <Modal isOpen={this.state.showModal} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Modal title</ModalHeader>
+                    <ModalBody>
+                        Holiwis
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggleModal}>Accept</Button>
+                        <Button color="secondary" onClick={this.toggleModal}>Close</Button>
+                    </ModalFooter>
+                </Modal>
                 <div className="row">
                     <div className="col-md-12">
                         <Form className="pb-4 pt-4 pl-2" onSubmit={this.onSubmit}>
@@ -166,12 +183,10 @@ export default class Home extends Component{
                                     </FormGroup>
                                 </div>
                             </div>
-                            
-                            
-                            
                         </Form>
                     </div>
                 </div>
+                
                 {this.printAlert()}
 
                 <Table dark striped hover className="table">

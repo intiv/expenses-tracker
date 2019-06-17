@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import './home.css';
 
 export default class Home extends Component{
@@ -14,6 +16,7 @@ export default class Home extends Component{
         categories: {},
         quantity: 0,
         category: 1,
+        createdAt: new Date(),
         errorMessage: '',
         userId: 0,
         toSignup: false,
@@ -50,6 +53,7 @@ export default class Home extends Component{
             });
             this.setState({categories: newCategories, name:'', errorMessage: ''});
         }else{
+            toast.error(`Error obtaining your categories: ${data.errorMessage}`);
             this.setState({categories: {}, errorMessage: data.errorMessage});
         }
             
@@ -62,6 +66,7 @@ export default class Home extends Component{
         if(!data.errorMessage){
             await this.setState({ transactions: data.transactions, errorMessage: '' });
         }else{
+            toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
         }
         
@@ -80,7 +85,8 @@ export default class Home extends Component{
                 transaction: {
                     quantity: this.state.quantity, 
                     categoryId: this.state.category,
-                    userId: this.state.userId
+                    userId: this.state.userId,
+                    createdAt: moment(this.state.createdAt).format('YYYY-MM-DD')
                 }})
         });
         const data = await response.json();
@@ -90,7 +96,7 @@ export default class Home extends Component{
             await this.getMonthTransactions();
             this.calculateBudget();
         }else{
-            toast.error('An error occured, couldn\'t create transaction');
+            toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
         this.toggleModal();
@@ -118,7 +124,7 @@ export default class Home extends Component{
             await this.getCategories();
             await this.categoriesSelect();
         }else{
-            toast.error('An error occured, couldn\'t create categoriy');
+            toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState(prevState => ({categories: prevState.categories, errorMessage: data.errorMessage, name: '', type: ''}));
         }
         this.toggleModal();
@@ -147,7 +153,6 @@ export default class Home extends Component{
             });
             await this.setState({budget: parseFloat(budget).toFixed(2)});
         }else{
-            toast.error('An error occured while calculating your budget');
             await this.setState({budget: parseFloat(0.00).toFixed(2)});
         }
     }
@@ -180,6 +185,18 @@ export default class Home extends Component{
                         </div>
                         <div className="row">
                             <div className="col-md-12">
+                                {this.state.addCategory ? null
+                                :
+                                (
+                                <FormGroup>
+                                    <legend>Date</legend>
+                                    <DatePicker className="transaction-date" selected={this.state.createdAt} onChange={(date) => this.setState({createdAt: date})}/>
+                                </FormGroup>
+                                ) }
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
                                 <FormGroup tag="fieldset">
                                     <legend>Represents an: </legend>
                                     <FormGroup check>
@@ -205,7 +222,15 @@ export default class Home extends Component{
                                         <Select 
                                             name="transactionCatId" 
                                             options={this.state.options} 
-                                            onChange={(event) => this.setState({category: event.value, enableCreate: true})}   
+                                            onChange={(event) => this.setState({category: event.value, enableCreate: true})}
+                                            className="light-background"
+                                            styles={{
+                                                option: base => ({
+                                                    ...base,
+                                                    color: '#181A1B',
+                                                    'borderBottom': '1px solid black'
+                                                })
+                                              }}
                                         />
                                     </FormGroup> 
                                 )} 
@@ -215,14 +240,6 @@ export default class Home extends Component{
                 </div>
             </div>
         )
-    }
-
-
-    printAlert = () => {
-        return this.state.errorMessage === '' ?
-        null
-        :
-        (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
 
     toggleModal = () => {
@@ -263,7 +280,33 @@ export default class Home extends Component{
 
     render () {
         return (
-            <div id="homeRoot" className="dark-background pt-2">
+            <div id="homeRoot" className="light-background">
+                
+                <Navbar color="faded" className="nav-bar" light>
+                    <NavbarBrand>Expenses Tracker</NavbarBrand>
+                    <Nav className="ml-auto" navbar horizontal="true">
+                        <div className="row">
+                            <div className="col-md-4 pt-2">
+                                <NavItem>
+                                    Budget: {this.state.budget}
+                                </NavItem>
+                            </div>
+                            <div className="col-md-4">
+                                <NavItem>
+                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
+                                </NavItem>
+                            </div>
+                            <div className="col-md-4">
+                                <NavItem>
+                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                </NavItem>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                    </Nav>
+                </Navbar>
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
@@ -274,13 +317,13 @@ export default class Home extends Component{
                 }
                 <div className="row">
                     <div className="col-md-2 col-sm-4">
-                        <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>Add Category</Button>
+                        
                     </div>
                     <div className="col-md-2 col-sm-4">
-                        <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
+                        
                     </div>
                     <div className={this.state.budget > 0 ? 'income' : 'expense'}>
-                        Budget: {this.state.budget}
+                        
                     </div>
                 </div>
                 
@@ -294,33 +337,59 @@ export default class Home extends Component{
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                
-                
-                {this.printAlert()}
-                <Table responsive dark striped hover className="table-header table-font">
+                <div className="table-scroll">
+                    {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
+                    {this.state.transactions.map((transaction, index) => {
+                        return this.state.categories[transaction.categoryId] ? 
+                        (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>
+                            <div className='col-md-4 offset-md-4 mt-2'>
+                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide`}>
+                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
+                                        <div className="row">
+                                            <div className="col-md-10 card-title">
+                                                {this.state.categories[transaction.categoryId].name} 
+                                            </div>
+                                            <div className="col-md-1">
+                                                <Button className="btn btn-circle btn-delete" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button>
+                                            </div>
+                                            <div className="col-md-12">
+                                                {transaction.createdAt}
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+                                    <CardBody className="light-dark-background card-body">{this.state.categories[transaction.categoryId].type}: {transaction.quantity}</CardBody>
+                                </Card>
+                            </div>
+                        </div>) 
+                        :
+                        null
+                    })}
+                </div>
+                {/* <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
                             <th scope="col" width="14%">Type</th>
-                            <th scope="col" width="30%">Category</th>
-                            <th scope="col" width="20%">Quantity</th>
-                            <th scope="col" >Date</th>
+                            <th scope="col" width="29%">Category</th>
+                            <th scope="col" width="21%">Quantity</th>
+                            <th scope="col" width="22%">Date</th>
+                            <th scope="col" >Delete</th>
                         </tr>
                     </thead>
                 </Table>
                 <div className="table-scroll">
                     <Table responsive dark striped hover>
-                        
                         <tbody>
                             {this.state.transactions.map((transaction, index) => 
                                 
                                 {return this.state.categories[transaction.categoryId] ?
-                                    (<tr key={transaction.id} onClick={this.deleteTransaction.bind(this, transaction)}>
+                                    (<tr key={transaction.id}>
                                         <td width="15%" className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
                                         <td width="30%" className="table-font">{this.state.categories[transaction.categoryId].name}</td>
-                                        <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                        <td with="20%" className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{transaction.quantity}</td>
                                         <td className="table-font">{transaction.createdAt}</td>
+                                        <td><Button className="btn btn-circle" color="danger" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button></td>
                                     </tr>)
                                     :
                                     (<tr key={index}>
@@ -331,12 +400,10 @@ export default class Home extends Component{
                                         <td>{''}</td>
                                     </tr>)
                                 }
-
                             )}
-                            
                         </tbody>
                     </Table>
-                </div>
+                </div> */}
                 <ToastContainer/>
             </div>
         );

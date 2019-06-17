@@ -31,17 +31,15 @@ router.get('/monthly/', async (req, res, next) => {
                     [Op.gte]: req.query.beginDate,
                     [Op.lte]: req.query.endDate
                 }
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
         });
         if(!transactions){
             throw new Error('Coulnd\'t find transactions');
         }
-        
-        //console.log(`Begin date: ${req.body.date}, End date: ${req.body.date}`);
-        //console.log('Transactions: ', transactions);
-        
         res.status(200).json({transactions});
-
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});
         next(err);

@@ -188,10 +188,10 @@ export default class Home extends Component{
                                 {this.state.addCategory ? null
                                 :
                                 (
-                                    <FormGroup>
-                                        <legend>Date</legend>
-                                        <DatePicker className="transaction-date" selected={this.state.createdAt} onChange={(date) => this.setState({createdAt: date})}/>
-                                    </FormGroup>
+                                <FormGroup>
+                                    <legend>Date</legend>
+                                    <DatePicker className="transaction-date" selected={this.state.createdAt} onChange={(date) => this.setState({createdAt: date})}/>
+                                </FormGroup>
                                 ) }
                             </div>
                         </div>
@@ -286,21 +286,25 @@ export default class Home extends Component{
                     <NavbarBrand>Expenses Tracker</NavbarBrand>
                     <Nav className="ml-auto" navbar horizontal="true">
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-4 pt-2">
                                 <NavItem>
-                                    <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
+                                    Budget: {this.state.budget}
                                 </NavItem>
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-4">
                                 <NavItem>
-                                    <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
                                 </NavItem>
                             </div>
-                        
+                            <div className="col-md-4">
+                                <NavItem>
+                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                </NavItem>
+                            </div>
+                            
+                            
                         </div>
-                        <NavItem>
-                            Budget: {this.state.budget}
-                        </NavItem>
+                        
                     </Nav>
                 </Navbar>
                 {this.state.toSignup ? 

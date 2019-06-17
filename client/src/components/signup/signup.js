@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, FormFeedback, Label, Input, Button } from 'reactstrap';
 import { Redirect  } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './signup.css';
@@ -74,6 +74,11 @@ export default class Signup extends Component {
                     <div className="col-md-5 offset-md-3 mt-2">
                         <Form onSubmit={this.onSubmit} className="form-border">
                             <div className="row">
+                                <div className="col-md-8 offset-md-3">
+                                    <h3>Expenses Tracker - {this.state.displayPhone ? 'Singup' : 'Sign in'}</h3>
+                                </div>
+                            </div>
+                            <div className="row">
                                 <div className="col-md-10 offset-md-1">
                                     <FormGroup>
                                         <Label className="white-font">Enter your username</Label>
@@ -83,7 +88,10 @@ export default class Signup extends Component {
                                             value={this.state.username}
                                             onChange={(event) => {this.setState({username: event.target.value})}}
                                             disabled={this.state.displayPhone}
+                                            invalid={this.state.username.length > 0 && (this.state.username.length < 3 || this.state.username.length > 12)}
+                                            valid={this.state.username.length > 0 && !this.invalid}
                                         ></Input>
+                                        <FormFeedback>Username must be 3 to 12 characters long!</FormFeedback>
                                     </FormGroup>
                                 </div>
                             </div>

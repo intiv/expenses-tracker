@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../db/db');
+const { Op } = require('sequelize');
 const Category = require('../models/Category');
 
 router.get('/', async (req, res, next) =>  {
@@ -14,7 +15,7 @@ router.get('/', async (req, res, next) =>  {
         // console.log(categories)
         res.status(200).json({categories});
     }catch(err){
-        res.status(500).json({categories: [], errorMessage: err});
+        res.status(500).json({categories: [], errorMessage: err.message});
         next(err);
     }
 });
@@ -27,11 +28,29 @@ router.get('/find/id/', async (req, res, next) => {
         }
         res.status(200).json({category});
     }catch(err){
-        res.status(500).json({errorMessage: err});
+        res.status(500).json({errorMessage: err.message});
         next(err);
     }
 });
 
+router.get('/find/name', async (req, res, next) => {
+    try{
+        const category = await Category.findOne({
+            where: {
+                name: {
+                    [Op.iLike]: req.query.name
+                },
+                userId: req.query.userId
+            }
+        });
+        if(!category){
+            throw new Error(`Category with name ${req.query.name} for this user`);
+        }
+        res.status(200).json({category});
+    }catch(err){
+        res.status(500).json({errorMessage: err.message});
+    }
+});
 
 router.post('/create/', async (req, res, next) => {
     // const newCategory = {
@@ -68,7 +87,7 @@ router.post('/create/', async (req, res, next) => {
                     userId: req.body.category.userId
                 }
             });
-            res.status(500).send({categories, errorMessage: err});
+            res.status(500).send({categories, errorMessage: err.message});
             next(err);
         }
     }
@@ -80,7 +99,7 @@ router.delete('/delete/', async (req, res, next) => {
     let dbTransaction;
     dbTransaction = await db.transaction();
     try{
-        let rows = await Category.destroy({where: {
+        const rows = await Category.destroy({where: {
             userId: req.body.category.userId,
             name: req.body.category.name
         }});
@@ -89,7 +108,7 @@ router.delete('/delete/', async (req, res, next) => {
         }else{
             throw new Error('No categories were deleted');
         }
-        let categories = await Category.findAll({
+        const categories = await Category.findAll({
             where: {
                 userId: req.body.category.userId
             }
@@ -98,7 +117,7 @@ router.delete('/delete/', async (req, res, next) => {
     }catch(err){
         if(err){
             await dbTransaction.rollback();
-            let categories = await Category.findAll({
+            const categories = await Category.findAll({
                 where: {
                     userId: req.body.category.userId
                 }

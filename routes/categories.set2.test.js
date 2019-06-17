@@ -31,15 +31,9 @@ describe('/api/categories', () => {
             userId: 1
         },
         {
-            name: 'Tax refunds',
+            name: 'Coffee',
             userId: 2
         }];
-
-
-        // return db.query('TRUNCATE TABLE categories RESTART IDENTITY CASCADE', {
-        //     model: Category,
-        //     mapToModel: true
-        // }).then();
     });
 
 
@@ -108,6 +102,13 @@ describe('/api/categories', () => {
             expect(response.statusCode).toBe(200);
             expect(response.body.category).toBeDefined();
             expect(response.body.category).toMatchObject(testCategories[0]);
+        });
+
+        test('It should get a category by name for one user with status 200', async () => {
+            const response = await (await request(app)).get(`/api/categories/find/name?name=coffee&userId=2`);
+            expect(response.statusCode).toBe(200);
+            expect(response.body.category).toBeDefined();
+            expect(response.body.category).toMatchObject(testCategories[5]);
         });
 
         test('It shouldn\'t get a category from a non-existent id with status 500', async () => {

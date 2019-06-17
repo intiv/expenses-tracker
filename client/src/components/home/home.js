@@ -23,7 +23,8 @@ export default class Home extends Component{
         addCategory: false,
         addTransaction: false,
         name: '',
-        type: 'Expense'
+        type: 'Expense',
+        enableCreate: false
     }
 
     componentDidMount = async () => {
@@ -59,7 +60,7 @@ export default class Home extends Component{
         const response = await fetch(`/api/transactions/monthly?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
         const data = await response.json();
         if(!data.errorMessage){
-            this.setState({ transactions: data.transactions, errorMessage: '' });
+            await this.setState({ transactions: data.transactions, errorMessage: '' });
         }else{
             this.setState({ errorMessage: data.errorMessage });
         }
@@ -85,7 +86,7 @@ export default class Home extends Component{
         const data = await response.json();
         if(!data.errorMessage){
             await this.setState({quantity: 0, category: 0, errorMessage: ''});
-            await this.getMonthTransactions();
+            this.getMonthTransactions();
         }else{
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
@@ -119,17 +120,19 @@ export default class Home extends Component{
         this.toggleModal();
     }
 
-    categoriesSelect = () => {
+    categoriesSelect = async () => {
         let selectOptions = [];
         if(Object.keys(this.state.categories).length>0){
             Object.keys(this.state.categories).forEach((category) => {
-                selectOptions.push({
-                    value: this.state.categories[category].id,
-                    label: this.state.categories[category].name
-                });
+                if(this.state.categories[category].type === this.state.type){
+                    selectOptions.push({
+                        value: this.state.categories[category].id,
+                        label: this.state.categories[category].name
+                    });
+                }
             });
         }
-        this.setState({options: selectOptions});
+        await this.setState({options: selectOptions});
     }
 
     calculateBudget = async () => {
@@ -172,26 +175,33 @@ export default class Home extends Component{
                         </div>
                         <div className="row">
                             <div className="col-md-12">
-                                {this.state.addCategory ? (
-                                    <FormGroup tag="fieldset">
-                                        <legend>This category represents an: </legend>
-                                        <FormGroup check>
-                                            <Label check>
-                                                <Input type="radio" name="radioType" onChange={() => this.setState({type: 'Income'})} checked={this.state.type === 'Income'}/>
-                                                Income
-                                            </Label>
-                                        </FormGroup>
-                                        <FormGroup check>
-                                            <Label check>
-                                                <Input type="radio" name="radioType" onChange={() => this.setState({type: 'Expense'})} checked={this.state.type === 'Expense'}/> 
-                                                Expense
-                                            </Label>
-                                        </FormGroup>
+                                <FormGroup tag="fieldset">
+                                    <legend>Represents an: </legend>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Income'}); await this.categoriesSelect();}} checked={this.state.type === 'Income'}/>
+                                            Income
+                                        </Label>
                                     </FormGroup>
-                                ) : (
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Expense'}); await this.categoriesSelect();}} checked={this.state.type === 'Expense'}/> 
+                                            Expense
+                                        </Label>
+                                    </FormGroup>
+                                </FormGroup>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                {this.state.addCategory ? null : (
                                     <FormGroup>
-                                        <Label for="transactionCatId" className="pr-1">Category</Label>
-                                        <Select name="transactionCatId" options={this.state.options} onChange={(event) => this.setState({category: event.value})}/>
+                                        <Label for="transactionCatId" className="pr-1">Select/Search Category</Label>
+                                        <Select 
+                                            name="transactionCatId" 
+                                            options={this.state.options} 
+                                            onChange={(event) => this.setState({category: event.value, enableCreate: true})}   
+                                        />
                                     </FormGroup> 
                                 )} 
                             </div>
@@ -211,10 +221,14 @@ export default class Home extends Component{
     }
 
     toggleModal = () => {
+        this.categoriesSelect();
         this.setState(prevState => ({
             showModal: !prevState.showModal,
             addCategory: false,
-            addTransaction: false
+            addTransaction: false,
+            enableCreate: false,
+            quantity: 0,
+            name: ''
         }));
     }
 
@@ -260,16 +274,6 @@ export default class Home extends Component{
                     <div className="col-md-2 col-sm-4">
                         <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
                     </div>
-                    <div className="col-md-4 col-sm-4">
-                        {/* <Link to={{
-                            pathname: '/categories',
-                            state: {userId: this.state.userId}
-                        }}>
-                            <Button color="info" className="pl-2">
-                                Categories
-                            </Button>
-                        </Link> */}
-                    </div>
                     <div className={this.state.budget > 0 ? 'income' : 'expense'}>
                         Budget: {this.state.budget}
                     </div>
@@ -281,7 +285,7 @@ export default class Home extends Component{
                         {this.renderForm()}
                     </ModalBody>
                     <ModalFooter  className="dark-background">
-                        <Button color="primary" form="modalForm" type="submit">Accept</Button>
+                        <Button color="primary" form="modalForm" type="submit" disabled={!this.state.addCategory && !this.state.enableCreate}>Accept</Button>
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
@@ -295,7 +299,6 @@ export default class Home extends Component{
                             <th scope="col" width="30%">Category</th>
                             <th scope="col" width="20%">Quantity</th>
                             <th scope="col" >Date</th>
-                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                 </Table>
@@ -313,7 +316,6 @@ export default class Home extends Component{
                                         <td className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{transaction.quantity}</td>
                                         <td className="table-font">{transaction.createdAt}</td>
-                                        <td></td>
                                     </tr>)
                                     :
                                     (<tr key={index}>

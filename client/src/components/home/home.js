@@ -286,7 +286,7 @@ export default class Home extends Component{
                     <Nav className="ml-auto" navbar horizontal="true">
                         <div className="row">
                             <div className="col-md-4 pt-2">
-                                <NavItem>
+                                <NavItem className="white-font">
                                     Budget: {this.state.budget}
                                 </NavItem>
                             </div>
@@ -327,10 +327,10 @@ export default class Home extends Component{
                         return this.state.categories[transaction.categoryId] ? 
                         (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>
                             <div className='col-md-4 offset-md-4 mt-2'>
-                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide`}>
-                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
+                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide white-font`}>
+                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header white-font`}>
                                         <div className="row">
-                                            <div className="col-md-10 card-title">
+                                            <div className="col-md-10 card-title white-font">
                                                 {this.state.categories[transaction.categoryId].name} 
                                             </div>
                                             <div className="col-md-1">

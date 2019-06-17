@@ -19,6 +19,10 @@ body {
   overflow-y: auto !important;
 }
 
+.light-background {
+  background-color: #e4e4e4;
+}
+
 * {
   color: #DDD;
 }

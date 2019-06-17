@@ -83,7 +83,7 @@ export default class Signup extends Component {
     render () {
         return (
             
-            <div id="signupRoot">
+            <div id="signupRoot" className="light-background">
                 {this.state.toHome ? 
                 <Redirect to={{
                     pathname: '/home',

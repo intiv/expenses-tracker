@@ -281,27 +281,32 @@ export default class Home extends Component{
     render () {
         return (
             <div id="homeRoot" className="light-background">
-                <Navbar color="faded" className="nav-bar white-font" light>
+                <Navbar color="faded" className="nav-bar white-font fade-in" light>
                     <NavbarBrand className="white-font">Expenses Tracker</NavbarBrand>
-                    <Nav className="ml-auto" navbar horizontal="true">
-                        <div className="row">
-                            <div className="col-md-5 pt-2">
-                                <NavItem className="white-font">
-                                    Budget: {this.state.budget}
-                                </NavItem>
-                            </div>
-                            <div className="col-md-3">
-                                <NavItem>
-                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
-                                </NavItem>
-                            </div>
-                            <div className="col-md-3">
-                                <NavItem>
-                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
-                                </NavItem>
-                            </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <Nav className="ml-auto" navbar horizontal="true">
+                                <div className="row">
+                                    <div className="col-md-5 pt-2">
+                                        <NavItem className="white-font">
+                                            Budget: {this.state.budget}
+                                        </NavItem>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <NavItem>
+                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
+                                        </NavItem>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <NavItem>
+                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                        </NavItem>
+                                    </div>
+                                </div>
+                            </Nav>
                         </div>
-                    </Nav>
+                    </div>
+                    
                 </Navbar>
                 {this.state.toSignup ? 
                     (<Redirect to={{
@@ -325,7 +330,7 @@ export default class Home extends Component{
                     {this.state.transactions.length > 0 ? 
                         null 
                         : 
-                        (<div className="row">
+                        (<div className="row fade-in">
                             <div className="col-md-6 offset-md-3">
                                 <h2 className="black-font offset-md-2">There seems to be nothing here</h2>
                                 <h3 className="black-font">Add some categories and transactions in the top-right!</h3>

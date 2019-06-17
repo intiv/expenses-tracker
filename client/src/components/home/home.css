@@ -3,12 +3,14 @@
     color: white;
 }
 
-
 .light-dark-background {
     background-color: #343A40;
     color: white;
 }
 
+.nav-bar {
+    background-color: #1dad3c;
+}
 
 .btn-circle {
     border-radius: 50px;
@@ -30,16 +32,6 @@
     border-color: #ad2628;
 }
 
-.Income-container {
-    transform: translateX(-100%);
-    animation: slidein 3s forwards;
-}
-
-.Expense-container {
-    transform: translateX(100%);
-    animation: slidein 3s forwards;
-}
-
 .card-title {
     font-size: 2rem;
     margin-bottom: 0;
@@ -48,22 +40,6 @@
 .card-body {
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-}
-
-.Income-slide {
-    animation: slidein 0.5s forwards;
-}
-
-
-@keyframes slidein {
-    100% {
-        transform: translateX(0%);
-    }
-}
-
-.Expense-slide {
-    transition: 1s;
-    right: 0;
 }
 
 .Income-border {
@@ -88,8 +64,38 @@
     border-top-right-radius: 5px;
 }
 
-.nav-bar {
-    background-color: #1dad3c;
+.Income-slide {
+    animation: slidein 0.5s forwards;
+}
+
+.Income-container {
+    transform: translateX(-100%);
+    animation: slidein 2s forwards, fadein 1.8s ease;
+}
+
+.Expense-container {
+    transform: translateX(100%);
+    animation: slidein 2s forwards, fadein 1.8s ease;
+}
+
+.fade-in {
+    animation: fadein 3s ease;
+}
+
+@keyframes slidein {
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 

@@ -13,8 +13,12 @@ router.get('/', async (req, res, next) => {
         let transactions = await Transaction.findAll({
             where: {
                 userId: req.query.userId
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
         });
+        
         res.status(200).json({transactions});
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});

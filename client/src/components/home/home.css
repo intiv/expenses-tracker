@@ -12,25 +12,22 @@
     border-radius: 50px;
 }
 
-.table-header {
-    margin-bottom: 0;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.table-header > thead {
-    height: 10vh;
-}
-
 .table-scroll {
     display: block;
-    width: 100%;
     max-height: 80vh;
     overflow-y: scroll;
 }
 
 .transaction-date {
     width: 100%;
+}
+
+.Income-card {
+    border: 3px solid green;
+}
+
+.Expense-card {
+    border: 3px solid red;
 }
 
 @media screen and (max-width: 800px){

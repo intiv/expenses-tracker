@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Table, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -311,8 +311,34 @@ export default class Home extends Component{
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                
-                
+                <div className="table-scroll">
+                    {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
+                    {this.state.transactions.map((transaction) => {
+                        {return this.state.categories[transaction.categoryId] ? 
+                        (<div className="row">
+                            <div className='col-md-8 offset-md-2 mb-1 mt-1'>
+                                <Card>
+                                    <CardHeader className={`dark-background ${this.state.categories[transaction.categoryId].type}-card`}>
+                                        <div className="row">
+                                            <div className="col-md-11">
+                                                {this.state.categories[transaction.categoryId].name} 
+                                            </div>
+                                            <div className="col-md-1">
+                                                <Button className="btn btn-circle" color="danger" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button>
+                                            </div>
+                                            <div className="col-md-12">
+                                                {transaction.createdAt}
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+                                    <CardBody></CardBody>
+                                </Card>
+                            </div>
+                        </div>) 
+                        :
+                        null}
+                    })}
+                </div>
                 <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
@@ -348,9 +374,7 @@ export default class Home extends Component{
                                         <td>{''}</td>
                                     </tr>)
                                 }
-
                             )}
-                            
                         </tbody>
                     </Table>
                 </div>

@@ -280,7 +280,7 @@ export default class Home extends Component{
 
     render () {
         return (
-            <div id="homeRoot" className="dark-background pt-2">
+            <div id="homeRoot" className="light-background pt-2">
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
@@ -313,12 +313,12 @@ export default class Home extends Component{
                 </Modal>
                 <div className="table-scroll">
                     {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
-                    {this.state.transactions.map((transaction) => {
-                        {return this.state.categories[transaction.categoryId] ? 
-                        (<div className="row">
+                    {this.state.transactions.map((transaction, index) => {
+                        return this.state.categories[transaction.categoryId] ? 
+                        (<div className="row" key={index}>
                             <div className='col-md-8 offset-md-2 mb-1 mt-1'>
-                                <Card>
-                                    <CardHeader className={`dark-background ${this.state.categories[transaction.categoryId].type}-card`}>
+                                <Card className={`${this.state.categories[transaction.categoryId].type}-border`}>
+                                    <CardHeader className={`dark-background ${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
                                         <div className="row">
                                             <div className="col-md-11">
                                                 {this.state.categories[transaction.categoryId].name} 
@@ -331,15 +331,15 @@ export default class Home extends Component{
                                             </div>
                                         </div>
                                     </CardHeader>
-                                    <CardBody></CardBody>
+                                    <CardBody className="light-dark-background">{transaction.quantity}</CardBody>
                                 </Card>
                             </div>
                         </div>) 
                         :
-                        null}
+                        null
                     })}
                 </div>
-                <Table responsive dark striped hover className="table-header table-font">
+                {/* <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
                             <th scope="col" width="14%">Type</th>
@@ -377,7 +377,7 @@ export default class Home extends Component{
                             )}
                         </tbody>
                     </Table>
-                </div>
+                </div> */}
                 <ToastContainer/>
             </div>
         );

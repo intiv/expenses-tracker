@@ -3,6 +3,10 @@
     color: #CCC;
 }
 
+.light-background {
+    background-color: #e4e4e4;
+}
+
 .light-dark-background {
     background-color: #343A40;
     color: #CCC;
@@ -22,13 +26,22 @@
     width: 100%;
 }
 
-.Income-card {
-    border: 3px solid green;
+.Income-border {
+    border: 1px solid #07BC0C;
 }
 
-.Expense-card {
-    border: 3px solid red;
+.Income-header {
+    background-color: #07BC0C;
 }
+
+.Expense-border {
+    border: 1px solid #bc2121;
+}
+
+.Expense-header {
+    background-color: #bc2121;
+}
+
 
 @media screen and (max-width: 800px){
 

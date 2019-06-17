@@ -281,21 +281,21 @@ export default class Home extends Component{
     render () {
         return (
             <div id="homeRoot" className="light-background">
-                <Navbar color="faded" className="nav-bar" light>
-                    <NavbarBrand>Expenses Tracker</NavbarBrand>
+                <Navbar color="faded" className="nav-bar white-font" light>
+                    <NavbarBrand className="white-font">Expenses Tracker</NavbarBrand>
                     <Nav className="ml-auto" navbar horizontal="true">
                         <div className="row">
-                            <div className="col-md-4 pt-2">
+                            <div className="col-md-5 pt-2">
                                 <NavItem className="white-font">
                                     Budget: {this.state.budget}
                                 </NavItem>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                                 <NavItem>
                                     <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
                                 </NavItem>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                                 <NavItem>
                                     <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
                                 </NavItem>
@@ -322,7 +322,16 @@ export default class Home extends Component{
                     </ModalFooter>
                 </Modal>
                 <div className="table-scroll">
-                    {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
+                    {this.state.transactions.length > 0 ? 
+                        null 
+                        : 
+                        (<div className="row">
+                            <div className="col-md-6 offset-md-3">
+                                <h2 className="black-font offset-md-2">There seems to be nothing here</h2>
+                                <h3 className="black-font">Add some categories and transactions in the top-right!</h3>
+                            </div>
+                        </div>)
+                    }
                     {this.state.transactions.map((transaction, index) => {
                         return this.state.categories[transaction.categoryId] ? 
                         (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>

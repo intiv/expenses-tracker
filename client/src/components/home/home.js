@@ -342,7 +342,7 @@ export default class Home extends Component{
                     {this.state.transactions.map((transaction, index) => {
                         return this.state.categories[transaction.categoryId] ? 
                         (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>
-                            <div className='col-md-4 offset-md-4 mb-1 mt-1'>
+                            <div className='col-md-4 offset-md-4 mt-2'>
                                 <Card className={`${this.state.categories[transaction.categoryId].type}-slide`}>
                                     <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
                                         <div className="row">
@@ -357,7 +357,7 @@ export default class Home extends Component{
                                             </div>
                                         </div>
                                     </CardHeader>
-                                    <CardBody className="light-dark-background card-body">{transaction.quantity}</CardBody>
+                                    <CardBody className="light-dark-background card-body">{this.state.categories[transaction.categoryId].type}: {transaction.quantity}</CardBody>
                                 </Card>
                             </div>
                         </div>) 

@@ -27,19 +27,23 @@
 }
 
 .Income-border {
-    border: 1px solid #07BC0C;
+    border: 1px solid #21bc40;
 }
 
 .Income-header {
-    background-color: #07BC0C;
+    background-color: #21bc40;
 }
 
 .Expense-border {
-    border: 1px solid #bc2121;
+    border: 1px solid #db3035;
 }
 
 .Expense-header {
-    background-color: #bc2121;
+    background-color: #db3035;
+}
+
+.nav-bar {
+    background-color: #1dad3c;
 }
 
 

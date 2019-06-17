@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Table, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
+import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -280,7 +280,26 @@ export default class Home extends Component{
 
     render () {
         return (
-            <div id="homeRoot" className="light-background pt-2">
+            <div id="homeRoot" className="light-background">
+                
+                <Navbar color="faded" className="nav-bar" light>
+                    <NavbarBrand>Expenses Tracker</NavbarBrand>
+                    <Nav className="ml-auto" navbar horizontal>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <NavItem>
+                                    <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
+                                </NavItem>
+                            </div>
+                            <div className="col-md-6">
+                                <NavItem>
+                                    <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                </NavItem>
+                            </div>
+                        
+                        </div>
+                    </Nav>
+                </Navbar>
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
@@ -291,10 +310,10 @@ export default class Home extends Component{
                 }
                 <div className="row">
                     <div className="col-md-2 col-sm-4">
-                        <Button color="info" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>Add Category</Button>
+                        
                     </div>
                     <div className="col-md-2 col-sm-4">
-                        <Button color="info" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>Add Transaction</Button>
+                        
                     </div>
                     <div className={this.state.budget > 0 ? 'income' : 'expense'}>
                         Budget: {this.state.budget}

@@ -341,9 +341,9 @@ export default class Home extends Component{
                     {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
                     {this.state.transactions.map((transaction, index) => {
                         return this.state.categories[transaction.categoryId] ? 
-                        (<div className="row" key={index}>
+                        (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>
                             <div className='col-md-4 offset-md-4 mb-1 mt-1'>
-                                <Card>
+                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide`}>
                                     <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
                                         <div className="row">
                                             <div className="col-md-10 card-title">

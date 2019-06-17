@@ -32,6 +32,16 @@
     border-color: #ad2628;
 }
 
+.Income-container {
+    transform: translateX(-100%);
+    animation: slidein 1s forwards;
+}
+
+.Expense-container {
+    transform: translateX(100%);
+    animation: slidein 1s forwards;
+}
+
 .card-title {
     font-size: 2rem;
     margin-bottom: 0;
@@ -42,6 +52,21 @@
     border-bottom-left-radius: 5px;
 }
 
+.Income-slide {
+    animation: slidein 0.5s forwards;
+}
+
+
+@keyframes slidein {
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.Expense-slide {
+    transition: 1s;
+    right: 0;
+}
 
 .Income-border {
     border: 1px solid #29d32f;

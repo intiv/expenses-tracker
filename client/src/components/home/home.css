@@ -18,13 +18,30 @@
 
 .table-scroll {
     display: block;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .transaction-date {
     width: 100%;
 }
+
+.btn-delete {
+    background-color: #ad2628;
+    border-color: #ad2628;
+}
+
+.card-title {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+.card-body {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
 
 .Income-border {
     border: 1px solid #21bc40;
@@ -32,6 +49,9 @@
 
 .Income-header {
     background-color: #21bc40;
+    padding: 4px 8px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .Expense-border {
@@ -40,6 +60,9 @@
 
 .Expense-header {
     background-color: #db3035;
+    padding: 4px 8px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .nav-bar {

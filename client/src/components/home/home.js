@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
+import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -284,7 +284,7 @@ export default class Home extends Component{
                 
                 <Navbar color="faded" className="nav-bar" light>
                     <NavbarBrand>Expenses Tracker</NavbarBrand>
-                    <Nav className="ml-auto" navbar horizontal>
+                    <Nav className="ml-auto" navbar horizontal="true">
                         <div className="row">
                             <div className="col-md-6">
                                 <NavItem>
@@ -298,6 +298,9 @@ export default class Home extends Component{
                             </div>
                         
                         </div>
+                        <NavItem>
+                            Budget: {this.state.budget}
+                        </NavItem>
                     </Nav>
                 </Navbar>
                 {this.state.toSignup ? 
@@ -316,7 +319,7 @@ export default class Home extends Component{
                         
                     </div>
                     <div className={this.state.budget > 0 ? 'income' : 'expense'}>
-                        Budget: {this.state.budget}
+                        
                     </div>
                 </div>
                 
@@ -335,22 +338,22 @@ export default class Home extends Component{
                     {this.state.transactions.map((transaction, index) => {
                         return this.state.categories[transaction.categoryId] ? 
                         (<div className="row" key={index}>
-                            <div className='col-md-8 offset-md-2 mb-1 mt-1'>
-                                <Card className={`${this.state.categories[transaction.categoryId].type}-border`}>
-                                    <CardHeader className={`dark-background ${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
+                            <div className='col-md-4 offset-md-4 mb-1 mt-1'>
+                                <Card>
+                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
                                         <div className="row">
-                                            <div className="col-md-11">
+                                            <div className="col-md-10 card-title">
                                                 {this.state.categories[transaction.categoryId].name} 
                                             </div>
                                             <div className="col-md-1">
-                                                <Button className="btn btn-circle" color="danger" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button>
+                                                <Button className="btn btn-circle btn-delete" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button>
                                             </div>
                                             <div className="col-md-12">
                                                 {transaction.createdAt}
                                             </div>
                                         </div>
                                     </CardHeader>
-                                    <CardBody className="light-dark-background">{transaction.quantity}</CardBody>
+                                    <CardBody className="light-dark-background card-body">{transaction.quantity}</CardBody>
                                 </Card>
                             </div>
                         </div>) 

@@ -349,7 +349,7 @@ export default class Home extends Component{
                         null
                     })}
                 </div>
-                <ToastContainer/>
+                <ToastContainer className="mt-5"/>
             </div>
         );
     }

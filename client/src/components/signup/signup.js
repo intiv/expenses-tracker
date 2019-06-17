@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Redirect  } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import './signup.css';
 
 export default class Signup extends Component {
 
@@ -83,7 +84,7 @@ export default class Signup extends Component {
     render () {
         return (
             
-            <div id="signupRoot" className="light-background">
+            <div id="signupRoot" className="light-background signup-container">
                 {this.state.toHome ? 
                 <Redirect to={{
                     pathname: '/home',

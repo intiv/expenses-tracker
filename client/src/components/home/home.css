@@ -3,18 +3,12 @@
     color: white;
 }
 
-.light-background {
-    background-color: #e4e4e4;
-}
 
 .light-dark-background {
     background-color: #343A40;
     color: white;
 }
 
-.white-font {
-    color: white;
-}
 
 .btn-circle {
     border-radius: 50px;

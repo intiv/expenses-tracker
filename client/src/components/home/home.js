@@ -326,7 +326,6 @@ export default class Home extends Component{
                 </Table>
                 <div className="table-scroll">
                     <Table responsive dark striped hover>
-                        
                         <tbody>
                             {this.state.transactions.map((transaction, index) => 
                                 

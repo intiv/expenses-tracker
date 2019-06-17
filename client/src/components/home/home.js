@@ -3,8 +3,10 @@ import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 import { Table, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import './home.css';
 
 export default class Home extends Component{
@@ -14,6 +16,7 @@ export default class Home extends Component{
         categories: {},
         quantity: 0,
         category: 1,
+        createdAt: new Date(),
         errorMessage: '',
         userId: 0,
         toSignup: false,
@@ -82,7 +85,8 @@ export default class Home extends Component{
                 transaction: {
                     quantity: this.state.quantity, 
                     categoryId: this.state.category,
-                    userId: this.state.userId
+                    userId: this.state.userId,
+                    createdAt: moment(this.state.createdAt).format('YYYY-MM-DD')
                 }})
         });
         const data = await response.json();
@@ -177,6 +181,18 @@ export default class Home extends Component{
                                         />
                                     </FormGroup>
                                 )}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                {this.state.addCategory ? null
+                                :
+                                (
+                                    <FormGroup>
+                                        <legend>Date</legend>
+                                        <DatePicker className="transaction-date" selected={this.state.createdAt} onChange={(date) => this.setState({createdAt: date})}/>
+                                    </FormGroup>
+                                ) }
                             </div>
                         </div>
                         <div className="row">
@@ -301,9 +317,9 @@ export default class Home extends Component{
                     <thead>
                         <tr>
                             <th scope="col" width="14%">Type</th>
-                            <th scope="col" width="30%">Category</th>
-                            <th scope="col" width="22%">Quantity</th>
-                            <th scope="col" >Date</th>
+                            <th scope="col" width="29%">Category</th>
+                            <th scope="col" width="21%">Quantity</th>
+                            <th scope="col" width="22%">Date</th>
                             <th scope="col" >Delete</th>
                         </tr>
                     </thead>

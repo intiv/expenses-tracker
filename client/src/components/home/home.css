@@ -8,6 +8,9 @@
     color: #CCC;
 }
 
+.btn-circle {
+    border-radius: 50px;
+}
 
 .table-header {
     margin-bottom: 0;
@@ -26,9 +29,6 @@
     overflow-y: scroll;
 }
 
-tbody > tr:hover {
-    cursor: pointer;
-}
 
 @media screen and (max-width: 800px){
 

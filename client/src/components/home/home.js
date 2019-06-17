@@ -50,7 +50,7 @@ export default class Home extends Component{
             });
             this.setState({categories: newCategories, name:'', errorMessage: ''});
         }else{
-            toast.error(`Error obtaining your categories: ${data.errorMessage}`)
+            toast.error(`Error obtaining your categories: ${data.errorMessage}`);
             this.setState({categories: {}, errorMessage: data.errorMessage});
         }
             
@@ -206,7 +206,15 @@ export default class Home extends Component{
                                         <Select 
                                             name="transactionCatId" 
                                             options={this.state.options} 
-                                            onChange={(event) => this.setState({category: event.value, enableCreate: true})}   
+                                            onChange={(event) => this.setState({category: event.value, enableCreate: true})}
+                                            className="light-background"
+                                            styles={{
+                                                option: base => ({
+                                                    ...base,
+                                                    color: '#181A1B',
+                                                    'borderBottom': '1px solid black'
+                                                })
+                                              }}
                                         />
                                     </FormGroup> 
                                 )} 
@@ -289,14 +297,14 @@ export default class Home extends Component{
                 </Modal>
                 
                 
-                {this.printAlert()}
                 <Table responsive dark striped hover className="table-header table-font">
                     <thead>
                         <tr>
                             <th scope="col" width="14%">Type</th>
                             <th scope="col" width="30%">Category</th>
-                            <th scope="col" width="20%">Quantity</th>
+                            <th scope="col" width="22%">Quantity</th>
                             <th scope="col" >Date</th>
+                            <th scope="col" >Delete</th>
                         </tr>
                     </thead>
                 </Table>
@@ -307,13 +315,14 @@ export default class Home extends Component{
                             {this.state.transactions.map((transaction, index) => 
                                 
                                 {return this.state.categories[transaction.categoryId] ?
-                                    (<tr key={transaction.id} onClick={this.deleteTransaction.bind(this, transaction)}>
+                                    (<tr key={transaction.id}>
                                         <td width="15%" className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
                                         <td width="30%" className="table-font">{this.state.categories[transaction.categoryId].name}</td>
-                                        <td className={this.state.categories[transaction.categoryId].type==='Expense'?
+                                        <td with="20%" className={this.state.categories[transaction.categoryId].type==='Expense'?
                                             'expense' : 'income'}>{transaction.quantity}</td>
                                         <td className="table-font">{transaction.createdAt}</td>
+                                        <td><Button className="btn btn-circle" color="danger" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button></td>
                                     </tr>)
                                     :
                                     (<tr key={index}>

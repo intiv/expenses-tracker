@@ -281,7 +281,6 @@ export default class Home extends Component{
     render () {
         return (
             <div id="homeRoot" className="light-background">
-                
                 <Navbar color="faded" className="nav-bar" light>
                     <NavbarBrand>Expenses Tracker</NavbarBrand>
                     <Nav className="ml-auto" navbar horizontal="true">
@@ -301,10 +300,7 @@ export default class Home extends Component{
                                     <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
                                 </NavItem>
                             </div>
-                            
-                            
                         </div>
-                        
                     </Nav>
                 </Navbar>
                 {this.state.toSignup ? 
@@ -315,18 +311,6 @@ export default class Home extends Component{
                     : 
                     null
                 }
-                <div className="row">
-                    <div className="col-md-2 col-sm-4">
-                        
-                    </div>
-                    <div className="col-md-2 col-sm-4">
-                        
-                    </div>
-                    <div className={this.state.budget > 0 ? 'income' : 'expense'}>
-                        
-                    </div>
-                </div>
-                
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
                     <ModalHeader toggle={this.toggleModal}  className="dark-background">{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>
                     <ModalBody  className="light-dark-background">
@@ -365,45 +349,6 @@ export default class Home extends Component{
                         null
                     })}
                 </div>
-                {/* <Table responsive dark striped hover className="table-header table-font">
-                    <thead>
-                        <tr>
-                            <th scope="col" width="14%">Type</th>
-                            <th scope="col" width="29%">Category</th>
-                            <th scope="col" width="21%">Quantity</th>
-                            <th scope="col" width="22%">Date</th>
-                            <th scope="col" >Delete</th>
-                        </tr>
-                    </thead>
-                </Table>
-                <div className="table-scroll">
-                    <Table responsive dark striped hover>
-                        <tbody>
-                            {this.state.transactions.map((transaction, index) => 
-                                
-                                {return this.state.categories[transaction.categoryId] ?
-                                    (<tr key={transaction.id}>
-                                        <td width="15%" className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                            'expense' : 'income'}>{this.state.categories[transaction.categoryId].type}</td>                
-                                        <td width="30%" className="table-font">{this.state.categories[transaction.categoryId].name}</td>
-                                        <td with="20%" className={this.state.categories[transaction.categoryId].type==='Expense'?
-                                            'expense' : 'income'}>{transaction.quantity}</td>
-                                        <td className="table-font">{transaction.createdAt}</td>
-                                        <td><Button className="btn btn-circle" color="danger" onClick={this.deleteTransaction.bind(this, transaction)}>X</Button></td>
-                                    </tr>)
-                                    :
-                                    (<tr key={index}>
-                                        <td>{''}</td>
-                                        <td>{''}</td>
-                                        <td>{''}</td>
-                                        <td>{''}</td>
-                                        <td>{''}</td>
-                                    </tr>)
-                                }
-                            )}
-                        </tbody>
-                    </Table>
-                </div> */}
                 <ToastContainer/>
             </div>
         );

@@ -24,9 +24,8 @@ export default class Signup extends Component {
         event.preventDefault();
         if(!this.state.displayPhone){
             const response = await fetch(`/api/users?username=${this.state.username}`);
-            const { user, errorMessage } = await response.json();
+            const { user } = await response.json();
             if(user){
-                
                 this.setState({userId: user.id, toHome: true});
             }else{
                 this.setState({displayPhone: true});
@@ -49,7 +48,7 @@ export default class Signup extends Component {
             if(!data.errorMessage && data.user){
                 this.setState({userId: data.user.id, toHome: true});
             }else{
-                console.log('ERROR: ',data.errorMessage);
+                toast.error('User could not be created. Username must be 3 to 12 characters long');
             }
         }
     }

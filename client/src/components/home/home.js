@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Table, Form, FormGroup, Button, Input, Label, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Table, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -50,6 +50,7 @@ export default class Home extends Component{
             });
             this.setState({categories: newCategories, name:'', errorMessage: ''});
         }else{
+            toast.error(`Error obtaining your categories: ${data.errorMessage}`)
             this.setState({categories: {}, errorMessage: data.errorMessage});
         }
             
@@ -62,6 +63,7 @@ export default class Home extends Component{
         if(!data.errorMessage){
             await this.setState({ transactions: data.transactions, errorMessage: '' });
         }else{
+            toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
         }
         
@@ -90,7 +92,7 @@ export default class Home extends Component{
             await this.getMonthTransactions();
             this.calculateBudget();
         }else{
-            toast.error('An error occured, couldn\'t create transaction');
+            toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
         this.toggleModal();
@@ -118,7 +120,7 @@ export default class Home extends Component{
             await this.getCategories();
             await this.categoriesSelect();
         }else{
-            toast.error('An error occured, couldn\'t create categoriy');
+            toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState(prevState => ({categories: prevState.categories, errorMessage: data.errorMessage, name: '', type: ''}));
         }
         this.toggleModal();
@@ -147,7 +149,6 @@ export default class Home extends Component{
             });
             await this.setState({budget: parseFloat(budget).toFixed(2)});
         }else{
-            toast.error('An error occured while calculating your budget');
             await this.setState({budget: parseFloat(0.00).toFixed(2)});
         }
     }
@@ -215,14 +216,6 @@ export default class Home extends Component{
                 </div>
             </div>
         )
-    }
-
-
-    printAlert = () => {
-        return this.state.errorMessage === '' ?
-        null
-        :
-        (<Alert color="danger">{this.state.errorMessage}</Alert>)
     }
 
     toggleModal = () => {

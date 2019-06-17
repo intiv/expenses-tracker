@@ -18,7 +18,7 @@
 
 .table-scroll {
     display: block;
-    max-height: 90vh;
+    height: 95vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -34,12 +34,12 @@
 
 .Income-container {
     transform: translateX(-100%);
-    animation: slidein 1s forwards;
+    animation: slidein 3s forwards;
 }
 
 .Expense-container {
     transform: translateX(100%);
-    animation: slidein 1s forwards;
+    animation: slidein 3s forwards;
 }
 
 .card-title {

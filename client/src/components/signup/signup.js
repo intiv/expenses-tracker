@@ -71,10 +71,10 @@ export default class Signup extends Component {
                 : null}
                 
                 <div className="row">
-                    <div className="col-md-5 offset-md-3 mt-2">
+                    <div className="col-md-5 offset-md-3 col-sm-5 offset-sm-3 mt-2 ">
                         <Form onSubmit={this.onSubmit} className="form-border">
                             <div className="row">
-                                <div className="col-md-8 offset-md-3">
+                                <div className="col-md-8 offset-md-3 col-sm-12">
                                     <h3>Expenses Tracker - {this.state.displayPhone ? 'Singup' : 'Sign in'}</h3>
                                 </div>
                             </div>
@@ -100,25 +100,24 @@ export default class Signup extends Component {
                                     {this.state.displayPhone ? 
                                     (
                                     <FormGroup>
-                                        <Label>
-                                            Enter your phone to send you notifications!
-                                            <Input
-                                                type="text"
-                                                name="signupPhone"
-                                                value={this.state.phone}
-                                                onChange={(event) => {this.setState({phone: event.target.value})}}
-                                            >
-                                            </Input>
-                                        </Label>
+                                        <Label>Enter your phone to send you notifications!</Label>
+                                        <Input
+                                            type="text"
+                                            name="signupPhone"
+                                            value={this.state.phone}
+                                            onChange={(event) => {this.setState({phone: event.target.value})}}
+                                        >
+                                        </Input>
+                                        
                                     </FormGroup>
                                     )   
                                     : null}
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-md-1 offset-md-1">
+                                <div className={`col-md-1 ${this.state.displayPhone ? 'offset-md-4' : 'offset-md-5'}`}>
                                     <FormGroup>
-                                        <Button color="primary" type="submit">Enter</Button>
+                                        <Button color="primary" type="submit" disabled={this.state.username.length < 3 || this.state.username.length > 12}>Enter</Button>
                                     </FormGroup>
                                 </div>
                                 {this.state.displayPhone?

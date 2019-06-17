@@ -85,12 +85,14 @@ export default class Home extends Component{
         });
         const data = await response.json();
         if(!data.errorMessage){
+            toast.success('Transaction added successfully!')
             await this.setState({quantity: 0, category: 0, errorMessage: ''});
-            this.getMonthTransactions();
+            await this.getMonthTransactions();
+            this.calculateBudget();
         }else{
+            toast.error('An error occured, couldn\'t create transaction');
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
         }
-        this.calculateBudget();
         this.toggleModal();
     } 
 
@@ -112,9 +114,11 @@ export default class Home extends Component{
         });
         const data = await response.json();
         if(!data.errorMessage){
+            toast.success('Category added successfully!');
             await this.getCategories();
             await this.categoriesSelect();
         }else{
+            toast.error('An error occured, couldn\'t create categoriy');
             await this.setState(prevState => ({categories: prevState.categories, errorMessage: data.errorMessage, name: '', type: ''}));
         }
         this.toggleModal();
@@ -143,6 +147,7 @@ export default class Home extends Component{
             });
             await this.setState({budget: parseFloat(budget).toFixed(2)});
         }else{
+            toast.error('An error occured while calculating your budget');
             await this.setState({budget: parseFloat(0.00).toFixed(2)});
         }
     }
@@ -248,7 +253,7 @@ export default class Home extends Component{
             const data = await response.json();
             if(!data.errorMessage){
                 this.setState({transactions: data.transactions});
-                toast.success('Transaction deleted succesfully!');
+                toast.success('Transaction deleted successfully!');
                 this.calculateBudget();
             }else{
                 toast.error('An error occured, could not delete transaction');

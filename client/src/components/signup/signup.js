@@ -54,28 +54,6 @@ export default class Signup extends Component {
         }
     }
 
-    renderPhone = () => {
-        
-        return this.state.displayPhone ? 
-        (<div className="row">
-            <div className="col-md-6 ml-2">
-                <FormGroup>
-                    <Label>
-                        Enter your phone to send you notifications!
-                        <Input
-                            type="text"
-                            name="signupPhone"
-                            value={this.state.phone}
-                            onChange={(event) => {this.setState({phone: event.target.value})}}
-                        >
-                        </Input>
-                    </Label>
-                </FormGroup>
-            </div>
-        </div>)
-        : null
-    }
-
     cancel = () => {
         this.setState({displayPhone: false, phone: ''});
     }
@@ -93,34 +71,50 @@ export default class Signup extends Component {
                 : null}
                 
                 <div className="row">
-                    <div className="col-md-8 mt-2">
-                        <Form onSubmit={this.onSubmit}>
+                    <div className="col-md-5 offset-md-3 mt-2">
+                        <Form onSubmit={this.onSubmit} className="form-border">
                             <div className="row">
-                                <div className="col-md-6 ml-2">
+                                <div className="col-md-10 offset-md-1">
                                     <FormGroup>
-                                        <Label>Enter your username</Label>
+                                        <Label className="white-font">Enter your username</Label>
                                         <Input 
                                             type="text" 
                                             name="signupUsername" 
                                             value={this.state.username}
                                             onChange={(event) => {this.setState({username: event.target.value})}}
                                             disabled={this.state.displayPhone}
-                                            
                                         ></Input>
                                     </FormGroup>
                                 </div>
                             </div>
-
-                            {this.renderPhone()}
-                            
                             <div className="row">
-                                <div className="col-md-1 ml-2">
+                                <div className="col-md-10 offset-md-1 ">
+                                    {this.state.displayPhone ? 
+                                    (
+                                    <FormGroup>
+                                        <Label>
+                                            Enter your phone to send you notifications!
+                                            <Input
+                                                type="text"
+                                                name="signupPhone"
+                                                value={this.state.phone}
+                                                onChange={(event) => {this.setState({phone: event.target.value})}}
+                                            >
+                                            </Input>
+                                        </Label>
+                                    </FormGroup>
+                                    )   
+                                    : null}
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-1 offset-md-1">
                                     <FormGroup>
                                         <Button color="primary" type="submit">Enter</Button>
                                     </FormGroup>
                                 </div>
                                 {this.state.displayPhone?
-                                (<div className="col-md-2">
+                                (<div className="col-md-2 offset-md-1">
                                     <FormGroup>
                                         <Button color="secondary" onClick={this.cancel}>Cancel</Button>
                                     </FormGroup>

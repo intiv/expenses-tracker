@@ -306,9 +306,16 @@ export default class Home extends Component{
                             <div className="col-md-5">
                                 <Button id="reportButton" color="info" onClick={() => this.setState({toReport: true})}>Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <InputGroup size="md">
-                                    <CustomInput id="alltimeSwitch" className="mt-2" value={this.state.alltime} onChange={this.changeTime} type="switch" label={this.state.alltime === true ? 'All time' : 'Monthly'}></CustomInput>
+                                    <CustomInput 
+                                        id="alltimeSwitch" 
+                                        className="mt-2 time-switch" 
+                                        value={this.state.alltime} 
+                                        onChange={this.changeTime} 
+                                        type="switch" 
+                                        label={this.state.alltime === true ? 'All time' : 'Month: '+moment().format('MMMM').toString()}/>
+          
                                 </InputGroup>
                             </div>
                         </div>

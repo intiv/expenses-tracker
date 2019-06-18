@@ -43,8 +43,8 @@
     margin-bottom: 0;
 }
 
-#alltimeSwitch > label {
-    margin-bottom: 2px;
+#alltimeSwitch{
+    width: 15vh;
 }
 
 .card-body {

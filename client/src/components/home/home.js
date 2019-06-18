@@ -367,6 +367,7 @@ export default class Home extends Component{
                     (<Redirect to={{
                         pathname: '/report',
                         state: {
+                            userId: this.state.userId,
                             transactions: this.state.transactions,
                             categories: this.state.categories
                         }

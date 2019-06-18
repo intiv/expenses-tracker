@@ -13,16 +13,30 @@ export default class Report extends Component {
         toSignup: false,
         toHome: false,
         incomeData: [],
-        expenseData: []
+        expenseData: [],
+        expenseCategories: 0,
+        incomeCategories: 0
     }
 
     componentDidMount = async () => {
         if(this.props.location.state){
+            let expenseCategories = 0;
+            let incomeCategories = 0;
+            Object.keys(this.props.location.state.categories).forEach((category) => {
+                if(this.props.location.state.categories[category].type === 'Expense'){
+                    expenseCategories++;
+                }else{
+                    incomeCategories++;
+                }
+            });
             await this.setState({
                 userId: this.props.location.state.userId,
                 transactions: this.props.location.state.transactions,
-                categories: this.props.location.state.categories
+                categories: this.props.location.state.categories,
+                expenseCategories,
+                incomeCategories
             });
+            
             this.setData();
         }else{
             await this.setState({toSignup: true});
@@ -104,9 +118,14 @@ export default class Report extends Component {
                         </Link>
                     </div>
                     <div id="reportContainer" className="col-md-10">
-                        <div className="row">
+                        <div className="row title">
                             <div className="col-md-12">
-                                <BarChart width={Object.keys(this.state.categories).length*25} height={350} data={this.state.incomeData}>
+                                <h3>Incomes</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12 bargraph">
+                                <BarChart width={this.state.incomeCategories*100} height={300} data={this.state.incomeData}>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis dataKey="name"/>
                                     <YAxis/>
@@ -115,9 +134,14 @@ export default class Report extends Component {
                                 </BarChart>
                             </div>
                         </div>
-                        <div className="row">
+                        <div className="row title">
                             <div className="col-md-12">
-                                <BarChart width={Object.keys(this.state.categories).length*50} height={350} data={this.state.expenseData}>
+                                <h3>Expenses</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12 bargraph">
+                                <BarChart width={this.state.expenseCategories*100} height={300} data={this.state.expenseData}>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis dataKey="name"/>
                                     <YAxis/>

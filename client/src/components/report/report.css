@@ -3,8 +3,18 @@
 }
 
 #reportContainer {
+    width: 80vw;
     border: 1px solid #181A1B;
     height: 98vh;
     background-color: #181A1B;
     box-shadow: -10px 10px 5px -5px rgb(0, 0, 0, 0.5);
+}
+
+.title {
+    text-align: center;
+}
+
+.bargraph {
+    max-width: 70vw;
+    margin: 0 auto;
 }

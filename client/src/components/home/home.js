@@ -70,7 +70,7 @@ export default class Home extends Component{
         const response = await fetch(`/api/transactions${this.state.alltime === false ? '/monthly' : ''}?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
         const data = await response.json();
         if(!data.errorMessage){
-            await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length > 0 });
+            await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length === 0 });
         }else{
             toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
@@ -313,18 +313,18 @@ export default class Home extends Component{
                         </div>
                     </NavbarBrand>
                     <div className="row">
-                        <div className="col-md-2">
+                        <div className="col-md-3">
                             <div className="row">
                                 <div className="col-md-12">
                                     Budget: 
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-md-12">
                                     {this.state.budget}
                                 </div>
                             </div>
                             
                         </div>
-                        <div className="col-md-10">
+                        <div className="col-md-9">
                             <Nav className="ml-auto" navbar>
                                 <div className="row">
                                     <div className="col-md-4">
@@ -377,7 +377,7 @@ export default class Home extends Component{
                     </ModalFooter>
                 </Modal>
                 <div className="table-scroll">
-                    {this.state.transactions.length > 0 ? 
+                    {this.state.showEmpty === false ? 
                         null 
                         : 
                         (<div className="row fade-in">

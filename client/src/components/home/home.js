@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
+import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, CustomInput, Input, InputGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,13 +27,16 @@ export default class Home extends Component{
         addTransaction: false,
         name: '',
         type: 'Expense',
-        enableCreate: false
+        enableCreate: false,
+        yearly: false
     }
 
     componentDidMount = async () => {
         if(this.props.location.state){
             await this.setState({userId: this.props.location.state.userId});
             toast.success('Welcome!');
+            let testdate = moment([2019, 1, 1]).subtract(1, 'day').format('YYYY-MM-DD');
+            toast.info(`Date: ${testdate}`)
             await this.getMonthTransactions();
             await this.getCategories();
             this.calculateBudget();
@@ -282,7 +285,21 @@ export default class Home extends Component{
         return (
             <div id="homeRoot" className="light-background">
                 <Navbar color="faded" className="nav-bar white-font fade-in" light>
-                    <NavbarBrand className="white-font">Expenses Tracker</NavbarBrand>
+                    <NavbarBrand className="white-font">
+                        <div className="row">
+                            <div className="col-md-4">
+                                Expenses Tracker
+                            </div>
+                            <div className="col-md-4">
+                                <Button color="info">Generate report</Button>
+                            </div>
+                            <div className="col-md-4">
+                                <InputGroup size="md">
+                                    <CustomInput id="yearlySwitch" className="mt-2" value={this.state.yearly} onChange={() => this.setState(prevState => ({yearly: !prevState.yearly}))} type="switch" label={this.state.yearly === true ? 'Yearly' : 'Monthly'}></CustomInput>
+                                </InputGroup>
+                            </div>
+                        </div>
+                    </NavbarBrand>
                     <div className="row">
                         <div className="col-md-12">
                             <Nav className="ml-auto" navbar horizontal="true">

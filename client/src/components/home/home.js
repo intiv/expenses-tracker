@@ -28,7 +28,7 @@ export default class Home extends Component{
         name: '',
         type: 'Expense',
         enableCreate: false,
-        yearly: false
+        alltime: false
     }
 
     componentDidMount = async () => {
@@ -290,12 +290,12 @@ export default class Home extends Component{
                             <div className="col-md-4">
                                 Expenses Tracker
                             </div>
-                            <div className="col-md-4">
-                                <Button color="info">Generate report</Button>
+                            <div className="col-md-6">
+                                <Button color="info">Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <InputGroup size="md">
-                                    <CustomInput id="yearlySwitch" className="mt-2" value={this.state.yearly} onChange={() => this.setState(prevState => ({yearly: !prevState.yearly}))} type="switch" label={this.state.yearly === true ? 'Yearly' : 'Monthly'}></CustomInput>
+                                    <CustomInput id="alltimeSwitch" className="mt-2" value={this.state.alltime} onChange={() => this.setState(prevState => ({alltime: !prevState.alltime}))} type="switch" label={this.state.alltime === true ? 'All time' : 'Monthly'}></CustomInput>
                                 </InputGroup>
                             </div>
                         </div>
@@ -309,12 +309,12 @@ export default class Home extends Component{
                                             Budget: {this.state.budget}
                                         </NavItem>
                                     </div>
-                                    <div className="col-md-3">
+                                    <div className="col-md-3 mr-2">
                                         <NavItem>
                                             <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
                                         </NavItem>
                                     </div>
-                                    <div className="col-md-3">
+                                    <div className="col-md-3 mr-2">
                                         <NavItem>
                                             <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
                                         </NavItem>

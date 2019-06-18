@@ -205,13 +205,13 @@ export default class Home extends Component{
                             <div className="col-md-12">
                                 <FormGroup tag="fieldset">
                                     <legend>Represents an: </legend>
-                                    <FormGroup check>
+                                    <FormGroup check inline>
                                         <Label check>
                                             <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Income'}); await this.categoriesSelect();}} checked={this.state.type === 'Income'}/>
                                             Income
                                         </Label>
                                     </FormGroup>
-                                    <FormGroup check>
+                                    <FormGroup check inline>
                                         <Label check>
                                             <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Expense'}); await this.categoriesSelect();}} checked={this.state.type === 'Expense'}/> 
                                             Expense
@@ -313,7 +313,7 @@ export default class Home extends Component{
                         </div>
                     </NavbarBrand>
                     <div className="row">
-                        <div className="col-md-3">
+                        <div className="col-md-3 white-font">
                             <div className="row">
                                 <div className="col-md-12">
                                     Budget: 

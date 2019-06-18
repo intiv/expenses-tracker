@@ -43,6 +43,10 @@
     margin-bottom: 0;
 }
 
+#alltimeSwitch > label {
+    margin-bottom: 2px;
+}
+
 .card-body {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -87,7 +91,7 @@
 }
 
 .fade-in {
-    animation: fadein 3s forwards;
+    animation: fadein 2s forwards;
 }
 
 @keyframes slidein {

@@ -20,6 +20,7 @@ export default class Home extends Component{
         errorMessage: '',
         userId: 0,
         toSignup: false,
+        invalid: true,
         toReport: false,
         budget: 0.00,
         options: [],
@@ -29,7 +30,8 @@ export default class Home extends Component{
         name: '',
         type: 'Expense',
         enableCreate: false,
-        alltime: false
+        alltime: false,
+        showEmpty: true
     }
 
     componentDidMount = async () => {
@@ -68,7 +70,7 @@ export default class Home extends Component{
         const response = await fetch(`/api/transactions${this.state.alltime === false ? '/monthly' : ''}?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
         const data = await response.json();
         if(!data.errorMessage){
-            await this.setState({ transactions: data.transactions, errorMessage: '' });
+            await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length > 0 });
         }else{
             toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
@@ -249,7 +251,8 @@ export default class Home extends Component{
     changeTime = async () => {
         await this.setState(prevState => ({
             alltime: !prevState.alltime,
-            transactions: []
+            transactions: [],
+            showEmpty: false
         }));
         this.getMonthTransactions();
     }
@@ -310,22 +313,33 @@ export default class Home extends Component{
                         </div>
                     </NavbarBrand>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-2">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    Budget: 
+                                </div>
+                                <div className="col-md-3">
+                                    {this.state.budget}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="col-md-10">
                             <Nav className="ml-auto" navbar>
                                 <div className="row">
-                                    <div className="col-md-5 pt-2">
-                                        <NavItem className="white-font">
-                                            Budget: {this.state.budget}
+                                    <div className="col-md-4">
+                                        <NavItem>
+                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
                                         </NavItem>
                                     </div>
-                                    <div className="col-md-3 mr-2">
+                                    <div className="col-md-4">
                                         <NavItem>
                                             <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
                                         </NavItem>
                                     </div>
-                                    <div className="col-md-3 mr-2">
+                                    <div className="col-md-4">
                                         <NavItem>
-                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                            <Button color="danger" className="btn-circle" onClick={() => this.setState({toSignup: true, invalid: false})}>Logout</Button>
                                         </NavItem>
                                     </div>
                                 </div>
@@ -337,20 +351,20 @@ export default class Home extends Component{
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
-                        state: {invalid: true}
+                        state: {invalid: this.state.invalid}
                     }}/>)
                     : 
                     null
                 }
                 {this.state.toReport && this.state.transactions.length > 0 ?
-                (<Redirect to={{
-                    pathname: '/report',
-                    state: {
-                        transactions: this.state.transactions
-                    }
-                }}/>)
-                : 
-                null
+                    (<Redirect to={{
+                        pathname: '/report',
+                        state: {
+                            transactions: this.state.transactions
+                        }
+                    }}/>)
+                    : 
+                    null
                 }
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
                     <ModalHeader toggle={this.toggleModal}  className="dark-background">{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>

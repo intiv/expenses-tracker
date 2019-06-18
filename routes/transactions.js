@@ -6,8 +6,6 @@ const { Op } = require('sequelize');
 const Transaction = require('../models/Transaction');
 const Category = require('../models/Category');
 
-const moment = require('moment');
-
 router.get('/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({

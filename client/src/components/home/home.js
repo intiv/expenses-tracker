@@ -20,6 +20,7 @@ export default class Home extends Component{
         errorMessage: '',
         userId: 0,
         toSignup: false,
+        toReport: false,
         budget: 0.00,
         options: [],
         showModal: false,
@@ -299,7 +300,7 @@ export default class Home extends Component{
                                 Expenses Tracker
                             </div>
                             <div className="col-md-5">
-                                <Button id="reportButton" color="info">Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
+                                <Button id="reportButton" color="info" onClick={() => this.setState({toReport: true})}>Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
                             </div>
                             <div className="col-md-2">
                                 <InputGroup size="md">
@@ -340,6 +341,16 @@ export default class Home extends Component{
                     }}/>)
                     : 
                     null
+                }
+                {this.state.toReport && this.state.transactions.length > 0 ?
+                (<Redirect to={{
+                    pathname: '/report',
+                    state: {
+                        transactions: this.state.transactions
+                    }
+                }}/>)
+                : 
+                null
                 }
                 <Modal isOpen={this.state.showModal} toggle={this.toggleModal} className="dark-background">
                     <ModalHeader toggle={this.toggleModal}  className="dark-background">{this.state.addCategory ? 'Add Category' : 'Add Transaction' }</ModalHeader>

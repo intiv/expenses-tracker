@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, FormFeedback, Label, Input, Button } from 'reactstrap';
 import { Redirect  } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import './signup.css';
 
 export default class Signup extends Component {
 
@@ -53,28 +54,6 @@ export default class Signup extends Component {
         }
     }
 
-    renderPhone = () => {
-        
-        return this.state.displayPhone ? 
-        (<div className="row">
-            <div className="col-md-6 ml-2">
-                <FormGroup>
-                    <Label>
-                        Enter your phone to send you notifications!
-                        <Input
-                            type="text"
-                            name="signupPhone"
-                            value={this.state.phone}
-                            onChange={(event) => {this.setState({phone: event.target.value})}}
-                        >
-                        </Input>
-                    </Label>
-                </FormGroup>
-            </div>
-        </div>)
-        : null
-    }
-
     cancel = () => {
         this.setState({displayPhone: false, phone: ''});
     }
@@ -83,7 +62,7 @@ export default class Signup extends Component {
     render () {
         return (
             
-            <div id="signupRoot">
+            <div id="signupRoot" className="light-background signup-container">
                 {this.state.toHome ? 
                 <Redirect to={{
                     pathname: '/home',
@@ -92,34 +71,57 @@ export default class Signup extends Component {
                 : null}
                 
                 <div className="row">
-                    <div className="col-md-8 mt-2">
-                        <Form onSubmit={this.onSubmit}>
+                    <div className="col-md-5 offset-md-3 col-sm-5 offset-sm-3 mt-2 ">
+                        <Form onSubmit={this.onSubmit} className="form-border">
                             <div className="row">
-                                <div className="col-md-6 ml-2">
+                                <div className="col-md-8 offset-md-3 col-sm-12">
+                                    <h3>Expenses Tracker - {this.state.displayPhone ? 'Singup' : 'Sign in'}</h3>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-10 offset-md-1">
                                     <FormGroup>
-                                        <Label>Enter your username</Label>
+                                        <Label className="white-font">Enter your username</Label>
                                         <Input 
                                             type="text" 
                                             name="signupUsername" 
                                             value={this.state.username}
                                             onChange={(event) => {this.setState({username: event.target.value})}}
                                             disabled={this.state.displayPhone}
-                                            
+                                            invalid={this.state.username.length > 0 && (this.state.username.length < 3 || this.state.username.length > 12)}
+                                            valid={this.state.username.length > 0 && !this.invalid}
                                         ></Input>
+                                        <FormFeedback>Username must be 3 to 12 characters long!</FormFeedback>
                                     </FormGroup>
                                 </div>
                             </div>
-
-                            {this.renderPhone()}
-                            
                             <div className="row">
-                                <div className="col-md-1 ml-2">
+                                <div className="col-md-10 offset-md-1 ">
+                                    {this.state.displayPhone ? 
+                                    (
                                     <FormGroup>
-                                        <Button color="primary" type="submit">Enter</Button>
+                                        <Label>Enter your phone to send you notifications!</Label>
+                                        <Input
+                                            type="text"
+                                            name="signupPhone"
+                                            value={this.state.phone}
+                                            onChange={(event) => {this.setState({phone: event.target.value})}}
+                                        >
+                                        </Input>
+                                        
+                                    </FormGroup>
+                                    )   
+                                    : null}
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className={`col-md-1 ${this.state.displayPhone ? 'offset-md-4' : 'offset-md-5'}`}>
+                                    <FormGroup>
+                                        <Button color="primary" type="submit" disabled={this.state.username.length < 3 || this.state.username.length > 12}>Enter</Button>
                                     </FormGroup>
                                 </div>
                                 {this.state.displayPhone?
-                                (<div className="col-md-2">
+                                (<div className="col-md-2 offset-md-1">
                                     <FormGroup>
                                         <Button color="secondary" onClick={this.cancel}>Cancel</Button>
                                     </FormGroup>

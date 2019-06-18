@@ -1,24 +1,30 @@
 .dark-background {
     background-color: #181A1B;
-    color: #CCC;
-}
-
-.light-background {
-    background-color: #e4e4e4;
+    color: white;
 }
 
 .light-dark-background {
     background-color: #343A40;
-    color: #CCC;
+    color: white;
+}
+
+.nav-bar {
+    background-color: #1dad3c;
 }
 
 .btn-circle {
+    margin-top: 5px;
+    margin-right: 2px;
     border-radius: 50px;
+}
+
+#reportButton {
+    width: 15vw;
 }
 
 .table-scroll {
     display: block;
-    height: 95vh;
+    height: 91vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -32,49 +38,29 @@
     border-color: #ad2628;
 }
 
-.Income-container {
-    transform: translateX(-100%);
-    animation: slidein 3s forwards;
-}
-
-.Expense-container {
-    transform: translateX(100%);
-    animation: slidein 3s forwards;
-}
-
 .card-title {
     font-size: 2rem;
     margin-bottom: 0;
 }
 
+#alltimeSwitch{
+    width: 15vh;
+}
+
 .card-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
-.Income-slide {
-    animation: slidein 0.5s forwards;
-}
-
-
-@keyframes slidein {
-    100% {
-        transform: translateX(0%);
-    }
-}
-
-.Expense-slide {
-    transition: 1s;
-    right: 0;
-}
-
 .Income-border {
-    border: 1px solid #29d32f;
+    border: 1px solid #1DAD3C;
 }
 
 .Income-header {
-    background-color: #29d32f;
-    padding: 4px 8px;
+    background-color: #1DAD3C;
+    padding: 0px 8px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -85,48 +71,43 @@
 
 .Expense-header {
     background-color: #db3035;
-    padding: 4px 8px;
+    padding: 0px 8px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.nav-bar {
-    background-color: #1dad3c;
+.Income-slide {
+    animation: slidein 0.5s forwards;
 }
 
+.Income-container {
+    transform: translateX(-100%);
+    animation: slidein 2s forwards, fadein 1.8s ease;
+}
 
-@media screen and (max-width: 800px){
+.Expense-container {
+    transform: translateX(100%);
+    animation: slidein 2s forwards, fadein 1.8s ease;
+}
 
-    .table-font {
-        color: #CCC;
-        font-size: 1rem;
-    }
+.fade-in {
+    animation: fadein 2s forwards;
+}
 
-    .income {
-        color: #07BC0C;
-        font-size: 1rem;
-    }
-
-    .expense {
-        color: #bc2121;
-        font-size: 1rem;
+@keyframes slidein {
+    100% {
+        transform: translateX(0%);
     }
 }
 
-@media screen and (min-width: 801px){
-    .table-font {
-        color: #CCC;
-        font-size: 1.3rem;
+@keyframes fadein {
+    0% {
+        opacity: 0;
     }
 
-    .income {
-        color: #07BC0C;
-        font-size: 1.4rem;
-    }
-
-    .expense {
-        color: #bc2121;
-        font-size: 1.4rem;
+    100% {
+        opacity: 1;
     }
 }
+
 

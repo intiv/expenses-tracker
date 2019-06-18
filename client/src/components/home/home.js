@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
+import { Navbar, Nav, NavbarBrand, NavItem, Form, FormGroup, Button, CustomInput, Input, InputGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody } from 'reactstrap';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,6 +20,8 @@ export default class Home extends Component{
         errorMessage: '',
         userId: 0,
         toSignup: false,
+        invalid: true,
+        toReport: false,
         budget: 0.00,
         options: [],
         showModal: false,
@@ -27,7 +29,9 @@ export default class Home extends Component{
         addTransaction: false,
         name: '',
         type: 'Expense',
-        enableCreate: false
+        enableCreate: false,
+        alltime: false,
+        showEmpty: true
     }
 
     componentDidMount = async () => {
@@ -61,10 +65,11 @@ export default class Home extends Component{
 
     getMonthTransactions = async () => {
         const month = moment().month();
-        const response = await fetch(`/api/transactions/monthly?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
+        const response = await fetch(`/api/transactions${this.state.alltime === false ? '/monthly' : ''}?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
         const data = await response.json();
         if(!data.errorMessage){
-            await this.setState({ transactions: data.transactions, errorMessage: '' });
+            await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length === 0 });
+            await this.calculateBudget();
         }else{
             toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
@@ -94,7 +99,7 @@ export default class Home extends Component{
             toast.success('Transaction added successfully!')
             await this.setState({quantity: 0, category: 0, errorMessage: ''});
             await this.getMonthTransactions();
-            this.calculateBudget();
+            await this.calculateBudget();
         }else{
             toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
@@ -227,8 +232,7 @@ export default class Home extends Component{
                                             styles={{
                                                 option: base => ({
                                                     ...base,
-                                                    color: '#181A1B',
-                                                    'borderBottom': '1px solid black'
+                                                    color: '#181A1B'
                                                 })
                                               }}
                                         />
@@ -240,6 +244,15 @@ export default class Home extends Component{
                 </div>
             </div>
         )
+    }
+
+    changeTime = async () => {
+        await this.setState(prevState => ({
+            alltime: !prevState.alltime,
+            transactions: [],
+            showEmpty: false
+        }));
+        this.getMonthTransactions();
     }
 
     toggleModal = () => {
@@ -281,32 +294,83 @@ export default class Home extends Component{
     render () {
         return (
             <div id="homeRoot" className="light-background">
-                <Navbar color="faded" className="nav-bar" light>
-                    <NavbarBrand>Expenses Tracker</NavbarBrand>
-                    <Nav className="ml-auto" navbar horizontal="true">
+                <Navbar color="faded" className="nav-bar white-font fade-in" light>
+                    <NavbarBrand className="white-font">
                         <div className="row">
-                            <div className="col-md-4 pt-2">
-                                <NavItem>
-                                    Budget: {this.state.budget}
-                                </NavItem>
-                            </div>
                             <div className="col-md-4">
-                                <NavItem>
-                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
-                                </NavItem>
+                                Expenses Tracker
                             </div>
-                            <div className="col-md-4">
-                                <NavItem>
-                                    <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
-                                </NavItem>
+                            <div className="col-md-5">
+                                <Button id="reportButton" color="info" onClick={() => this.setState({toReport: true})}>Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
+                            </div>
+                            <div className="col-md-3">
+                                <InputGroup size="md">
+                                    <CustomInput 
+                                        id="alltimeSwitch" 
+                                        className="mt-2 time-switch" 
+                                        value={this.state.alltime} 
+                                        onChange={this.changeTime} 
+                                        type="switch" 
+                                        label={this.state.alltime === true ? 'All time' : 'Month: '+moment().format('MMMM').toString()}/>
+          
+                                </InputGroup>
                             </div>
                         </div>
-                    </Nav>
+                    </NavbarBrand>
+                    <div className="row">
+                        <div className="col-md-3 white-font">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    Budget: 
+                                </div>
+                                <div className="col-md-12">
+                                    {this.state.budget}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="col-md-9">
+                            <Nav className="ml-auto" navbar>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <NavItem>
+                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: false, addTransaction: true, showModal: true})}}>+Transaction</Button>
+                                        </NavItem>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <NavItem>
+                                            <Button color="info" className="btn-circle" onClick={() => {this.setState({addCategory: true, addTransaction: false, showModal: true})}}>+Category</Button>
+                                        </NavItem>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <NavItem>
+                                            <Button color="danger" className="btn-circle" onClick={() => this.setState({toSignup: true, invalid: false})}>Logout</Button>
+                                        </NavItem>
+                                    </div>
+                                </div>
+                            </Nav>
+                        </div>
+                    </div>
+                    
                 </Navbar>
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
-                        state: {invalid: true}
+                        state: {
+                            invalid: this.state.invalid
+                        }
+                    }}/>)
+                    : 
+                    null
+                }
+                {this.state.toReport && this.state.transactions.length > 0 ?
+                    (<Redirect to={{
+                        pathname: '/report',
+                        state: {
+                            userId: this.state.userId,
+                            transactions: this.state.transactions,
+                            categories: this.state.categories
+                        }
                     }}/>)
                     : 
                     null
@@ -322,15 +386,24 @@ export default class Home extends Component{
                     </ModalFooter>
                 </Modal>
                 <div className="table-scroll">
-                    {this.state.transactions.length > 0 ? null : (<div>There seems to be nothing here, add some transactions!</div>)}
+                    {this.state.showEmpty === false ? 
+                        null 
+                        : 
+                        (<div className="row fade-in">
+                            <div className="col-md-6 offset-md-3">
+                                <h2 className="black-font offset-md-2">There seems to be nothing here</h2>
+                                <h3 className="black-font">Add some categories and transactions in the top-right!</h3>
+                            </div>
+                        </div>)
+                    }
                     {this.state.transactions.map((transaction, index) => {
                         return this.state.categories[transaction.categoryId] ? 
                         (<div className={`row ${this.state.categories[transaction.categoryId].type}-container`} key={index}>
                             <div className='col-md-4 offset-md-4 mt-2'>
-                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide`}>
-                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header`}>
+                                <Card className={`${this.state.categories[transaction.categoryId].type}-slide white-font`}>
+                                    <CardHeader className={`${this.state.categories[transaction.categoryId].type}-border ${this.state.categories[transaction.categoryId].type}-header white-font`}>
                                         <div className="row">
-                                            <div className="col-md-10 card-title">
+                                            <div className="col-md-10 card-title white-font">
                                                 {this.state.categories[transaction.categoryId].name} 
                                             </div>
                                             <div className="col-md-1">
@@ -349,7 +422,7 @@ export default class Home extends Component{
                         null
                     })}
                 </div>
-                <ToastContainer/>
+                <ToastContainer className="mt-5"/>
             </div>
         );
     }

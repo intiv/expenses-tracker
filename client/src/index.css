@@ -14,13 +14,22 @@ body {
   color: #DDD;
 }
 
-.table {
-  max-height: 5vh !important;
-  overflow-y: auto !important;
+
+.light-background {
+  background-color: #e4e4e4;
 }
+
 
 * {
   color: #DDD;
+}
+
+.white-font {
+  color: white;
+}
+
+.black-font {
+  color: black;  
 }
 
 code {

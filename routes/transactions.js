@@ -6,15 +6,17 @@ const { Op } = require('sequelize');
 const Transaction = require('../models/Transaction');
 const Category = require('../models/Category');
 
-const moment = require('moment');
-
 router.get('/', async (req, res, next) => {
     try{
         let transactions = await Transaction.findAll({
             where: {
                 userId: req.query.userId
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
         });
+        
         res.status(200).json({transactions});
     }catch(err){
         res.status(500).json({transactions: [], errorMessage: err});
@@ -29,7 +31,7 @@ router.get('/monthly/', async (req, res, next) => {
                 userId: req.query.userId,
                 createdAt: {
                     [Op.gte]: req.query.beginDate,
-                    [Op.lte]: req.query.endDate
+                    [Op.lt]: req.query.endDate
                 }
             },
             order: [

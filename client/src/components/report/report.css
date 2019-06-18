@@ -1,0 +1,9 @@
+#reportRoot {
+    height: 100vh;
+}
+
+#reportContainer {
+    border: 1px solid #181A1B;
+    height: 95vh;
+
+}

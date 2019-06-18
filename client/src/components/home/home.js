@@ -71,7 +71,7 @@ export default class Home extends Component{
         const data = await response.json();
         if(!data.errorMessage){
             await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length === 0 });
-            //this.calculateBudget();
+            await this.calculateBudget();
         }else{
             toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });
@@ -101,7 +101,7 @@ export default class Home extends Component{
             toast.success('Transaction added successfully!')
             await this.setState({quantity: 0, category: 0, errorMessage: ''});
             await this.getMonthTransactions();
-            this.calculateBudget();
+            await this.calculateBudget();
         }else{
             toast.error(`An error occured: ${data.errorMessage}`);
             await this.setState({errorMessage: data.errorMessage, quantity: 0, category: 0});
@@ -206,13 +206,13 @@ export default class Home extends Component{
                             <div className="col-md-12">
                                 <FormGroup tag="fieldset">
                                     <legend>Represents an: </legend>
-                                    <FormGroup check inline>
+                                    <FormGroup check>
                                         <Label check>
                                             <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Income'}); await this.categoriesSelect();}} checked={this.state.type === 'Income'}/>
                                             Income
                                         </Label>
                                     </FormGroup>
-                                    <FormGroup check inline>
+                                    <FormGroup check>
                                         <Label check>
                                             <Input type="radio" name="radioType" onChange={async () => { await this.setState({type: 'Expense'}); await this.categoriesSelect();}} checked={this.state.type === 'Expense'}/> 
                                             Expense
@@ -234,8 +234,7 @@ export default class Home extends Component{
                                             styles={{
                                                 option: base => ({
                                                     ...base,
-                                                    color: '#181A1B',
-                                                    'borderBottom': '1px solid black'
+                                                    color: '#181A1B'
                                                 })
                                               }}
                                         />
@@ -359,7 +358,9 @@ export default class Home extends Component{
                 {this.state.toSignup ? 
                     (<Redirect to={{
                         pathname: '/',
-                        state: {invalid: this.state.invalid}
+                        state: {
+                            invalid: this.state.invalid
+                        }
                     }}/>)
                     : 
                     null
@@ -368,7 +369,8 @@ export default class Home extends Component{
                     (<Redirect to={{
                         pathname: '/report',
                         state: {
-                            transactions: this.state.transactions
+                            transactions: this.state.transactions,
+                            categories: this.state.categories
                         }
                     }}/>)
                     : 

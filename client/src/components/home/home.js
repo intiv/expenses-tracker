@@ -71,6 +71,7 @@ export default class Home extends Component{
         const data = await response.json();
         if(!data.errorMessage){
             await this.setState({ transactions: data.transactions, errorMessage: '', showEmpty: data.transactions.length === 0 });
+            //this.calculateBudget();
         }else{
             toast.error(`Error obtaining your transactions: ${data.errorMessage}`)
             this.setState({ errorMessage: data.errorMessage });

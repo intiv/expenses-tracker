@@ -31,7 +31,7 @@ router.get('/monthly/', async (req, res, next) => {
                 userId: req.query.userId,
                 createdAt: {
                     [Op.gte]: req.query.beginDate,
-                    [Op.lte]: req.query.endDate
+                    [Op.lt]: req.query.endDate
                 }
             },
             order: [

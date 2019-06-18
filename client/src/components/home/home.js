@@ -64,7 +64,7 @@ export default class Home extends Component{
 
     getMonthTransactions = async () => {
         const month = moment().month();
-        const response = await fetch(`/api/transactions/monthly?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
+        const response = await fetch(`/api/transactions${this.state.alltime === false ? '/monthly' : ''}?beginDate=${moment().date(1).format('YYYY-MM-DD')}&endDate=${moment().month(month+1).date(1).format('YYYY-MM-DD')}&userId=${this.state.userId}`)
         const data = await response.json();
         if(!data.errorMessage){
             await this.setState({ transactions: data.transactions, errorMessage: '' });
@@ -245,6 +245,14 @@ export default class Home extends Component{
         )
     }
 
+    changeTime = async () => {
+        await this.setState(prevState => ({
+            alltime: !prevState.alltime,
+            transactions: []
+        }));
+        this.getMonthTransactions();
+    }
+
     toggleModal = () => {
         this.categoriesSelect();
         this.setState(prevState => ({
@@ -295,14 +303,14 @@ export default class Home extends Component{
                             </div>
                             <div className="col-md-2">
                                 <InputGroup size="md">
-                                    <CustomInput id="alltimeSwitch" className="mt-2" value={this.state.alltime} onChange={() => this.setState(prevState => ({alltime: !prevState.alltime}))} type="switch" label={this.state.alltime === true ? 'All time' : 'Monthly'}></CustomInput>
+                                    <CustomInput id="alltimeSwitch" className="mt-2" value={this.state.alltime} onChange={this.changeTime} type="switch" label={this.state.alltime === true ? 'All time' : 'Monthly'}></CustomInput>
                                 </InputGroup>
                             </div>
                         </div>
                     </NavbarBrand>
                     <div className="row">
                         <div className="col-md-12">
-                            <Nav className="ml-auto" navbar horizontal="true">
+                            <Nav className="ml-auto" navbar>
                                 <div className="row">
                                     <div className="col-md-5 pt-2">
                                         <NavItem className="white-font">

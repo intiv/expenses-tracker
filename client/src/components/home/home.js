@@ -38,8 +38,6 @@ export default class Home extends Component{
         if(this.props.location.state){
             await this.setState({userId: this.props.location.state.userId});
             toast.success('Welcome!');
-            let testdate = moment([2019, 1, 1]).subtract(1, 'day').format('YYYY-MM-DD');
-            toast.info(`Date: ${testdate}`)
             await this.getMonthTransactions();
             await this.getCategories();
             this.calculateBudget();

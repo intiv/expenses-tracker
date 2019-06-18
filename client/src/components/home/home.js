@@ -290,8 +290,8 @@ export default class Home extends Component{
                             <div className="col-md-4">
                                 Expenses Tracker
                             </div>
-                            <div className="col-md-6">
-                                <Button color="info">Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
+                            <div className="col-md-5">
+                                <Button id="reportButton" color="info">Generate {this.state.alltime===true ? 'all time' : 'this month\'s'} report</Button>
                             </div>
                             <div className="col-md-2">
                                 <InputGroup size="md">

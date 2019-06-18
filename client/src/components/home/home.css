@@ -13,12 +13,17 @@
 }
 
 .btn-circle {
+    margin-top: 5px;
     border-radius: 50px;
+}
+
+#reportButton {
+    width: 15vw;
 }
 
 .table-scroll {
     display: block;
-    height: 95vh;
+    height: 91vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -38,6 +43,8 @@
 }
 
 .card-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
@@ -48,7 +55,7 @@
 
 .Income-header {
     background-color: #1DAD3C;
-    padding: 4px 8px;
+    padding: 0px 8px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -59,7 +66,7 @@
 
 .Expense-header {
     background-color: #db3035;
-    padding: 4px 8px;
+    padding: 0px 8px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
